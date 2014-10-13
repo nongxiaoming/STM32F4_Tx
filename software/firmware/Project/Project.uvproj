@@ -221,7 +221,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <RoSelD>3</RoSelD>
@@ -362,7 +362,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\User;..\Hardware</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\User;..\Hardware;..\config</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -429,6 +429,11 @@
               <FileName>led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hardware\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\drv_lcd.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1307,6 +1312,41 @@
                   </Aads>
                 </FileArmAds>
               </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Config</GroupName>
+          <Files>
+            <File>
+              <FileName>display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\config\display.c</FilePath>
+            </File>
+            <File>
+              <FileName>hardware.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\config\hardware.c</FilePath>
+            </File>
+            <File>
+              <FileName>ini.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\config\ini.c</FilePath>
+            </File>
+            <File>
+              <FileName>language.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\config\language.c</FilePath>
+            </File>
+            <File>
+              <FileName>model.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\config\model.c</FilePath>
+            </File>
+            <File>
+              <FileName>tx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\config\tx.c</FilePath>
             </File>
           </Files>
         </Group>
