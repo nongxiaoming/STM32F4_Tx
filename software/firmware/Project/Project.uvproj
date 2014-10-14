@@ -362,7 +362,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\User;..\Hardware;..\config</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\User;..\Hardware;..\config;..\devo</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1349,6 +1349,89 @@
               <FilePath>..\config\tx.c</FilePath>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>devo</GroupName>
+          <Files>
+            <File>
+              <FileName>autodimmer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\autodimmer.c</FilePath>
+            </File>
+            <File>
+              <FileName>battery.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\battery.c</FilePath>
+            </File>
+            <File>
+              <FileName>buttons.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\buttons.c</FilePath>
+            </File>
+            <File>
+              <FileName>curves.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\curves.c</FilePath>
+            </File>
+            <File>
+              <FileName>datalog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\datalog.c</FilePath>
+            </File>
+            <File>
+              <FileName>inputs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\inputs.c</FilePath>
+            </File>
+            <File>
+              <FileName>misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\misc.c</FilePath>
+            </File>
+            <File>
+              <FileName>mixer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\mixer.c</FilePath>
+            </File>
+            <File>
+              <FileName>mixer_standard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\mixer_standard.c</FilePath>
+            </File>
+            <File>
+              <FileName>music.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\music.c</FilePath>
+            </File>
+            <File>
+              <FileName>remap_channels.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\remap_channels.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>telemetry.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\telemetry.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>version.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\devo\version.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>target</GroupName>
         </Group>
       </Groups>
     </Target>
