@@ -89,15 +89,15 @@ enum {
 #define PAYLOADSIZE 8       // receive data pipes set to this size, but unused
 #define MAX_PACKET_SIZE 9   // YD717 packets have 8-byte payload, Syma X4 is 9
 
-static u8 packet[MAX_PACKET_SIZE];
-static u16 counter;
-static u32 packet_counter;
-static u8 tx_power;
-static u8 throttle, rudder, elevator, aileron, flags;
-static u8 rudder_trim, elevator_trim, aileron_trim;
-static u8 rx_tx_addr[5];
+static uint8_t packet[MAX_PACKET_SIZE];
+static uint16_t counter;
+static uint32_t packet_counter;
+static uint8_t tx_power;
+static uint8_t throttle, rudder, elevator, aileron, flags;
+static uint8_t rudder_trim, elevator_trim, aileron_trim;
+static uint8_t rx_tx_addr[5];
 
-static u8 phase;
+static uint8_t phase;
 enum {
     YD717_INIT1 = 0,
     YD717_BIND2,
@@ -140,7 +140,7 @@ enum {
     PKT_TIMEOUT
 };
 
-static u8 packet_ack()
+static uint8_t packet_ack()
 {
     switch (NRF24L01_ReadReg(NRF24L01_07_STATUS) & (BV(NRF24L01_07_TX_DS) | BV(NRF24L01_07_MAX_RT))) {
     case BV(NRF24L01_07_TX_DS):
@@ -156,7 +156,7 @@ static u8 packet_ack()
 }
 
 
-static u8 convert_channel(u8 num)
+static uint8_t convert_channel(uint8_t num)
 {
     // Sometimes due to imperfect calibration or mixer settings
     // throttle can be less than CHAN_MIN_VALUE or larger than
@@ -169,12 +169,12 @@ static u8 convert_channel(u8 num)
         ch = CHAN_MAX_VALUE;
     }
 
-    return (u8) (((ch * 0xFF / CHAN_MAX_VALUE) + 0x100) >> 1);
+    return (uint8_t) (((ch * 0xFF / CHAN_MAX_VALUE) + 0x100) >> 1);
 }
 
 
-static void read_controls(u8* throttle, u8* rudder, u8* elevator, u8* aileron,
-                          u8* flags, u8* rudder_trim, u8* elevator_trim, u8* aileron_trim)
+static void read_controls(uint8_t* throttle, uint8_t* rudder, uint8_t* elevator, uint8_t* aileron,
+                          uint8_t* flags, uint8_t* rudder_trim, uint8_t* elevator_trim, uint8_t* aileron_trim)
 {
     // Protocol is registered AETRF, that is
     // Aileron is channel 1, Elevator - 2, Throttle - 3, Rudder - 4, Flip control - 5
@@ -218,7 +218,7 @@ static void read_controls(u8* throttle, u8* rudder, u8* elevator, u8* aileron,
 }
 
 
-static void send_packet(u8 bind)
+static void send_packet(uint8_t bind)
 {
     if (bind) {
         packet[0]= rx_tx_addr[0]; // send data phase address in first 4 bytes
@@ -256,7 +256,7 @@ static void send_packet(u8 bind)
         NRF24L01_WritePayload(packet, 8);
     } else {
         packet[8] = packet[0];  // checksum
-        for(u8 i=1; i < 8; i++) packet[8] += packet[i];
+        for(uint8_t i=1; i < 8; i++) packet[8] += packet[i];
         packet[8] = ~packet[8];
 
         NRF24L01_WritePayload(packet, 9);
@@ -334,16 +334,16 @@ static void yd717_init()
         // them by their numbers
         // It's all magic, eavesdropped from real transfer and not even from the
         // data sheet - it has slightly different values
-        NRF24L01_WriteRegisterMulti(0x00, (u8 *) "\x40\x4B\x01\xE2", 4);
-        NRF24L01_WriteRegisterMulti(0x01, (u8 *) "\xC0\x4B\x00\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x02, (u8 *) "\xD0\xFC\x8C\x02", 4);
-        NRF24L01_WriteRegisterMulti(0x03, (u8 *) "\x99\x00\x39\x21", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xD9\x96\x82\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x05, (u8 *) "\x24\x06\x7F\xA6", 4);
-        NRF24L01_WriteRegisterMulti(0x0C, (u8 *) "\x00\x12\x73\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0D, (u8 *) "\x46\xB4\x80\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xDF\x96\x82\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xD9\x96\x82\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x00, (uint8_t *) "\x40\x4B\x01\xE2", 4);
+        NRF24L01_WriteRegisterMulti(0x01, (uint8_t *) "\xC0\x4B\x00\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x02, (uint8_t *) "\xD0\xFC\x8C\x02", 4);
+        NRF24L01_WriteRegisterMulti(0x03, (uint8_t *) "\x99\x00\x39\x21", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xD9\x96\x82\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x05, (uint8_t *) "\x24\x06\x7F\xA6", 4);
+        NRF24L01_WriteRegisterMulti(0x0C, (uint8_t *) "\x00\x12\x73\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0D, (uint8_t *) "\x46\xB4\x80\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xDF\x96\x82\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xD9\x96\x82\x1B", 4);
     } else {
         dbgprintf("nRF24L01 detected\n");
     }
@@ -357,9 +357,9 @@ static void yd717_init()
 static void YD717_init1()
 {
     // for bind packets set address to prearranged value known to receiver
-    u8 bind_rx_tx_addr[] = {0x65, 0x65, 0x65, 0x65, 0x65};
+    uint8_t bind_rx_tx_addr[] = {0x65, 0x65, 0x65, 0x65, 0x65};
     if(Model.protocol == PROTOCOL_SymaX)
-        for(u8 i=0; i < 5; i++) bind_rx_tx_addr[i]  = 0x60;
+        for(uint8_t i=0; i < 5; i++) bind_rx_tx_addr[i]  = 0x60;
 
     NRF24L01_WriteRegisterMulti(NRF24L01_0A_RX_ADDR_P0, bind_rx_tx_addr, 5);
     NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR, bind_rx_tx_addr, 5);
@@ -376,7 +376,7 @@ static void YD717_init2()
 
 #ifdef YD717_TELEMETRY
 static void update_telemetry() {
-  static u8 frameloss = 0;
+  static uint8_t frameloss = 0;
 
   frameloss += NRF24L01_ReadReg(NRF24L01_08_OBSERVE_TX) >> 4;
   NRF24L01_WriteReg(NRF24L01_05_RF_CH, RF_CHANNEL);   // reset packet loss counter
@@ -388,7 +388,7 @@ static void update_telemetry() {
 
 
 MODULE_CALLTYPE
-static u16 yd717_callback()
+static uint16_t yd717_callback()
 {
     switch (phase) {
     case YD717_INIT1:
@@ -442,7 +442,7 @@ static u16 yd717_callback()
 }
 
 
-static void set_rx_tx_addr(u32 id)
+static void set_rx_tx_addr(uint32_t id)
 {
     rx_tx_addr[0] = (id >> 24) & 0xFF;
     rx_tx_addr[1] = (id >> 16) & 0xFF;
@@ -454,10 +454,10 @@ static void set_rx_tx_addr(u32 id)
 // Generate address to use from TX id and manufacturer id (STM32 unique id)
 static void initialize_rx_tx_addr()
 {
-    u32 lfsr = 0xb2c54a2ful;
+    uint32_t lfsr = 0xb2c54a2ful;
 
 #ifndef USE_FIXED_MFGID
-    u8 var[12];
+    uint8_t var[12];
     MCU_SerialNumber(var, 12);
     dbgprintf("Manufacturer id: ");
     for (int i = 0; i < 12; ++i) {
@@ -468,11 +468,11 @@ static void initialize_rx_tx_addr()
 #endif
 
     if (Model.fixed_id) {
-       for (u8 i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
+       for (uint8_t i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
            rand32_r(&lfsr, (Model.fixed_id >> j) & 0xff);
     }
     // Pump zero bytes for LFSR to diverge more
-    for (u8 i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
+    for (uint8_t i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
 
     set_rx_tx_addr(lfsr);
 }

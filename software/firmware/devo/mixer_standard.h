@@ -17,16 +17,16 @@ typedef enum {
 } FunctionSwitch;
 
 typedef struct {
-    u8 aile;
-    u8 elev;
-    u8 throttle;
-    u8 rudd;
-    u8 pitch;
-    u8 gear;
-    u8 aux2;
-    u8 actual_aile;
-    u8 actual_elev;
-    u8 switches[SWITCHFUNC_LAST];
+    uint8_t aile;
+    uint8_t elev;
+    uint8_t throttle;
+    uint8_t rudd;
+    uint8_t pitch;
+    uint8_t gear;
+    uint8_t aux2;
+    uint8_t actual_aile;
+    uint8_t actual_elev;
+    uint8_t switches[SWITCHFUNC_LAST];
 } MappedSimpleChannels;
 
 #define MAX_TRAVEL_LIMIT 175

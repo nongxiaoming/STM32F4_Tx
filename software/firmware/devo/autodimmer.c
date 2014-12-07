@@ -17,7 +17,7 @@
 #include "autodimmer.h"
 #include "tx.h"
 
-static u32 last_time;  // last_time must be u32
+static uint32_t last_time;  // last_time must be uint32_t
 static AutoDimmerState auto_dimmer_state = AUTODIMMER_STOP;  //backlight on
 
 void AUTODIMMER_Init()
@@ -49,7 +49,7 @@ void AUTODIMMER_Update()
         return; // dimmer target is even higher than current brightness, no need to make backlight dimmer
     if (auto_dimmer_state == AUTODIMMER_START)
         return; //backlight is already dimmer, no need to re-dim it
-    u32 current_time = CLOCK_getms();
+    uint32_t current_time = CLOCK_getms();
     if (current_time - last_time < Transmitter.auto_dimmer.timer)
         return;
     last_time = current_time;

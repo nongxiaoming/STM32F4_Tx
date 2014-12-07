@@ -65,21 +65,21 @@ enum {
 };
 
 
-static u8 packet[PAYLOADSIZE];
-static u8 packet_sent;
-static u8 tx_id[TXID_SIZE];
-static u8 rf_ch_num;
-static u8 packet_count;
-// static u16 bind_counter;
-static u32 total_packets;
-static u8 tx_power;
-static u16 throttle, rudder, elevator, aileron;
-static u8 flags;
-static u8 hopping_frequency[NFREQCHANNELS];
+static uint8_t packet[PAYLOADSIZE];
+static uint8_t packet_sent;
+static uint8_t tx_id[TXID_SIZE];
+static uint8_t rf_ch_num;
+static uint8_t packet_count;
+// static uint16_t bind_counter;
+static uint32_t total_packets;
+static uint8_t tx_power;
+static uint16_t throttle, rudder, elevator, aileron;
+static uint8_t flags;
+static uint8_t hopping_frequency[NFREQCHANNELS];
 
 
 //
-static u8 phase;
+static uint8_t phase;
 enum {
     ESKY150_INIT2 = 0,
     ESKY150_DATA
@@ -97,7 +97,7 @@ enum {
     PKT_TIMEOUT
 };
 
-static u8 packet_ack()
+static uint8_t packet_ack()
 {
     switch (NRF24L01_ReadReg(NRF24L01_07_STATUS) & (BV(NRF24L01_07_TX_DS) | BV(NRF24L01_07_MAX_RT))) {
     case BV(NRF24L01_07_TX_DS):
@@ -111,10 +111,10 @@ static u8 packet_ack()
 // 2-bytes CRC
 #define CRC_CONFIG (BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_CRCO))
 
-static u16 esky150_init()
+static uint16_t esky150_init()
 {
-    u8 rx_addr[ADDR_SIZE] = { 0x73, 0x73, 0x74, 0x63 };
-    u8 tx_addr[ADDR_SIZE] = { 0x71, 0x0A, 0x31, 0xF4 };
+    uint8_t rx_addr[ADDR_SIZE] = { 0x73, 0x73, 0x74, 0x63 };
+    uint8_t tx_addr[ADDR_SIZE] = { 0x71, 0x0A, 0x31, 0xF4 };
     NRF24L01_Initialize();
 
     NRF24L01_WriteReg(NRF24L01_00_CONFIG, CRC_CONFIG); 
@@ -152,17 +152,17 @@ static u16 esky150_init()
         // them by their numbers
         // It's all magic, eavesdropped from real transfer and not even from the
         // data sheet - it has slightly different values
-        NRF24L01_WriteRegisterMulti(0x00, (u8 *) "\x40\x4B\x01\xE2", 4);
-        NRF24L01_WriteRegisterMulti(0x01, (u8 *) "\xC0\x4B\x00\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x02, (u8 *) "\xD0\xFC\x8C\x02", 4);
-        NRF24L01_WriteRegisterMulti(0x03, (u8 *) "\xF9\x00\x39\x21", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x05, (u8 *) "\x24\x06\x7F\xA6", 4);
-        NRF24L01_WriteRegisterMulti(0x0C, (u8 *) "\x00\x12\x73\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0D, (u8 *) "\x46\xB4\x80\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0E, (u8 *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC7\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x00, (uint8_t *) "\x40\x4B\x01\xE2", 4);
+        NRF24L01_WriteRegisterMulti(0x01, (uint8_t *) "\xC0\x4B\x00\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x02, (uint8_t *) "\xD0\xFC\x8C\x02", 4);
+        NRF24L01_WriteRegisterMulti(0x03, (uint8_t *) "\xF9\x00\x39\x21", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x05, (uint8_t *) "\x24\x06\x7F\xA6", 4);
+        NRF24L01_WriteRegisterMulti(0x0C, (uint8_t *) "\x00\x12\x73\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0D, (uint8_t *) "\x46\xB4\x80\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0E, (uint8_t *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC7\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
     } else {
         printf("nRF24L01 detected\n");
     }
@@ -173,7 +173,7 @@ static u16 esky150_init()
 }
 
 
-static u16 esky150_init2()
+static uint16_t esky150_init2()
 {
     NRF24L01_FlushTx();
     NRF24L01_FlushRx();
@@ -188,18 +188,18 @@ static u16 esky150_init2()
 }
 
 
-static void calc_fh_channels(u32 seed)
+static void calc_fh_channels(uint32_t seed)
 {
     // Use channels 2..79
-    u8 first = seed % 37 + 2;
-    u8 second = first + 40;
+    uint8_t first = seed % 37 + 2;
+    uint8_t second = first + 40;
     hopping_frequency[0] = first;  // 0x22;
     hopping_frequency[1] = second; // 0x4a;
     printf("Using channels %02d and %02d\n", first, second);
 }
 
 
-static void set_tx_id(u32 id)
+static void set_tx_id(uint32_t id)
 {
     tx_id[0] = (id >> 24) & 0xFF;
     tx_id[1] = (id >> 16) & 0xFF;
@@ -210,7 +210,7 @@ static void set_tx_id(u32 id)
 }
 
 
-static u16 convert_channel(u8 num)
+static uint16_t convert_channel(uint8_t num)
 {
     s32 ch = Channels[num];
     if (ch < CHAN_MIN_VALUE) {
@@ -218,12 +218,12 @@ static u16 convert_channel(u8 num)
     } else if (ch > CHAN_MAX_VALUE) {
         ch = CHAN_MAX_VALUE;
     }
-    return (u16) ((ch * 500 / CHAN_MAX_VALUE) + 1500);
+    return (uint16_t) ((ch * 500 / CHAN_MAX_VALUE) + 1500);
 }
 
 
-static void read_controls(u16* throttle, u16* aileron, u16* elevator, u16* rudder,
-                          u8* flags)
+static void read_controls(uint16_t* throttle, uint16_t* aileron, uint16_t* elevator, uint16_t* rudder,
+                          uint8_t* flags)
 {
     (void) flags;
     // Protocol is registered TAERG, that is
@@ -250,10 +250,10 @@ static void read_controls(u16* throttle, u16* aileron, u16* elevator, u16* rudde
 
 
 
-static void send_packet(u8 bind)
+static void send_packet(uint8_t bind)
 {
     (void) bind;
-    u8 rf_ch = hopping_frequency[rf_ch_num];
+    uint8_t rf_ch = hopping_frequency[rf_ch_num];
     rf_ch_num = 1 - rf_ch_num;
 
     read_controls(&throttle, &aileron, &elevator, &rudder, &flags);
@@ -273,7 +273,7 @@ static void send_packet(u8 bind)
     packet[11] = 0xd8;
     packet[12] = 0x18;
     packet[13] = 0xf8;
-    u8 sum = 0;
+    uint8_t sum = 0;
     for (int i = 0; i < 14; ++i) sum += packet[i];
     packet[14] = sum;
 
@@ -305,9 +305,9 @@ static void send_packet(u8 bind)
 
 
 MODULE_CALLTYPE
-static u16 esky150_callback()
+static uint16_t esky150_callback()
 {
-    u16 timeout = PACKET_PERIOD;
+    uint16_t timeout = PACKET_PERIOD;
     switch (phase) {
     case ESKY150_INIT2:
         timeout = esky150_init2();
@@ -331,10 +331,10 @@ static u16 esky150_callback()
 // Generate internal id from TX id and manufacturer id (STM32 unique id)
 static void initialize_tx_id()
 {
-    u32 lfsr = 0xb2c54a2ful;
+    uint32_t lfsr = 0xb2c54a2ful;
 
 #ifndef USE_FIXED_MFGID
-    u8 var[12];
+    uint8_t var[12];
     MCU_SerialNumber(var, 12);
     printf("Manufacturer id: ");
     for (int i = 0; i < 12; ++i) {
@@ -345,22 +345,22 @@ static void initialize_tx_id()
 #endif
 
     if (Model.fixed_id) {
-       for (u8 i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
+       for (uint8_t i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
            rand32_r(&lfsr, (Model.fixed_id >> j) & 0xff);
     }
     // Pump zero bytes for LFSR to diverge more
-    for (u8 i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
+    for (uint8_t i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
 
     set_tx_id(lfsr);
 }
 
-static void initialize(u8 bind)
+static void initialize(uint8_t bind)
 {
     (void) bind;
     CLOCK_StopTimer();
     tx_power = Model.tx_power;
     total_packets = 0;
-    u16 timeout = esky150_init();
+    uint16_t timeout = esky150_init();
     initialize_tx_id();
 
     CLOCK_StartTimer(timeout, esky150_callback);

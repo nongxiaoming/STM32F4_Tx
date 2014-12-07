@@ -44,26 +44,26 @@
 
 #define PAYLOADSIZE 13
 
-static u8 packet[PAYLOADSIZE];
-static u8 packet_sent;
-static u8 tx_id[4];
+static uint8_t packet[PAYLOADSIZE];
+static uint8_t packet_sent;
+static uint8_t tx_id[4];
 
-static u8 rf_ch_num; // index into channel array
-static u8 rf_channels[6]; // 3 repeats on 2 channels
-static u8 end_bytes[6];
+static uint8_t rf_ch_num; // index into channel array
+static uint8_t rf_channels[6]; // 3 repeats on 2 channels
+static uint8_t end_bytes[6];
 
 
-static u16 counter;
-static u32 packet_counter;
+static uint16_t counter;
+static uint32_t packet_counter;
 
-static u8 tx_power;
-static u16 input[6]; // aileron, elevator, throttle, rudder, gyro, pitch
+static uint8_t tx_power;
+static uint16_t input[6]; // aileron, elevator, throttle, rudder, gyro, pitch
 
-static u8 channel_code;
+static uint8_t channel_code;
 
 
 //
-static u8 phase;
+static uint8_t phase;
 enum {
     ESKY_INIT2 = 0,
     ESKY_INIT2_NO_BIND,
@@ -82,7 +82,7 @@ enum {
     PKT_TIMEOUT
 };
 
-static u8 packet_ack()
+static uint8_t packet_ack()
 {
     switch (NRF24L01_ReadReg(NRF24L01_07_STATUS) & (BV(NRF24L01_07_TX_DS) | BV(NRF24L01_07_MAX_RT))) {
     case BV(NRF24L01_07_TX_DS):
@@ -96,7 +96,7 @@ static u8 packet_ack()
 static void set_bind_address()
 {
     NRF24L01_WriteReg(NRF24L01_03_SETUP_AW, 0x01);     // 3-byte RX/TX address for bind packets
-    u8 rx_tx_addr[] = {0x00, 0x00, 0x00};
+    uint8_t rx_tx_addr[] = {0x00, 0x00, 0x00};
     NRF24L01_WriteRegisterMulti(NRF24L01_0A_RX_ADDR_P0, rx_tx_addr, 3);
     NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR,    rx_tx_addr, 3);
 }
@@ -110,7 +110,7 @@ static void set_data_address()
 }
 
 
-static void esky_init(u8 bind)
+static void esky_init(uint8_t bind)
 {
     NRF24L01_Initialize();
 
@@ -156,17 +156,17 @@ static void esky_init(u8 bind)
         // them by their numbers
         // It's all magic, eavesdropped from real transfer and not even from the
         // data sheet - it has slightly different values
-        NRF24L01_WriteRegisterMulti(0x00, (u8 *) "\x40\x4B\x01\xE2", 4);
-        NRF24L01_WriteRegisterMulti(0x01, (u8 *) "\xC0\x4B\x00\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x02, (u8 *) "\xD0\xFC\x8C\x02", 4);
-        NRF24L01_WriteRegisterMulti(0x03, (u8 *) "\xF9\x00\x39\x21", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x05, (u8 *) "\x24\x06\x7F\xA6", 4);
-        NRF24L01_WriteRegisterMulti(0x0C, (u8 *) "\x00\x12\x73\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0D, (u8 *) "\x46\xB4\x80\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0E, (u8 *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC7\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x00, (uint8_t *) "\x40\x4B\x01\xE2", 4);
+        NRF24L01_WriteRegisterMulti(0x01, (uint8_t *) "\xC0\x4B\x00\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x02, (uint8_t *) "\xD0\xFC\x8C\x02", 4);
+        NRF24L01_WriteRegisterMulti(0x03, (uint8_t *) "\xF9\x00\x39\x21", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x05, (uint8_t *) "\x24\x06\x7F\xA6", 4);
+        NRF24L01_WriteRegisterMulti(0x0C, (uint8_t *) "\x00\x12\x73\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0D, (uint8_t *) "\x46\xB4\x80\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0E, (uint8_t *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC7\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
     } else {
         printf("nRF24L01 detected\n");
     }
@@ -181,11 +181,11 @@ static void esky_init2()
     NRF24L01_FlushTx();
     packet_sent = 0;
     rf_ch_num = 0;
-    u32 channel_ord = rand32_r(0, 0) % 74;
-    channel_code = 10 + (u8) channel_ord;
-    u8 channel1, channel2;
-    channel1 = 10 + (u8) ((37 + channel_ord*5) % 74);
-    channel2 = 10 + (u8) ((channel_ord*5) % 74) ;
+    uint32_t channel_ord = rand32_r(0, 0) % 74;
+    channel_code = 10 + (uint8_t) channel_ord;
+    uint8_t channel1, channel2;
+    channel1 = 10 + (uint8_t) ((37 + channel_ord*5) % 74);
+    channel2 = 10 + (uint8_t) ((channel_ord*5) % 74) ;
     printf("channel code %d, channel1 %d, channel2 %d\n", (int) channel_code, (int) channel1, (int) channel2);
 
     rf_channels[0] = channel1;
@@ -203,13 +203,13 @@ static void esky_init2()
     end_bytes[5] = channel2*2;
 
     // Turn radio power on
-    u8 config = BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_CRCO) | BV(NRF24L01_00_PWR_UP);
+    uint8_t config = BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_CRCO) | BV(NRF24L01_00_PWR_UP);
     NRF24L01_WriteReg(NRF24L01_00_CONFIG, config);
     // Implicit delay in callback
     // delayMicroseconds(150);
 }
 
-static void set_tx_id(u32 id)
+static void set_tx_id(uint32_t id)
 {
     tx_id[0] = (id >> 16) & 0xFF;
     tx_id[1] = (id >> 8) & 0xFF;
@@ -219,7 +219,7 @@ static void set_tx_id(u32 id)
 
 // Channel values are servo time in ms, 1500ms is the middle,
 // 1000 and 2000 are min and max values
-static u16 convert_channel(u8 num)
+static uint16_t convert_channel(uint8_t num)
 {
     s32 ch = Channels[num];
     if (ch < CHAN_MIN_VALUE) {
@@ -227,11 +227,11 @@ static u16 convert_channel(u8 num)
     } else if (ch > CHAN_MAX_VALUE) {
         ch = CHAN_MAX_VALUE;
     }
-    return (u16) ((ch * 500 / CHAN_MAX_VALUE) + 1500);
+    return (uint16_t) ((ch * 500 / CHAN_MAX_VALUE) + 1500);
 }
 
 
-static void read_controls(u16* values)
+static void read_controls(uint16_t* values)
 {
     // Protocol is registered AETRG, that is
     // Aileron is channel 0, Elevator - 1, Throttle - 2, Rudder - 3
@@ -239,7 +239,7 @@ static void read_controls(u16* values)
     // throttle can be less than CHAN_MIN_VALUE or larger than
     // CHAN_MAX_VALUE. As we have no space here, we hard-limit
     // channels values by min..max range
-    for (u8 i = 0; i < 6; i++) {
+    for (uint8_t i = 0; i < 6; i++) {
         values[i] = convert_channel(i);
     }
 
@@ -254,9 +254,9 @@ static void read_controls(u16* values)
     }
 }
 
-static void send_packet(u8 bind)
+static void send_packet(uint8_t bind)
 {
-    u8 rf_ch = 50; // bind channel
+    uint8_t rf_ch = 50; // bind channel
     if (bind) {
         // Bind packet
         packet[0]  = tx_id[2];
@@ -280,13 +280,13 @@ static void send_packet(u8 bind)
 
         if (rf_ch_num == 0) read_controls(input);
         rf_ch = rf_channels[rf_ch_num];
-        u8 end_byte = end_bytes[rf_ch_num];
+        uint8_t end_byte = end_bytes[rf_ch_num];
         rf_ch_num += 1;
         if (rf_ch_num > 6) rf_ch_num = 0;
 
         for (int i = 0; i < 6; i++) {
-            packet[i*2]    = (u8) (input[i] >> 8);
-            packet[i*2+1]  = (u8) (input[i] & 0xFF);
+            packet[i*2]    = (uint8_t) (input[i] >> 8);
+            packet[i*2+1]  = (uint8_t) (input[i] & 0xFF);
         }
         packet[12] = end_byte;
 
@@ -317,7 +317,7 @@ static void send_packet(u8 bind)
 
 
 MODULE_CALLTYPE
-static u16 esky_callback()
+static uint16_t esky_callback()
 {
     switch (phase) {
     case ESKY_INIT2:
@@ -355,7 +355,7 @@ static u16 esky_callback()
     return PACKET_PERIOD;
 }
 
-static void initialize(u8 bind)
+static void initialize(uint8_t bind)
 {
     CLOCK_StopTimer();
     tx_power = Model.tx_power;
@@ -366,12 +366,12 @@ static void initialize(u8 bind)
         PROTOCOL_SetBindState(BIND_COUNT * PACKET_PERIOD / 1000); // msec
     }
 
-    u32 id = 0xb2c54a2f;
+    uint32_t id = 0xb2c54a2f;
     if (Model.fixed_id) {
         id ^= Model.fixed_id + (Model.fixed_id << 16);
     } else {
         /*
-        u32* stm32id = (uint32_t*) 0x1FFFF7E8;
+        uint32_t* stm32id = (uint32_t*) 0x1FFFF7E8;
         id ^= *stm32id++;
         id ^= *stm32id++;
         id ^= *stm32id;

@@ -59,22 +59,22 @@ enum CYRF_PWR {
 /* SPI CYRF6936 */
 void CYRF_Initialize(void);
 int CYRF_Reset(void);
-void CYRF_GetMfgData(u8 data[]);
+void CYRF_GetMfgData(uint8_t data[]);
 
 void CYRF_SetTxRxMode(enum TXRX_State);
-void CYRF_ConfigRFChannel(u8 ch);
-void CYRF_SetPower(u8 power);
-void CYRF_ConfigCRCSeed(u16 crc);
+void CYRF_ConfigRFChannel(uint8_t ch);
+void CYRF_SetPower(uint8_t power);
+void CYRF_ConfigCRCSeed(uint16_t crc);
 void CYRF_StartReceive(void);
-void CYRF_ConfigSOPCode(const u8 *sopcodes);
-void CYRF_ConfigDataCode(const u8 *datacodes, u8 len);
-u8 CYRF_ReadRSSI(u32 dodummyread);
-void CYRF_ReadDataPacket(u8 dpbuffer[]); 
-void CYRF_WriteDataPacket(const u8 dpbuffer[]);
-void CYRF_WriteDataPacketLen(const u8 dpbuffer[], u8 len);
-void CYRF_WriteRegister(u8 address, u8 data);
-u8 CYRF_ReadRegister(u8 address);
-void CYRF_WritePreamble(u32 preamble);
-u8 CYRF_MaxPower(void);
-void CYRF_FindBestChannels(u8 *channels, u8 len, u8 minspace, u8 minchan, u8 maxchan);
+void CYRF_ConfigSOPCode(const uint8_t *sopcodes);
+void CYRF_ConfigDataCode(const uint8_t *datacodes, uint8_t len);
+uint8_t CYRF_ReadRSSI(uint32_t dodummyread);
+void CYRF_ReadDataPacket(uint8_t dpbuffer[]); 
+void CYRF_WriteDataPacket(const uint8_t dpbuffer[]);
+void CYRF_WriteDataPacketLen(const uint8_t dpbuffer[], uint8_t len);
+void CYRF_WriteRegister(uint8_t address, uint8_t data);
+uint8_t CYRF_ReadRegister(uint8_t address);
+void CYRF_WritePreamble(uint32_t preamble);
+uint8_t CYRF_MaxPower(void);
+void CYRF_FindBestChannels(uint8_t *channels, uint8_t len, uint8_t minspace, uint8_t minchan, uint8_t maxchan);
 #endif

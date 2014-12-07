@@ -54,35 +54,35 @@ static int counter;
 
 #define FREQUENCE_NUM  20
 // available frequency must be in between 2402 and 2477
-static u8 hopping_frequency[FREQUENCE_NUM];
-static u8 hopping_frequency_no;
+static uint8_t hopping_frequency[FREQUENCE_NUM];
+static uint8_t hopping_frequency_no;
 
-static const u8  binding_adr_rf[5]={0x12,0x23,0x23,0x45,0x78}; // fixed binding ids for all planes
+static const uint8_t  binding_adr_rf[5]={0x12,0x23,0x23,0x45,0x78}; // fixed binding ids for all planes
 // rf_adr_buf can be used for fixed id
-static u8 rf_adr_buf[5]; // ={0x13,0x88,0x46,0x57,0x76};
+static uint8_t rf_adr_buf[5]; // ={0x13,0x88,0x46,0x57,0x76};
 
-static u8 binding_idx;
-static u8 bind_buf_arry[4][10];
+static uint8_t binding_idx;
+static uint8_t bind_buf_arry[4][10];
 
 static unsigned int ch_data[8];
-static u8 payload[10];
-static u8 counter1ms;
+static uint8_t payload[10];
+static uint8_t counter1ms;
 
 
 // HiSky protocol uses TX id as an address for nRF24L01, and uses frequency hopping sequence
 // which does not depend on this id and is passed explicitly in binding sequence. So we are free
 // to generate this sequence as we wish. It should be in the range [02..77]
-static void calc_fh_channels(u32 seed)
+static void calc_fh_channels(uint32_t seed)
 {
     int idx = 0;
-    u32 rnd = seed;
+    uint32_t rnd = seed;
     while (idx < FREQUENCE_NUM) {
         int i;
         int count_2_26 = 0, count_27_50 = 0, count_51_74 = 0;
         rnd = rnd * 0x0019660D + 0x3C6EF35F; // Randomization
 
         // Use least-significant byte. 73 is prime, so channels 76..77 are unused
-        u8 next_ch = ((rnd >> 8) % 73) + 2;
+        uint8_t next_ch = ((rnd >> 8) % 73) + 2;
         // Keep the distance 2 between the channels - either odd or even
         if (((next_ch ^ seed) & 0x01 )== 0)
             continue;
@@ -111,9 +111,9 @@ static void calc_fh_channels(u32 seed)
 
 static void build_binding_packet(void)
 {
-    u8 i;
+    uint8_t i;
     unsigned int  sum;
-    u8 sum_l,sum_h;
+    uint8_t sum_l,sum_h;
 
     counter1ms = 0;
     hopping_frequency_no = 0;
@@ -121,9 +121,9 @@ static void build_binding_packet(void)
     sum = 0;
     for(i=0;i<5;i++)
       sum += rf_adr_buf[i];
-    sum_l = (u8)sum;
+    sum_l = (uint8_t)sum;
     sum >>= 8;
-    sum_h = (u8)sum;
+    sum_h = (uint8_t)sum;
     bind_buf_arry[0][0] = 0xff;
     bind_buf_arry[0][1] = 0xaa;
     bind_buf_arry[0][2] = 0x55;
@@ -183,23 +183,23 @@ static void hisky_init()
         // them by their numbers
         // It's all magic, eavesdropped from real transfer and not even from the
         // data sheet - it has slightly different values
-        NRF24L01_WriteRegisterMulti(0x00, (u8 *) "\x40\x4B\x01\xE2", 4);
-        NRF24L01_WriteRegisterMulti(0x01, (u8 *) "\xC0\x4B\x00\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x02, (u8 *) "\xD0\xFC\x8C\x02", 4);
-        NRF24L01_WriteRegisterMulti(0x03, (u8 *) "\xF9\x00\x39\x21", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x05, (u8 *) "\x24\x06\x7F\xA6", 4);
-        NRF24L01_WriteRegisterMulti(0x06, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x07, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x08, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x09, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0A, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0B, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0C, (u8 *) "\x00\x12\x73\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0D, (u8 *) "\x46\xB4\x80\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0E, (u8 *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC7\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x00, (uint8_t *) "\x40\x4B\x01\xE2", 4);
+        NRF24L01_WriteRegisterMulti(0x01, (uint8_t *) "\xC0\x4B\x00\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x02, (uint8_t *) "\xD0\xFC\x8C\x02", 4);
+        NRF24L01_WriteRegisterMulti(0x03, (uint8_t *) "\xF9\x00\x39\x21", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x05, (uint8_t *) "\x24\x06\x7F\xA6", 4);
+        NRF24L01_WriteRegisterMulti(0x06, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x07, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x08, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x09, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0A, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0B, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0C, (uint8_t *) "\x00\x12\x73\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0D, (uint8_t *) "\x46\xB4\x80\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0E, (uint8_t *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC7\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
     } else {
         printf("nRF24L01 detected\n");
     }
@@ -210,7 +210,7 @@ static void hisky_init()
 static void build_ch_data()
 {
     s32 temp;
-    u8 i;
+    uint8_t i;
     for (i = 0; i< 8; i++) {
         if (i >= Model.num_channels)
             ch_data[i] = 500; // any data between 0 to 1000 is ok
@@ -226,18 +226,18 @@ static void build_ch_data()
                 ch_data[i] = (unsigned int)temp;
         }
 
-        payload[i] = (u8)ch_data[i];
+        payload[i] = (uint8_t)ch_data[i];
     }
 
-    payload[8]  = (u8)((ch_data[0]>>8)&0x0003);
-    payload[8] |= (u8)((ch_data[1]>>6)&0x000c);
-    payload[8] |= (u8)((ch_data[2]>>4)&0x0030);
-    payload[8] |= (u8)((ch_data[3]>>2)&0x00c0);
+    payload[8]  = (uint8_t)((ch_data[0]>>8)&0x0003);
+    payload[8] |= (uint8_t)((ch_data[1]>>6)&0x000c);
+    payload[8] |= (uint8_t)((ch_data[2]>>4)&0x0030);
+    payload[8] |= (uint8_t)((ch_data[3]>>2)&0x00c0);
 
-    payload[9]  = (u8)((ch_data[4]>>8)&0x0003);
-    payload[9] |= (u8)((ch_data[5]>>6)&0x000c);
-    payload[9] |= (u8)((ch_data[6]>>4)&0x0030);
-    payload[9] |= (u8)((ch_data[7]>>2)&0x00c0);
+    payload[9]  = (uint8_t)((ch_data[4]>>8)&0x0003);
+    payload[9] |= (uint8_t)((ch_data[5]>>6)&0x000c);
+    payload[9] |= (uint8_t)((ch_data[6]>>4)&0x0030);
+    payload[9] |= (uint8_t)((ch_data[7]>>2)&0x00c0);
 #ifdef EMULATOR
     for (i = 0; i < 8; i++)
         printf("ch[%d]=%d,  payload[%d]=%d\n", i, ch_data[i], i, payload[i]);
@@ -247,14 +247,14 @@ static void build_ch_data()
 }
 
 MODULE_CALLTYPE
-static u16 hisky_cb()
+static uint16_t hisky_cb()
 {
     counter1ms++;
     if(counter1ms==1)
         NRF24L01_FlushTx();
     else if(counter1ms==2) {
         if (counter>0) {
-            NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR, (u8 *)binding_adr_rf, 5);
+            NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR, (uint8_t *)binding_adr_rf, 5);
             NRF24L01_WriteReg(NRF24L01_05_RF_CH, 81);
         }
     }else if(counter1ms==3) {
@@ -299,10 +299,10 @@ static u16 hisky_cb()
 // Generate internal id from TX id and manufacturer id (STM32 unique id)
 static void initialize_tx_id()
 {
-    u32 lfsr = 0x7649eca9ul;
+    uint32_t lfsr = 0x7649eca9ul;
 
 #ifndef USE_FIXED_MFGID
-    u8 var[12];
+    uint8_t var[12];
     MCU_SerialNumber(var, 12);
     printf("Manufacturer id: ");
     for (int i = 0; i < 12; ++i) {
@@ -313,13 +313,13 @@ static void initialize_tx_id()
 #endif
 
     if (Model.fixed_id) {
-       for (u8 i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
+       for (uint8_t i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
            rand32_r(&lfsr, (Model.fixed_id >> j) & 0xff);
     }
     // Pump zero bytes for LFSR to diverge more
     for (int i = 0; i < TXID_SIZE; ++i) rand32_r(&lfsr, 0);
 
-    for (u8 i = 0; i < TXID_SIZE; ++i) {
+    for (uint8_t i = 0; i < TXID_SIZE; ++i) {
         rf_adr_buf[i] = lfsr & 0xff;
         rand32_r(&lfsr, i);
     }
@@ -329,7 +329,7 @@ static void initialize_tx_id()
 
     // Use LFSR to seed frequency hopping sequence after another
     // divergence round
-    for (u8 i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
+    for (uint8_t i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
     calc_fh_channels(lfsr);
 
     printf("FH Seq: ");
@@ -339,7 +339,7 @@ static void initialize_tx_id()
     printf("\r\n");
 }
 
-static void initialize(u8 bind)
+static void initialize(uint8_t bind)
 {
     CLOCK_StopTimer();
     initialize_tx_id();

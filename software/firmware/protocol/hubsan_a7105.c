@@ -60,13 +60,13 @@ enum {
 };
 ctassert(LAST_PROTO_OPT <= NUM_PROTO_OPTS, too_many_protocol_opts);
 
-static u8 packet[16];
-static u8 channel;
-static const u8 allowed_ch[] = {0x14, 0x1e, 0x28, 0x32, 0x3c, 0x46, 0x50, 0x5a, 0x64, 0x6e, 0x78, 0x82};
-static u32 sessionid;
-static const u32 txid = 0xdb042679;
-static u8 state;
-static u8 packet_count;
+static uint8_t packet[16];
+static uint8_t channel;
+static const uint8_t allowed_ch[] = {0x14, 0x1e, 0x28, 0x32, 0x3c, 0x46, 0x50, 0x5a, 0x64, 0x6e, 0x78, 0x82};
+static uint32_t sessionid;
+static const uint32_t txid = 0xdb042679;
+static uint8_t state;
+static uint8_t packet_count;
 enum {
     BIND_1,
     BIND_2,
@@ -86,10 +86,10 @@ enum {
 
 static int hubsan_init()
 {
-    u8 if_calibration1;
-    u8 vco_calibration0;
-    u8 vco_calibration1;
-    //u8 vco_current;
+    uint8_t if_calibration1;
+    uint8_t vco_calibration0;
+    uint8_t vco_calibration1;
+    //uint8_t vco_current;
 
     A7105_WriteID(0x55201041);
     A7105_WriteReg(A7105_01_MODE_CONTROL, 0x63);
@@ -110,7 +110,7 @@ static int hubsan_init()
     A7105_WriteReg(0x02, 1);
     //vco_current =
     A7105_ReadReg(0x02);
-    u32 ms = CLOCK_getms();
+    uint32_t ms = CLOCK_getms();
     CLOCK_ResetWatchdog();
     while(CLOCK_getms()  - ms < 500) {
         if(! A7105_ReadReg(0x02))
@@ -186,7 +186,7 @@ static void update_crc()
         sum += packet[i];
     packet[15] = (256 - (sum % 256)) & 0xff;
 }
-static void hubsan_build_bind_packet(u8 state)
+static void hubsan_build_bind_packet(uint8_t state)
 {
     packet[0] = state;
     packet[1] = channel;
@@ -206,7 +206,7 @@ static void hubsan_build_bind_packet(u8 state)
     update_crc();
 }
 
-static s16 get_channel(u8 ch, s32 scale, s32 center, s32 range)
+static s16 get_channel(uint8_t ch, s32 scale, s32 center, s32 range)
 {
     s32 value = (s32)Channels[ch] * scale / CHAN_MAX_VALUE + center;
     if (value < center - range)
@@ -263,7 +263,7 @@ static void hubsan_build_packet()
     update_crc();
 }
 
-static u8 hubsan_check_integrity() 
+static uint8_t hubsan_check_integrity() 
 {
     int sum = 0;
     for(int i = 0; i < 15; i++)
@@ -273,8 +273,8 @@ static u8 hubsan_check_integrity()
 
 static void hubsan_update_telemetry()
 {
-    const u8 *update = NULL;
-    static const u8 telempkt[] = { TELEM_DEVO_VOLT1, 0 };
+    const uint8_t *update = NULL;
+    static const uint8_t telempkt[] = { TELEM_DEVO_VOLT1, 0 };
     if( (packet[0]==0xe1) && hubsan_check_integrity()) {
         Telemetry.p.devo.volt[0] = packet[13];
         update = telempkt;
@@ -287,11 +287,11 @@ static void hubsan_update_telemetry()
 }
 
 MODULE_CALLTYPE
-static u16 hubsan_cb()
+static uint16_t hubsan_cb()
 {
-    static u8 txState = 0;
+    static uint8_t txState = 0;
     static int delay = 0;
-    static u8 rfMode=0;
+    static uint8_t rfMode=0;
     int i;
     switch(state) {
     case BIND_1:

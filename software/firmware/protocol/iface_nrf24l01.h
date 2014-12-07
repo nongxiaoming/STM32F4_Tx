@@ -77,22 +77,22 @@ enum {
 
 void NRF24L01_Initialize(void);
 int NRF24L01_Reset(void);
-u8 NRF24L01_WriteReg(u8 reg, u8 data);
-u8 NRF24L01_WriteRegisterMulti(u8 reg, const u8 data[], u8 length);
-u8 NRF24L01_WritePayload(u8 *data, u8 len);
-u8 NRF24L01_ReadReg(u8 reg);
-u8 NRF24L01_ReadRegisterMulti(u8 reg, u8 data[], u8 length);
-u8 NRF24L01_ReadPayload(u8 *data, u8 len);
+uint8_t NRF24L01_WriteReg(uint8_t reg, uint8_t data);
+uint8_t NRF24L01_WriteRegisterMulti(uint8_t reg, const uint8_t data[], uint8_t length);
+uint8_t NRF24L01_WritePayload(uint8_t *data, uint8_t len);
+uint8_t NRF24L01_ReadReg(uint8_t reg);
+uint8_t NRF24L01_ReadRegisterMulti(uint8_t reg, uint8_t data[], uint8_t length);
+uint8_t NRF24L01_ReadPayload(uint8_t *data, uint8_t len);
 
-u8 NRF24L01_FlushTx(void);
-u8 NRF24L01_FlushRx(void);
-u8 NRF24L01_Activate(u8 code);
+uint8_t NRF24L01_FlushTx(void);
+uint8_t NRF24L01_FlushRx(void);
+uint8_t NRF24L01_Activate(uint8_t code);
 
 
 // Bitrate 0 - 1Mbps, 1 - 2Mbps, 3 - 250K (for nRF24L01+)
-u8 NRF24L01_SetBitrate(u8 bitrate);
+uint8_t NRF24L01_SetBitrate(uint8_t bitrate);
 
-u8 NRF24L01_SetPower(u8 power);
+uint8_t NRF24L01_SetPower(uint8_t power);
 void NRF24L01_SetTxRxMode(enum TXRX_State);
 int NRF24L01_Reset(void);
 

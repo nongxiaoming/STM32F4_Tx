@@ -61,17 +61,17 @@ enum {
 #define USE_FIXED_MFGID
 #endif
 
-static u8 packet[PAYLOADSIZE];
-static u8 packet_sent;
-static u8 tx_id[TXID_SIZE];
-static u8 rf_ch_num;
-static u16 counter;
-static u32 packet_counter;
-static u8 tx_power;
+static uint8_t packet[PAYLOADSIZE];
+static uint8_t packet_sent;
+static uint8_t tx_id[TXID_SIZE];
+static uint8_t rf_ch_num;
+static uint16_t counter;
+static uint32_t packet_counter;
+static uint8_t tx_power;
 
 
 //
-static u8 phase;
+static uint8_t phase;
 enum {
     SLT_INIT2 = 0,
     SLT_BIND,
@@ -81,12 +81,12 @@ enum {
 };
 
 
-static u8 rf_channels[NFREQCHANNELS];
+static uint8_t rf_channels[NFREQCHANNELS];
 
 // Bit vector from bit position
 #define BV(bit) (1 << bit)
 
-static const u8 init_vals[][2] = {
+static const uint8_t init_vals[][2] = {
     {NRF24L01_00_CONFIG, BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_CRCO)}, // 2-bytes CRC, radio off
     {NRF24L01_01_EN_AA, 0x00},      // No Auto Acknoledgement
     {NRF24L01_02_EN_RXADDR, 0x01},  // Enable data pipe 0
@@ -100,11 +100,11 @@ static const u8 init_vals[][2] = {
 static void SLT_init()
 {
     NRF24L01_Initialize();
-    for (u32 i = 0; i < sizeof(init_vals) / sizeof(init_vals[0]); i++)
+    for (uint32_t i = 0; i < sizeof(init_vals) / sizeof(init_vals[0]); i++)
         NRF24L01_WriteReg(init_vals[i][0], init_vals[i][1]);
     NRF24L01_SetBitrate(NRF24L01_BR_250K);           // 256kbps
     NRF24L01_SetPower(Model.tx_power);
-    u8 rx_tx_addr[] = {0xC3, 0xC3, 0xAA, 0x55};
+    uint8_t rx_tx_addr[] = {0xC3, 0xC3, 0xAA, 0x55};
     NRF24L01_WriteRegisterMulti(NRF24L01_0A_RX_ADDR_P0, rx_tx_addr, 4);
     NRF24L01_FlushRx();
 
@@ -126,23 +126,23 @@ static void SLT_init()
         // them by their numbers
         // It's all magic, eavesdropped from real transfer and not even from the
         // data sheet - it has slightly different values
-        NRF24L01_WriteRegisterMulti(0x00, (u8 *) "\x40\x4B\x01\xE2", 4);
-        NRF24L01_WriteRegisterMulti(0x01, (u8 *) "\xC0\x4B\x00\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x02, (u8 *) "\xD0\xFC\x8C\x02", 4);
-        NRF24L01_WriteRegisterMulti(0x03, (u8 *) "\xF9\x00\x39\x21", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x05, (u8 *) "\x24\x06\x7F\xA6", 4);
-        NRF24L01_WriteRegisterMulti(0x06, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x07, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x08, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x09, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0A, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0B, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0C, (u8 *) "\x00\x12\x73\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0D, (u8 *) "\x46\xB4\x80\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0E, (u8 *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC7\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x00, (uint8_t *) "\x40\x4B\x01\xE2", 4);
+        NRF24L01_WriteRegisterMulti(0x01, (uint8_t *) "\xC0\x4B\x00\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x02, (uint8_t *) "\xD0\xFC\x8C\x02", 4);
+        NRF24L01_WriteRegisterMulti(0x03, (uint8_t *) "\xF9\x00\x39\x21", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x05, (uint8_t *) "\x24\x06\x7F\xA6", 4);
+        NRF24L01_WriteRegisterMulti(0x06, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x07, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x08, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x09, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0A, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0B, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0C, (uint8_t *) "\x00\x12\x73\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0D, (uint8_t *) "\x46\xB4\x80\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0E, (uint8_t *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC7\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
     } else {
         printf("nRF24L01 detected\n");
     }
@@ -160,14 +160,14 @@ static void SLT_init2()
     rf_ch_num = 0;
 
     // Turn radio power on
-    u8 config = BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_CRCO) | BV(NRF24L01_00_PWR_UP);
+    uint8_t config = BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_CRCO) | BV(NRF24L01_00_PWR_UP);
     NRF24L01_WriteReg(NRF24L01_00_CONFIG, config);
     // Implicit delay in callback
     // delayMicroseconds(150);
 }
 
 
-static void set_tx_id(u32 id)
+static void set_tx_id(uint32_t id)
 {
     for (int i = TXID_SIZE-1; i >= 0; --i) {
         tx_id[i] = id & 0xFF;
@@ -178,7 +178,7 @@ static void set_tx_id(u32 id)
 
     for (int i = 0; i < 4; ++i) {
         int next_i = (i+1) % 4; // is & 3 better than % 4 ?
-        u8 base = i < 2 ? 0x03 : 0x10;
+        uint8_t base = i < 2 ? 0x03 : 0x10;
         rf_channels[i*4 + 0]  = (tx_id[i] & 0x3f) + base;
         rf_channels[i*4 + 1]  = (tx_id[i] >> 2) + base;
         rf_channels[i*4 + 2]  = (tx_id[i] >> 4) + (tx_id[next_i] & 0x03)*0x10 + base;
@@ -188,7 +188,7 @@ static void set_tx_id(u32 id)
 
     // unique
     for (int i = 0; i < NFREQCHANNELS; ++i) {
-        u8 done = 0;
+        uint8_t done = 0;
         while (!done) {
             done = 1;
             for (int j = 0; j < i; ++j) {
@@ -211,7 +211,7 @@ static void set_tx_id(u32 id)
 }
 
 
-static s16 convert_channel(u8 num)
+static s16 convert_channel(uint8_t num)
 {
     s32 ch = Channels[num];
     if (ch < CHAN_MIN_VALUE) {
@@ -255,7 +255,7 @@ void wait_radio()
 }
 
 
-void send_data(u8 *data, u8 len)
+void send_data(uint8_t *data, uint8_t len)
 {
     wait_radio();
     NRF24L01_FlushTx();
@@ -271,11 +271,11 @@ static void build_packet()
     // Raw controls, limited by -10000..10000
     s16 controls[6]; // aileron, elevator, throttle, rudder, gear, pitch
     read_controls(controls);
-    u8 e = 0; // byte where extension 2 bits for every 10-bit channel are packed
+    uint8_t e = 0; // byte where extension 2 bits for every 10-bit channel are packed
     for (int i = 0; i < 4; ++i) {
-        u16 v = (long) controls[i] * 1023 / 20000L + 512;
+        uint16_t v = (long) controls[i] * 1023 / 20000L + 512;
         packet[i] = v;
-        e = (e >> 2) | (u8) ((v >> 2) & 0xC0);
+        e = (e >> 2) | (uint8_t) ((v >> 2) & 0xC0);
     }
     // Extra bits for AETR
     packet[4] = e;
@@ -284,7 +284,7 @@ static void build_packet()
     packet[6] = (long) controls[5] * 255 / 20000L + 128;
 
     // Set radio channel - once per packet batch
-    u8 rf_ch = rf_channels[rf_ch_num];
+    uint8_t rf_ch = rf_channels[rf_ch_num];
     NRF24L01_WriteReg(NRF24L01_05_RF_CH, rf_ch);
     if (++rf_ch_num >= NFREQCHANNELS) rf_ch_num = 0;
     //  Serial.print(rf_ch); Serial.write("\n");
@@ -303,8 +303,8 @@ static void send_bind_packet()
     wait_radio();
 
     NRF24L01_SetPower(TXPOWER_100uW);
-    static const u8 bind_addr[4] = {0x7E, 0xB8, 0x63, 0xA9};
-    NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR, (u8 *)bind_addr, 4);
+    static const uint8_t bind_addr[4] = {0x7E, 0xB8, 0x63, 0xA9};
+    NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR, (uint8_t *)bind_addr, 4);
 
     NRF24L01_WriteReg(NRF24L01_05_RF_CH, 0x50);
     send_data(tx_id, sizeof(tx_id));
@@ -333,9 +333,9 @@ void checkTxPower()
 
 
 MODULE_CALLTYPE
-static u16 SLT_callback()
+static uint16_t SLT_callback()
 {
-    u16 delay_us = 20000; // 3 packets with 1ms intervals every 22ms
+    uint16_t delay_us = 20000; // 3 packets with 1ms intervals every 22ms
     switch (phase) {
     case SLT_INIT2:
         SLT_init2();
@@ -381,10 +381,10 @@ static u16 SLT_callback()
 // Generate internal id from TX id and manufacturer id (STM32 unique id)
 static void initialize_tx_id()
 {
-    u32 lfsr = 0xb2c54a2ful;
+    uint32_t lfsr = 0xb2c54a2ful;
 
 #ifndef USE_FIXED_MFGID
-    u8 var[12];
+    uint8_t var[12];
     MCU_SerialNumber(var, 12);
     printf("Manufacturer id: ");
     for (int i = 0; i < 12; ++i) {
@@ -395,7 +395,7 @@ static void initialize_tx_id()
 #endif
 
     if (Model.fixed_id) {
-       for (u8 i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
+       for (uint8_t i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
            rand32_r(&lfsr, (Model.fixed_id >> j) & 0xff);
     }
     // Pump zero bytes for LFSR to diverge more

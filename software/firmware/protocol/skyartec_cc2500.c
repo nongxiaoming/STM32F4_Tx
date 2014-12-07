@@ -36,10 +36,10 @@
 
 #include "iface_cc2500.h"
 
-static u8 packet[20];
-static u32 state;
-static u32 fixed_id;
-static u32 bind_count;
+static uint8_t packet[20];
+static uint32_t state;
+static uint32_t fixed_id;
+static uint32_t bind_count;
 #define TX_ADDR ((fixed_id >> 16) & 0xff)
 #define TX_CHANNEL ((fixed_id >> 24) & 0xff)
 
@@ -164,7 +164,7 @@ static void send_bind_packet()
     packet[8] = 0x00;
     packet[9] = 0x00;
     packet[10] = TX_ADDR;
-    u8 xor = 0;
+    uint8_t xor = 0;
     for(int i = 3; i < 11; i++)
         xor ^= packet[i];
     packet[11] = xor;
@@ -175,7 +175,7 @@ static void send_bind_packet()
     CC2500_WriteData(packet, 12);
 }
 
-static u16 skyartec_cb()
+static uint16_t skyartec_cb()
 {
     if (state & 0x01) {
         CC2500_Strobe(CC2500_SIDLE);

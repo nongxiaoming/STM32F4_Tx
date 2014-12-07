@@ -15,7 +15,7 @@
 
 #include "common.h"
 #include "target.h"
-#include "gui/gui.h"
+#include "gui.h"
 #include "tx.h"
 #include "rtc.h"
 
@@ -24,7 +24,7 @@
 #include "autodimmer.h"
 
 struct Transmitter Transmitter;
-static u32 crc32;
+static uint32_t crc32;
 
 const char CURRENT_MODEL[] = "current_model";
 
@@ -152,7 +152,7 @@ static int ini_handler(void* user, const char* section, const char* name, const 
     #endif
     }
     if(MATCH_START(section, SECTION_CALIBRATE) && strlen(section) >= sizeof(SECTION_CALIBRATE)) {
-        u8 idx = atoi(section + sizeof(SECTION_CALIBRATE)-1);
+        uint8_t idx = atoi(section + sizeof(SECTION_CALIBRATE)-1);
         if (idx == 0) {
             printf("%s: Unknown Calibration\n", section);
             return 0;
@@ -320,7 +320,7 @@ void CONFIG_LoadTx()
 
 void CONFIG_SaveTxIfNeeded()
 {
-    u32 newCrc = Crc(&Transmitter, sizeof(Transmitter));
+    uint32_t newCrc = Crc(&Transmitter, sizeof(Transmitter));
     if (crc32 == newCrc)
         return;
     crc32 = newCrc;

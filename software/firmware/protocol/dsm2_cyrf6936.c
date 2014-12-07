@@ -79,7 +79,7 @@ enum {
     DSM2_CH2_READ_B  = BIND_COUNT + 10,
 };
    
-static const u8 pncodes[5][9][8] = {
+static const uint8_t pncodes[5][9][8] = {
     /* Note these are in order transmitted (LSB 1st) */
 { /* Row 0 */
   /* Col 0 */ {0x03, 0xBC, 0x6E, 0x8A, 0xEF, 0xBD, 0xFE, 0xF8},
@@ -138,41 +138,41 @@ static const u8 pncodes[5][9][8] = {
 },
 };
 
-static const u8 pn_bind[] = { 0xc6,0x94,0x22,0xfe,0x48,0xe6,0x57,0x4e };
+static const uint8_t pn_bind[] = { 0xc6,0x94,0x22,0xfe,0x48,0xe6,0x57,0x4e };
 
-static const u8 ch_map4[] = {0, 1, 2, 3, 0xff, 0xff, 0xff};    //Guess
-static const u8 ch_map5[] = {0, 1, 2, 3, 4,    0xff, 0xff}; //Guess
-static const u8 ch_map6[] = {1, 5, 2, 3, 0,    4,    0xff}; //HP6DSM
-static const u8 ch_map7[] = {1, 5, 2, 4, 3,    6,    0}; //DX6i
-static const u8 ch_map8[] = {1, 5, 2, 3, 6,    0xff, 0xff, 4, 0, 7,    0xff, 0xff, 0xff, 0xff}; //DX8
-static const u8 ch_map9[] = {3, 2, 1, 5, 0,    4,    6,    7, 8, 0xff, 0xff, 0xff, 0xff, 0xff}; //DM9
-static const u8 ch_map10[] = {3, 2, 1, 5, 0,    4,    6,    7, 8, 9, 0xff, 0xff, 0xff, 0xff};
-static const u8 ch_map11[] = {3, 2, 1, 5, 0,    4,    6,    7, 8, 9, 10, 0xff, 0xff, 0xff};
-static const u8 ch_map12[] = {3, 2, 1, 5, 0,    4,    6,    7, 8, 9, 10, 11, 0xff, 0xff};
-static const u8 * const ch_map[] = {ch_map4, ch_map5, ch_map6, ch_map7, ch_map8, ch_map9, ch_map10, ch_map11, ch_map12};
+static const uint8_t ch_map4[] = {0, 1, 2, 3, 0xff, 0xff, 0xff};    //Guess
+static const uint8_t ch_map5[] = {0, 1, 2, 3, 4,    0xff, 0xff}; //Guess
+static const uint8_t ch_map6[] = {1, 5, 2, 3, 0,    4,    0xff}; //HP6DSM
+static const uint8_t ch_map7[] = {1, 5, 2, 4, 3,    6,    0}; //DX6i
+static const uint8_t ch_map8[] = {1, 5, 2, 3, 6,    0xff, 0xff, 4, 0, 7,    0xff, 0xff, 0xff, 0xff}; //DX8
+static const uint8_t ch_map9[] = {3, 2, 1, 5, 0,    4,    6,    7, 8, 0xff, 0xff, 0xff, 0xff, 0xff}; //DM9
+static const uint8_t ch_map10[] = {3, 2, 1, 5, 0,    4,    6,    7, 8, 9, 0xff, 0xff, 0xff, 0xff};
+static const uint8_t ch_map11[] = {3, 2, 1, 5, 0,    4,    6,    7, 8, 9, 10, 0xff, 0xff, 0xff};
+static const uint8_t ch_map12[] = {3, 2, 1, 5, 0,    4,    6,    7, 8, 9, 10, 11, 0xff, 0xff};
+static const uint8_t * const ch_map[] = {ch_map4, ch_map5, ch_map6, ch_map7, ch_map8, ch_map9, ch_map10, ch_map11, ch_map12};
 
-u8 packet[16];
-u8 channels[23];
-u8 chidx;
-u8 sop_col;
-u8 data_col;
-u16 state;
-u8 crcidx;
-u8 binding;
+uint8_t packet[16];
+uint8_t channels[23];
+uint8_t chidx;
+uint8_t sop_col;
+uint8_t data_col;
+uint16_t state;
+uint8_t crcidx;
+uint8_t binding;
 #ifdef USE_FIXED_MFGID
-//static const u8 cyrfmfg_id[6] = {0x5e, 0x28, 0xa3, 0x1b, 0x00, 0x00}; //dx8
-static const u8 cyrfmfg_id[6] = {0xd4, 0x62, 0xd6, 0xad, 0xd3, 0xff}; //dx6i
+//static const uint8_t cyrfmfg_id[6] = {0x5e, 0x28, 0xa3, 0x1b, 0x00, 0x00}; //dx8
+static const uint8_t cyrfmfg_id[6] = {0xd4, 0x62, 0xd6, 0xad, 0xd3, 0xff}; //dx6i
 #else
-static u8 cyrfmfg_id[6];
+static uint8_t cyrfmfg_id[6];
 #endif
-u8 num_channels;
-u16 crc;
-u8 model;
+uint8_t num_channels;
+uint16_t crc;
+uint8_t model;
 
 static void build_bind_packet()
 {
-    u8 i;
-    u16 sum = 384 - 0x10;
+    uint8_t i;
+    uint16_t sum = 384 - 0x10;
     packet[0] = crc >> 8;
     packet[1] = crc & 0xff;
     packet[2] = 0xff ^ cyrfmfg_id[2];
@@ -203,10 +203,10 @@ static void build_bind_packet()
     packet[15] = sum & 0xff;
 }
 
-static void build_data_packet(u8 upper)
+static void build_data_packet(uint8_t upper)
 {
-    u8 i;
-    const u8 *chmap = ch_map[num_channels - 4];
+    uint8_t i;
+    const uint8_t *chmap = ch_map[num_channels - 4];
     if (binding && PROTOCOL_SticksMoved(0)) {
         //Don't turn off dialog until sticks are moved
         PROTOCOL_SetBindState(0);  //Turn off Bind dialog
@@ -219,9 +219,9 @@ static void build_data_packet(u8 upper)
         packet[0] = (0xff ^ cyrfmfg_id[2]);
         packet[1] = (0xff ^ cyrfmfg_id[3]) + model;
     }
-    u8 bits = Model.protocol == PROTOCOL_DSMX ? 11 : 10;
-    u16 max = 1 << bits;
-    u16 pct_100 = (u32)max * 100 / 150;
+    uint8_t bits = Model.protocol == PROTOCOL_DSMX ? 11 : 10;
+    uint16_t max = 1 << bits;
+    uint16_t pct_100 = (uint32_t)max * 100 / 150;
     for (i = 0; i < 7; i++) {
        unsigned idx = chmap[upper * 7 + i];
        s32 value;
@@ -244,14 +244,14 @@ static void build_data_packet(u8 upper)
     }
 }
 
-static u8 get_pn_row(u8 channel)
+static uint8_t get_pn_row(uint8_t channel)
 {
     return Model.protocol == PROTOCOL_DSMX
            ? (channel - 2) % 5
            : channel % 5;
 }
 
-static const u8 init_vals[][2] = {
+static const uint8_t init_vals[][2] = {
     {CYRF_02_TX_CTRL, 0x00},
     {CYRF_05_RX_CTRL, 0x00},
     {CYRF_28_CLK_EN, 0x02},
@@ -280,7 +280,7 @@ static const u8 init_vals[][2] = {
 
 static void cyrf_config()
 {
-    for(u32 i = 0; i < sizeof(init_vals) / 2; i++)
+    for(uint32_t i = 0; i < sizeof(init_vals) / 2; i++)
         CYRF_WriteRegister(init_vals[i][0], init_vals[i][1]);
     CYRF_WritePreamble(0x333304);
     CYRF_ConfigRFChannel(0x61);
@@ -288,9 +288,9 @@ static void cyrf_config()
 
 void initialize_bind_state()
 {
-    u8 data_code[32];
+    uint8_t data_code[32];
     CYRF_ConfigRFChannel(BIND_CHANNEL); //This seems to be random?
-    u8 pn_row = get_pn_row(BIND_CHANNEL);
+    uint8_t pn_row = get_pn_row(BIND_CHANNEL);
     //printf("Ch: %d Row: %d SOP: %d Data: %d\n", BIND_CHANNEL, pn_row, sop_col, data_col);
     CYRF_ConfigCRCSeed(crc);
     CYRF_ConfigSOPCode(pncodes[pn_row][sop_col]);
@@ -301,7 +301,7 @@ void initialize_bind_state()
     build_bind_packet();
 }
 
-static const u8 data_vals[][2] = {
+static const uint8_t data_vals[][2] = {
     {CYRF_05_RX_CTRL, 0x83}, //Initialize for reading RSSI
     {CYRF_29_RX_ABORT, 0x20},
     {CYRF_0F_XACT_CFG, 0x24},
@@ -321,13 +321,13 @@ static const u8 data_vals[][2] = {
 
 static void cyrf_configdata()
 {
-    for(u32 i = 0; i < sizeof(data_vals) / 2; i++)
+    for(uint32_t i = 0; i < sizeof(data_vals) / 2; i++)
         CYRF_WriteRegister(data_vals[i][0], data_vals[i][1]);
 }
 
 static void set_sop_data_crc()
 {
-    u8 pn_row = get_pn_row(channels[chidx]);
+    uint8_t pn_row = get_pn_row(channels[chidx]);
     //printf("Ch: %d Row: %d SOP: %d Data: %d\n", ch[chidx], pn_row, sop_col, data_col);
     CYRF_ConfigRFChannel(channels[chidx]);
     CYRF_ConfigCRCSeed(crcidx ? ~crc : crc);
@@ -344,13 +344,13 @@ static void set_sop_data_crc()
 static void calc_dsmx_channel()
 {
     int idx = 0;
-    u32 id = ~((cyrfmfg_id[0] << 24) | (cyrfmfg_id[1] << 16) | (cyrfmfg_id[2] << 8) | (cyrfmfg_id[3] << 0));
-    u32 id_tmp = id;
+    uint32_t id = ~((cyrfmfg_id[0] << 24) | (cyrfmfg_id[1] << 16) | (cyrfmfg_id[2] << 8) | (cyrfmfg_id[3] << 0));
+    uint32_t id_tmp = id;
     while(idx < 23) {
         int i;
         int count_3_27 = 0, count_28_51 = 0, count_52_76 = 0;
         id_tmp = id_tmp * 0x0019660D + 0x3C6EF35F; // Randomization
-        u8 next_ch = ((id_tmp >> 8) % 0x49) + 3;       // Use least-significant byte and must be larger than 3
+        uint8_t next_ch = ((id_tmp >> 8) % 0x49) + 3;       // Use least-significant byte and must be larger than 3
         if (((next_ch ^ id) & 0x01 )== 0)
             continue;
         for (i = 0; i < idx; i++) {
@@ -374,23 +374,23 @@ static void calc_dsmx_channel()
     }
 }
 
-static int bcd_to_u8(u8 data)
+static int bcd_to_uint8_t(uint8_t data)
 {
      return (data >> 4) * 10 + (data & 0x0f);
 }
-static int pkt16_to_u8(u8 *ptr)
+static int pkt16_to_uint8_t(uint8_t *ptr)
 {
-    u32 value = ((u32)ptr[0] <<8) | ptr[1];
+    uint32_t value = ((uint32_t)ptr[0] <<8) | ptr[1];
     return value > 255 ? 255 : value;
 }
-static u32 pkt16_to_volt(u8 *ptr)
+static uint32_t pkt16_to_volt(uint8_t *ptr)
 {
-    return ((((u32)ptr[0] << 8) | ptr[1]) + 5) / 10;  //In 1/10 of Volts
+    return ((((uint32_t)ptr[0] << 8) | ptr[1]) + 5) / 10;  //In 1/10 of Volts
 }
 
-static u32 pkt16_to_rpm(u8 *ptr)
+static uint32_t pkt16_to_rpm(uint8_t *ptr)
 {
-    u32 value = ((u32)ptr[0] << 8) | ptr[1];
+    uint32_t value = ((uint32_t)ptr[0] << 8) | ptr[1];
     //In RPM (2 = number of poles)
     //RPM = 120000000 / number_of_poles(2, 4, ... 32) / gear_ratio(0.01 - 30.99) / Telemetry.rpm[0];
     //by default number_of_poles = 2, gear_ratio = 1.00
@@ -401,7 +401,7 @@ static u32 pkt16_to_rpm(u8 *ptr)
     return value;
 }
 
-static s32 pkt16_to_temp(u8 *ptr)
+static s32 pkt16_to_temp(uint8_t *ptr)
 {
     s32 value = ((s32)((s16)(ptr[0] << 8) | ptr[1]) - 32) * 5 / 9; //In degrees-C (16Bit signed integer)
     if (value > 500 || value < -100)
@@ -409,11 +409,11 @@ static s32 pkt16_to_temp(u8 *ptr)
     return value;
 }
 
-static u32 pkt32_to_coord(u8 *ptr)
+static uint32_t pkt32_to_coord(uint8_t *ptr)
 {
-    u8 tmp[4];
+    uint8_t tmp[4];
     for(int i = 0; i < 4; i++)
-        tmp[i] = bcd_to_u8(ptr[i]);
+        tmp[i] = bcd_to_uint8_t(ptr[i]);
     return tmp[3] * 3600000
          + tmp[2] * 60000
          + tmp[1] * 600
@@ -423,28 +423,28 @@ static u32 pkt32_to_coord(u8 *ptr)
 static void parse_telemetry_packet()
 {
     static s32 altitude;
-    static const u8 update7f[] = {
+    static const uint8_t update7f[] = {
                  TELEM_DSM_FLOG_FADESA, TELEM_DSM_FLOG_FADESB,
                  TELEM_DSM_FLOG_FADESL, TELEM_DSM_FLOG_FADESR,
                  TELEM_DSM_FLOG_FRAMELOSS, TELEM_DSM_FLOG_HOLDS,
                  TELEM_DSM_FLOG_VOLT2, 0};
-    static const u8 update7e[] = {
+    static const uint8_t update7e[] = {
                 TELEM_DSM_FLOG_RPM1, TELEM_DSM_FLOG_VOLT1, TELEM_DSM_FLOG_TEMP1, 0};
-    static const u8 update16[] = { TELEM_GPS_ALT, TELEM_GPS_LAT, TELEM_GPS_LONG, 0};
-    static const u8 update17[] = { TELEM_GPS_SPEED, TELEM_GPS_TIME, 0};
-    const u8 *update = NULL;
+    static const uint8_t update16[] = { TELEM_GPS_ALT, TELEM_GPS_LAT, TELEM_GPS_LONG, 0};
+    static const uint8_t update17[] = { TELEM_GPS_SPEED, TELEM_GPS_TIME, 0};
+    const uint8_t *update = NULL;
     switch(packet[0]) {
         case 0x7f: //TM1000 Flight log
         case 0xff: //TM1100 Flight log
             update = update7f;
-            //Telemetry.p.dsm.flog.fades[0] = pkt16_to_u8(packet+2); //FadesA 0xFFFF = (not connected)
-            //Telemetry.p.dsm.flog.fades[1] = pkt16_to_u8(packet+4); //FadesB 0xFFFF = (not connected)
-            //Telemetry.p.dsm.flog.fades[2] = pkt16_to_u8(packet+6); //FadesL 0xFFFF = (not connected)
-            //Telemetry.p.dsm.flog.fades[3] = pkt16_to_u8(packet+8); //FadesR 0xFFFF = (not connected)
-            //Telemetry.p.dsm.flog.frameloss = pkt16_to_u8(packet+10);
-            //Telemetry.p.dsm.flog.holds = pkt16_to_u8(packet+12);
+            //Telemetry.p.dsm.flog.fades[0] = pkt16_to_uint8_t(packet+2); //FadesA 0xFFFF = (not connected)
+            //Telemetry.p.dsm.flog.fades[1] = pkt16_to_uint8_t(packet+4); //FadesB 0xFFFF = (not connected)
+            //Telemetry.p.dsm.flog.fades[2] = pkt16_to_uint8_t(packet+6); //FadesL 0xFFFF = (not connected)
+            //Telemetry.p.dsm.flog.fades[3] = pkt16_to_uint8_t(packet+8); //FadesR 0xFFFF = (not connected)
+            //Telemetry.p.dsm.flog.frameloss = pkt16_to_uint8_t(packet+10);
+            //Telemetry.p.dsm.flog.holds = pkt16_to_uint8_t(packet+12);
             for(int i = 2; i < 14; i+=2) {
-                *(u8*)&Telemetry.p.dsm.flog = pkt16_to_u8(packet+i);
+                *(uint8_t*)&Telemetry.p.dsm.flog = pkt16_to_uint8_t(packet+i);
             }
             Telemetry.p.dsm.flog.volt[1] = pkt16_to_volt(packet+14);
             break;
@@ -547,8 +547,8 @@ static void parse_telemetry_packet()
 #endif //HAS_DSM_EXTENDED_TELEMETRY
         case 0x16: //GPS sensor (always second GPS packet)
             update = update16;
-            altitude += (bcd_to_u8(packet[3]) * 100 
-                       + bcd_to_u8(packet[2])) * 100; //In meters * 1000 (16Bit decimal, 1 unit is 0.1m)
+            altitude += (bcd_to_uint8_t(packet[3]) * 100 
+                       + bcd_to_uint8_t(packet[2])) * 100; //In meters * 1000 (16Bit decimal, 1 unit is 0.1m)
             Telemetry.gps.altitude = altitude;
             Telemetry.gps.latitude = pkt32_to_coord(&packet[4]);
             if ((packet[15] & 0x01)  == 0)
@@ -563,15 +563,15 @@ static void parse_telemetry_packet()
             break;
         case 0x17: //GPS sensor (always first GPS packet)
             update = update17;
-            Telemetry.gps.velocity = (bcd_to_u8(packet[3]) * 100 
-                                    + bcd_to_u8(packet[2])) * 5556 / 108; //In m/s * 1000
-            u8 sec   = bcd_to_u8(packet[5]);
-            u8 min   = bcd_to_u8(packet[6]);
-            u8 hour  = bcd_to_u8(packet[7]);
-            //u8 ssec   = (packet[4] >> 4) * 10 + (packet[4] & 0x0f);
-            u8 day   = 0;
-            u8 month = 0;
-            u8 year  = 0; // + 2000
+            Telemetry.gps.velocity = (bcd_to_uint8_t(packet[3]) * 100 
+                                    + bcd_to_uint8_t(packet[2])) * 5556 / 108; //In m/s * 1000
+            uint8_t sec   = bcd_to_uint8_t(packet[5]);
+            uint8_t min   = bcd_to_uint8_t(packet[6]);
+            uint8_t hour  = bcd_to_uint8_t(packet[7]);
+            //uint8_t ssec   = (packet[4] >> 4) * 10 + (packet[4] & 0x0f);
+            uint8_t day   = 0;
+            uint8_t month = 0;
+            uint8_t year  = 0; // + 2000
             Telemetry.gps.time = ((year & 0x3F) << 26)
                                | ((month & 0x0F) << 22)
                                | ((day & 0x1F) << 17)
@@ -579,7 +579,7 @@ static void parse_telemetry_packet()
                                | ((min & 0x3F) << 6)
                                | ((sec & 0x3F) << 0);
             //Telemetry.gps.sats = ((packet[8] >> 4) * 10 + (packet[8] & 0x0f));
-            altitude = bcd_to_u8(packet[9]) * 1000000; //In 1000 meters * 1000 (8Bit decimal, 1 unit is 1000m)
+            altitude = bcd_to_uint8_t(packet[9]) * 1000000; //In 1000 meters * 1000 (8Bit decimal, 1 unit is 1000m)
             break;
     }
     if (update) {
@@ -590,7 +590,7 @@ static void parse_telemetry_packet()
 }
 
 MODULE_CALLTYPE
-static u16 dsm2_cb()
+static uint16_t dsm2_cb()
 {
 #define CH1_CH2_DELAY 4010  // Time between write of channel 1 and channel 2
 #define WRITE_DELAY   1550  // Time after write to verify write complete
@@ -691,7 +691,7 @@ static u16 dsm2_cb()
     return 0;
 }
 
-static void initialize(u8 bind)
+static void initialize(uint8_t bind)
 {
     CLOCK_StopTimer();
     CYRF_Reset();
@@ -710,9 +710,9 @@ static void initialize(u8 bind)
         calc_dsmx_channel();
     } else {
         if (RANDOM_CHANNELS) {
-            u8 tmpch[10];
+            uint8_t tmpch[10];
             CYRF_FindBestChannels(tmpch, 10, 5, 3, 75);
-            u8 idx = rand32() % 10;
+            uint8_t idx = rand32() % 10;
             channels[0] = tmpch[idx];
             while(1) {
                idx = rand32() % 10;

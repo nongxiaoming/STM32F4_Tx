@@ -24,15 +24,15 @@
 extern struct FAT FontFAT; //defined in screen/lcd_string.c
 
 //Not static because we need it in mixer.c
-const u8 const EATRG[PROTO_MAP_LEN] =
+const uint8_t const EATRG[PROTO_MAP_LEN] =
     { INP_ELEVATOR, INP_AILERON, INP_THROTTLE, INP_RUDDER, INP_GEAR1 };
-static const u8 const TAERG[PROTO_MAP_LEN] = 
+static const uint8_t const TAERG[PROTO_MAP_LEN] = 
     { INP_THROTTLE, INP_AILERON, INP_ELEVATOR, INP_RUDDER, INP_GEAR1 };
-static const u8 const AETRG[PROTO_MAP_LEN] = 
+static const uint8_t const AETRG[PROTO_MAP_LEN] = 
     { INP_AILERON, INP_ELEVATOR, INP_THROTTLE, INP_RUDDER, INP_GEAR1 };
 
-static u8 proto_state;
-static u32 bind_time;
+static uint8_t proto_state;
+static uint32_t bind_time;
 #define PROTO_DEINIT    0x00
 #define PROTO_INIT      0x01
 #define PROTO_READY     0x02
@@ -41,7 +41,7 @@ static u32 bind_time;
 #define PROTO_MODULEDLG 0x10
 
 #define PROTODEF(proto, module, map, cmd, name) map,
-const u8 *ProtocolChannelMap[PROTOCOL_COUNT] = {
+const uint8_t *ProtocolChannelMap[PROTOCOL_COUNT] = {
     NULL,
     #include "protocol.h"
 };
@@ -63,7 +63,7 @@ const char * const ProtocolNames[PROTOCOL_COUNT] = {
 #undef PROTODEF
 static int get_module(int idx);
 
-void PROTOCOL_Init(u8 force)
+void PROTOCOL_Init(uint8_t force)
 {
     if(! force && (proto_state & PROTO_MODULEDLG))
         return;
@@ -117,7 +117,7 @@ void PROTOCOL_Load(int no_dlg)
     //Thatis necessary because we need to be able to load the
     //protocol while an ini file is open, and we don't want to
     //waste the RAM for an extra filehandle
-    u8 old_font = LCD_SetFont(0);
+    uint8_t old_font = LCD_SetFont(0);
     finit(&FontFAT, ""); //In case no fonts are loaded yet
     fh = fopen2(&FontFAT, file, "r");
     //printf("Loading %s: %08lx\n", file, fh);
@@ -169,12 +169,12 @@ void PROTOCOL_Load(int no_dlg)
     PROTOCOL_SetSwitch(get_module(Model.protocol));
 }
  
-u8 PROTOCOL_WaitingForSafe()
+uint8_t PROTOCOL_WaitingForSafe()
 {
     return ((proto_state & (PROTO_INIT | PROTO_READY)) == PROTO_INIT) ? 1 : 0;
 }
 
-u32 PROTOCOL_Binding()
+uint32_t PROTOCOL_Binding()
 {
 
     if (proto_state & PROTO_BINDING) {
@@ -186,7 +186,7 @@ u32 PROTOCOL_Binding()
     return 0;
 }
 
-void PROTOCOL_SetBindState(u32 msec)
+void PROTOCOL_SetBindState(uint32_t msec)
 {
     if (msec) {
         if (msec == 0xFFFFFFFF)
@@ -242,9 +242,9 @@ u64 PROTOCOL_CheckSafe()
     return unsafe;
 }
 
-u8 PROTOCOL_AutoBindEnabled()
+uint8_t PROTOCOL_AutoBindEnabled()
 {
-    u8 binding = 0;
+    uint8_t binding = 0;
     if(Model.protocol == PROTOCOL_NONE || ! PROTOCOL_LOADED)
         binding = 1;
     else
@@ -283,9 +283,9 @@ int PROTOCOL_DefaultNumChannels()
         num_channels = NUM_OUT_CHANNELS;
     return num_channels;
 }
-u32 PROTOCOL_CurrentID()
+uint32_t PROTOCOL_CurrentID()
 {
-    u32 id = 0;
+    uint32_t id = 0;
     if(Model.protocol != PROTOCOL_NONE && PROTOCOL_LOADED)
         id = (unsigned long)PROTO_Cmds(PROTOCMD_CURRENT_ID);
     return id;
@@ -369,16 +369,16 @@ int PROTOCOL_SetSwitch(int module)
 #if HAS_MULTIMOD_SUPPORT
     if (! Transmitter.module_enable[MULTIMOD].port)
         return 0;
-    u8 toggle = SPI_ProtoGetPinConfig(module, CSN_PIN);
-    u8 set    = SPI_ProtoGetPinConfig(module, ENABLED_PIN);
+    uint8_t toggle = SPI_ProtoGetPinConfig(module, CSN_PIN);
+    uint8_t set    = SPI_ProtoGetPinConfig(module, ENABLED_PIN);
     for (int i = 0; i < MULTIMOD; i++) {
         if (i == module)
             continue;
         set |= SPI_ProtoGetPinConfig(i, DISABLED_PIN);
         set |= SPI_ProtoGetPinConfig(i, CSN_PIN);
     }
-    u8 csn_high = toggle | set;
-    u8 csn_low  = ~toggle & set;
+    uint8_t csn_high = toggle | set;
+    uint8_t csn_low  = ~toggle & set;
     return SPI_ConfigSwitch(csn_high, csn_low);
 #else
     return 0;

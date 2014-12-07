@@ -32,9 +32,9 @@
 #define MIXER_CYC2 (NUM_TX_INPUTS + 2)
 #define MIXER_CYC3 (NUM_TX_INPUTS + 3)
 
-extern volatile u8 ppmSync;
+extern volatile uint8_t ppmSync;
 extern volatile s16 ppmChannels[MAX_PPM_IN_CHANNELS];
-extern volatile u8 ppmin_num_channels;
+extern volatile uint8_t ppmin_num_channels;
 
 // Channels should be volatile:
 // This array is written from the main event loop
@@ -456,7 +456,7 @@ void MIXER_RegisterTrimButtons()
 {
     int i;
     BUTTON_UnregisterCallback(&button_action);
-    u32 mask = 0;
+    uint32_t mask = 0;
     for (i = 0; i < NUM_TRIMS; i++) {
         mask |= CHAN_ButtonMask(Model.trims[i].neg);
         mask |= CHAN_ButtonMask(Model.trims[i].pos);
@@ -670,8 +670,8 @@ static void _trim_as_switch(unsigned flags, int i, int is_neg)
     }
 }
 
-static u32 last_trim_music_time = 0;
-unsigned MIXER_UpdateTrim(u32 buttons, unsigned flags, void *data)
+static uint32_t last_trim_music_time = 0;
+unsigned MIXER_UpdateTrim(uint32_t buttons, unsigned flags, void *data)
 {
 #define TRIM_MUSIC_DURATION 100
 #define START_TONE 1000
@@ -742,7 +742,7 @@ unsigned MIXER_UpdateTrim(u32 buttons, unsigned flags, void *data)
                 else  {  //  for small step change: generate 2 different tone for closing to/away from mid-point
                     if (*value < 0)
                         step_size = -step_size;
-                    u16 tone = START_TONE + 300;
+                    uint16_t tone = START_TONE + 300;
                     if (step_size < 0)
                         tone = START_TONE;
                     SOUND_SetFrequency(tone, volume);

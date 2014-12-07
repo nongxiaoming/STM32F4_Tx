@@ -181,10 +181,10 @@ uint8_t		neChannel = 10;
 uint8_t		neChannelOffset = 0;
 #define PACKET_LENGTH	7
 
-static u8 packet[20];
-static u32 state;
-static u32 bind_count;
-static u16 model_id = 0xA04A;
+static uint8_t packet[20];
+static uint32_t state;
+static uint32_t bind_count;
+static uint16_t model_id = 0xA04A;
 
 const uint8_t NEAddr[] = {0x34, 0x43, 0x10, 0x10, 0x01};
 enum {
@@ -249,7 +249,7 @@ static void send_bind_packet()
     NRF24L01_WritePayload((uint8_t*) &packet, PACKET_LENGTH);      // send the bind packet
 }
 
-static u16 ne260_cb()
+static uint16_t ne260_cb()
 {
     if (state == NE260_BINDTX) {
         // do we have a packet?

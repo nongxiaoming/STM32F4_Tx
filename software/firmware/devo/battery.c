@@ -18,12 +18,12 @@
 #include "tx.h"
 #include "music.h"
 
-static u8 warned = 0;
-static u32 next_battery_warning = 0;
-u8 BATTERY_Check()
+static uint8_t warned = 0;
+static uint32_t next_battery_warning = 0;
+uint8_t BATTERY_Check()
 {
-    u16 battery = PWR_ReadVoltage();
-    u32 ms = CLOCK_getms();
+    uint16_t battery = PWR_ReadVoltage();
+    uint32_t ms = CLOCK_getms();
     // If battery is low or , was low and till under low + 200mV
     if (battery < Transmitter.batt_alarm && !(warned & BATTERY_LOW)) {
         warned |= BATTERY_LOW; // Bat was low...

@@ -36,9 +36,9 @@ enum {
 #define DATALOG_POS(x) ((x) % 8)
 
 struct datalog {
-    u8 enable;
-    u8 rate;
-    u8 source[(7 + NUM_DATALOG) / 8];
+    uint8_t enable;
+    uint8_t rate;
+    uint8_t source[(7 + NUM_DATALOG) / 8];
 };
 
 extern void DATALOG_Init(void);

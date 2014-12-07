@@ -2,9 +2,9 @@
 #define _BUTTONS_H_
 
 struct buttonAction {
-    u32 button;
-    u8 flags;
-    unsigned (*callback)(u32 button, unsigned flags, void *data);
+    uint32_t button;
+    uint8_t flags;
+    unsigned (*callback)(uint32_t button, unsigned flags, void *data);
     void *data;
     struct buttonAction *next;
 };
@@ -20,9 +20,9 @@ enum ButtonFlags {
 
 typedef struct buttonAction buttonAction_t;
 
-unsigned BUTTON_RegisterCallback(buttonAction_t *action, u32 button, unsigned flags,
-                 unsigned (*callback)(u32 button, unsigned flags, void *data), void *data);
+unsigned BUTTON_RegisterCallback(buttonAction_t *action, uint32_t button, unsigned flags,
+                 unsigned (*callback)(uint32_t button, unsigned flags, void *data), void *data);
 void BUTTON_UnregisterCallback(buttonAction_t *action);
-void BUTTON_Handler();
-void BUTTON_InterruptLongPress();
+void BUTTON_Handler(void);
+void BUTTON_InterruptLongPress(void);
 #endif

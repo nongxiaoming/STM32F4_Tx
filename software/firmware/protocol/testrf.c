@@ -53,7 +53,7 @@ static unsigned char packet[16];
 #define BV(bit) (1 << bit)
 
 MODULE_CALLTYPE
-static u16 testrf_cb()
+static uint16_t testrf_cb()
 {
     packet[0]++;
     switch(Model.proto_opts[TESTRF_RF]) {
@@ -91,8 +91,8 @@ static u16 testrf_cb()
 
 static void init_cyrf()
 {
-    const u8 sopcode[] = {0x3C,0x37,0xCC,0x91,0xE2,0xF8,0xCC,0x91}; //0x91CCF8E291CC373C
-    static u8 initcmd[] = {
+    const uint8_t sopcode[] = {0x3C,0x37,0xCC,0x91,0xE2,0xF8,0xCC,0x91}; //0x91CCF8E291CC373C
+    static uint8_t initcmd[] = {
         CYRF_1D_MODE_OVERRIDE,  0x38,
         CYRF_03_TX_CFG,         0x08,
         CYRF_06_RX_CFG,         0x4A,
@@ -124,16 +124,16 @@ static void init_cyrf()
 
 static void init_a7105()
 {
-    static const u8 A7105_regs[] = {
+    static const uint8_t A7105_regs[] = {
          -1,  0x42, 0x00, 0x14, 0x00,  -1 ,  -1 , 0x00, 0x00, 0x00, 0x00, 0x01, 0x21, 0x05, 0x00, 0x50,
         0x9e, 0x4b, 0x00, 0x02, 0x16, 0x2b, 0x12, 0x00, 0x62, 0x80, 0x80, 0x00, 0x0a, 0x32, 0xc3, 0x0f,
         0x13, 0xc3, 0x00,  -1,  0x00, 0x00, 0x3b, 0x00, 0x17, 0x47, 0x80, 0x03, 0x01, 0x45, 0x18, 0x00,
         0x01, 0x0f,  -1,
     };
     int i;
-    u8 if_calibration1;
-    u8 vco_calibration0;
-    u8 vco_calibration1;
+    uint8_t if_calibration1;
+    uint8_t vco_calibration0;
+    uint8_t vco_calibration1;
 
     A7105_WriteID(0x5475c52a);
     for (i = 0; i < 0x33; i++)
@@ -145,7 +145,7 @@ static void init_a7105()
     //IF Filter Bank Calibration
     A7105_WriteReg(0x02, 1);
     A7105_ReadReg(0x02);
-    u32 ms = CLOCK_getms();
+    uint32_t ms = CLOCK_getms();
     CLOCK_ResetWatchdog();
     while(CLOCK_getms()  - ms < 500) {
         if(! A7105_ReadReg(0x02))
@@ -213,7 +213,7 @@ static void init_a7105()
 
 static void init_cc2500()
 {
-    static u8 initcmd[] = {
+    static uint8_t initcmd[] = {
         CC2500_16_MCSM2,    0x07,
         CC2500_17_MCSM1,    0x30,
         CC2500_1E_WOREVT1,  0x87,
@@ -270,7 +270,7 @@ static void init_cc2500()
 
 static void init_nrf()
 {
-    static const u8 initcmd[] = {
+    static const uint8_t initcmd[] = {
     // CRC, radio on
         NRF24L01_00_CONFIG,      BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_PWR_UP), 
         NRF24L01_01_EN_AA,       0x3F,        // Auto Acknoledgement on all data pipes
@@ -322,16 +322,16 @@ static void init_nrf()
         // them by their numbers
         // It's all magic, eavesdropped from real transfer and not even from the
         // data sheet - it has slightly different values
-        NRF24L01_WriteRegisterMulti(0x00, (u8 *) "\x40\x4B\x01\xE2", 4);
-        NRF24L01_WriteRegisterMulti(0x01, (u8 *) "\xC0\x4B\x00\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x02, (u8 *) "\xD0\xFC\x8C\x02", 4);
-        NRF24L01_WriteRegisterMulti(0x03, (u8 *) "\x99\x00\x39\x21", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xD9\x96\x82\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x05, (u8 *) "\x24\x06\x7F\xA6", 4);
-        NRF24L01_WriteRegisterMulti(0x0C, (u8 *) "\x00\x12\x73\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0D, (u8 *) "\x46\xB4\x80\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xDF\x96\x82\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xD9\x96\x82\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x00, (uint8_t *) "\x40\x4B\x01\xE2", 4);
+        NRF24L01_WriteRegisterMulti(0x01, (uint8_t *) "\xC0\x4B\x00\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x02, (uint8_t *) "\xD0\xFC\x8C\x02", 4);
+        NRF24L01_WriteRegisterMulti(0x03, (uint8_t *) "\x99\x00\x39\x21", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xD9\x96\x82\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x05, (uint8_t *) "\x24\x06\x7F\xA6", 4);
+        NRF24L01_WriteRegisterMulti(0x0C, (uint8_t *) "\x00\x12\x73\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0D, (uint8_t *) "\x46\xB4\x80\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xDF\x96\x82\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xD9\x96\x82\x1B", 4);
     } else {
         //dbgprintf("nRF24L01 detected\n");
     }

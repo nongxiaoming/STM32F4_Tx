@@ -24,7 +24,7 @@
 
 #define UPDATE_DELAY 4000 //wiat 4 seconds after changing enable before sample start
 #define DATALOG_HEADER_SIZE (3 + ((7 + NUM_DATALOG) / 8))
-const u32 sample_rate[DLOG_RATE_LAST] = {
+const uint32_t sample_rate[DLOG_RATE_LAST] = {
     [DLOG_RATE_1SEC]  =  1000,
     [DLOG_RATE_5SEC]  =  5000,
     [DLOG_RATE_10SEC] = 10000,
@@ -34,11 +34,11 @@ const u32 sample_rate[DLOG_RATE_LAST] = {
 
 static struct FAT DatalogFAT;
 static FILE *fh;
-static u32 next_update;
-static u32 dlog_pos;
-static u32 dlog_size;
-u8 need_header_update;
-u16 data_size;
+static uint32_t next_update;
+static uint32_t dlog_pos;
+static uint32_t dlog_size;
+uint8_t need_header_update;
+uint16_t data_size;
 
 const char *DATALOG_RateString(int idx)
 {
@@ -85,7 +85,7 @@ void DATALOG_ApplyMask(int idx, int set) {
     }
 }
 
-int DATALOG_GetSize(u8 *src)
+int DATALOG_GetSize(uint8_t *src)
 {
     int size = 0;
     for(int i = 0; i < NUM_DATALOG; i++) {
@@ -109,7 +109,7 @@ int DATALOG_GetSize(u8 *src)
     return size;
 }
 
-s16 _get_src_value(int idx, u32 opts)
+s16 _get_src_value(int idx, uint32_t opts)
 {
     s16 val;
     if (idx <= NUM_INPUTS || idx > NUM_INPUTS + NUM_CHANNELS /*PPM*/) {
@@ -123,7 +123,7 @@ s16 _get_src_value(int idx, u32 opts)
 long _find_fpos() {
     dlog_pos = 0;
     int size = 1;
-    u8 data[DATALOG_HEADER_SIZE];
+    uint8_t data[DATALOG_HEADER_SIZE];
     while(1) {
         fread((char *)data, DATALOG_HEADER_SIZE, 1, fh);
         if (data[0] == 0x00) {
@@ -142,13 +142,13 @@ long _find_fpos() {
 
 void _write_8(s32 data)
 {
-    u8 x[1] = {(data & 0xff)};
+    uint8_t x[1] = {(data & 0xff)};
     fwrite(x, 1, 1, fh);
     dlog_pos++;
 }
 void _write_16(s32 data)
 {
-    u8 x[2] = {(data & 0xff),
+    uint8_t x[2] = {(data & 0xff),
                (data >> 8) & 0xff,
               };
     fwrite(x, 2, 1, fh);
@@ -156,7 +156,7 @@ void _write_16(s32 data)
 }
 void _write_32(s32 data)
 {
-    u8 x[4] = {(data & 0xff),
+    uint8_t x[4] = {(data & 0xff),
                (data >> 8) & 0xff,
                (data >> 16) & 0xff,
                (data >> 24) & 0xff,
@@ -226,7 +226,7 @@ void DATALOG_Update()
     if (! fh)
         return;
     if(DATALOG_IsEnabled() && ((int)dlog_size - ftell(fh) >= data_size)) {
-        u32 time = CLOCK_getms();
+        uint32_t time = CLOCK_getms();
         if(time >= next_update) {
             if (need_header_update)
                 _write_header();

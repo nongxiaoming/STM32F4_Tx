@@ -1,7 +1,7 @@
 #ifndef _DISPLAY_H_
 #define _DISPLAY_H_
 
-#include "gui/gui.h"
+#include "gui.h"
 
 #define DEFAULT_FONT   (Display.font[0])
 #define MODELNAME_FONT (Display.font[1])
@@ -28,53 +28,53 @@
 #define NUM_LABELS 21
 
 struct disp_keyboard {
-    u8 font;
-    u16 fill_color;
-    u16 fg_key1;
-    u16 bg_key1;
-    u16 fg_key2;
-    u16 bg_key2;
-    u16 fg_key3;
-    u16 bg_key3;
+    uint8_t font;
+    uint16_t fill_color;
+    uint16_t fg_key1;
+    uint16_t bg_key1;
+    uint16_t fg_key2;
+    uint16_t bg_key2;
+    uint16_t fg_key3;
+    uint16_t bg_key3;
 };
 
 struct disp_listbox {
-    u16 font;
-    u16 bg_color;
-    u16 fg_color;
-    u16 bg_select;
-    u16 fg_select;
-    u16 bg_bar;
-    u16 fg_bar;
+    uint16_t font;
+    uint16_t bg_color;
+    uint16_t fg_color;
+    uint16_t bg_select;
+    uint16_t fg_select;
+    uint16_t bg_bar;
+    uint16_t fg_bar;
 };
 
 struct disp_bargraph {
-    u16 bg_color;
-    u16 fg_color_pos;
-    u16 fg_color_neg;
-    u16 fg_color_zero;
-    u16 outline_color;
+    uint16_t bg_color;
+    uint16_t fg_color_pos;
+    uint16_t fg_color_neg;
+    uint16_t fg_color_zero;
+    uint16_t outline_color;
 };
 
 struct disp_xygraph {
-    u16 bg_color;
-    u16 fg_color;
-    u16 grid_color;
-    u16 axis_color;
-    u16 point_color;
-    u16 outline_color;
+    uint16_t bg_color;
+    uint16_t fg_color;
+    uint16_t grid_color;
+    uint16_t axis_color;
+    uint16_t point_color;
+    uint16_t outline_color;
 };
 
 struct disp_scrollbar {
-    u16 bg_color;
-    u16 fg_color;
+    uint16_t bg_color;
+    uint16_t fg_color;
 };
 
 struct disp_metrics {
-    u8 header_height;
-    u8 header_widget_height;
-    u8 line_height;
-    u8 line_space;
+    uint8_t header_height;
+    uint8_t header_widget_height;
+    uint8_t line_height;
+    uint8_t line_space;
 };
 
 enum DispFlags {
@@ -93,13 +93,13 @@ struct display_settings {
     struct disp_bargraph bargraph;
     struct disp_xygraph xygraph;
     struct disp_bargraph trim;
-    u16 select_color;
-    u8 select_width;
+    uint16_t select_color;
+    uint8_t select_width;
     enum DispFlags flags;
 };
 
 extern struct display_settings Display;
 
 
-u8 CONFIG_ReadDisplay();
+uint8_t CONFIG_ReadDisplay();
 #endif

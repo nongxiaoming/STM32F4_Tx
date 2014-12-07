@@ -20,10 +20,10 @@ static buttonAction_t *buttonHEAD = NULL;
 static buttonAction_t *buttonPressed = NULL;
 #define DEBOUNCE_WAIT_MS 20
 
-void exec_callbacks(u32, enum ButtonFlags);
+void exec_callbacks(uint32_t, enum ButtonFlags);
 
-unsigned BUTTON_RegisterCallback(buttonAction_t *action, u32 button, unsigned flags,
-                 unsigned (*callback)(u32 button, unsigned flags, void *data), void *data)
+unsigned BUTTON_RegisterCallback(buttonAction_t *action, uint32_t button, unsigned flags,
+                 unsigned (*callback)(uint32_t button, unsigned flags, void *data), void *data)
 {
     buttonAction_t *ptr;
     //Ensure 'action' is not already in the linked list
@@ -81,7 +81,7 @@ void BUTTON_UnregisterCallback(buttonAction_t *action)
     }
 }
 
-void print_buttons(u32 buttons)
+void print_buttons(uint32_t buttons)
 {
     char buttonstring[33];
     int i;
@@ -90,24 +90,24 @@ void print_buttons(u32 buttons)
     buttonstring[32] = 0;
     printf("Buttons: %s\n",buttonstring);
 }
-static u8 interrupt_longpress = 0;
+static uint8_t interrupt_longpress = 0;
 void BUTTON_Handler()
 {
-    static u32 last_buttons = 0;
-    static u32 last_buttons_pressed = 0;
+    static uint32_t last_buttons = 0;
+    static uint32_t last_buttons_pressed = 0;
 
-    static u32 long_press_at = 0;
-    static u8  longpress_release = 0;
-    static u32 last_button_time = 0;
+    static uint32_t long_press_at = 0;
+    static uint8_t  longpress_release = 0;
+    static uint32_t last_button_time = 0;
 
-    u32 ms = CLOCK_getms();
+    uint32_t ms = CLOCK_getms();
     //debounce
     if (ms < last_button_time)
         return;
-    u32 buttons = ScanButtons();
+    uint32_t buttons = ScanButtons();
 
-    u32 buttons_pressed=   buttons  & (~last_buttons);
-    u32 buttons_released=(~buttons) &   last_buttons;
+    uint32_t buttons_pressed=   buttons  & (~last_buttons);
+    uint32_t buttons_released=(~buttons) &   last_buttons;
 
     if (buttons != last_buttons)
         last_button_time = ms;
@@ -151,7 +151,7 @@ void BUTTON_InterruptLongPress()
     interrupt_longpress = 1;
 }
 
-void exec_callbacks(u32 buttons, enum ButtonFlags flags) {
+void exec_callbacks(uint32_t buttons, enum ButtonFlags flags) {
     buttonAction_t *ptr = buttonHEAD;
 
     while(ptr) {

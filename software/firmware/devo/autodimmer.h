@@ -3,8 +3,8 @@
 #include "timer.h"
 
 struct AutoDimmer {
-    u32 timer;  //bug fix: overflow when timer > 1minutes
-    u8 backlight_dim_value;
+    uint32_t timer;  //bug fix: overflow when timer > 1minutes
+    uint8_t backlight_dim_value;
 };
 
 typedef enum {
@@ -17,7 +17,7 @@ typedef enum {
 #define MIN_BACKLIGHT_DIMTIME 0 // shorter than 10seconds is too frequent
 #define MAX_BACKLIGHT_DIMTIME 120
 
-void AUTODIMMER_Update();
-void AUTODIMMER_Check();
-void AUTODIMMER_Init();
+void AUTODIMMER_Update(void);
+void AUTODIMMER_Check(void);
+void AUTODIMMER_Init(void);
 #endif

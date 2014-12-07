@@ -20,10 +20,10 @@
 /* Initialize Disk Drive                                                 */
 /*-----------------------------------------------------------------------*/
 static const struct {
-	void (*ReadBytes)(u32 readAddress, u32 length, u8 * buffer);
-	int (*ReadBytesStopCR)(u32 readAddress, u32 length, u8 * buffer);
-	void (*WriteBytes)(u32 writeAddress, u32 length, const u8 * buffer);
-	void (*EraseSector)(u32 sectorAddress);
+	void (*ReadBytes)(uint32_t readAddress, uint32_t length, uint8_t * buffer);
+	int (*ReadBytesStopCR)(uint32_t readAddress, uint32_t length, uint8_t * buffer);
+	void (*WriteBytes)(uint32_t writeAddress, uint32_t length, const uint8_t * buffer);
+	void (*EraseSector)(uint32_t sectorAddress);
 	long SECTOR_OFFSET;
 } drive[] = {
 	{SPIFlash_ReadBytes, SPIFlash_ReadBytesStopCR, SPIFlash_WriteBytes, SPIFlash_EraseSector, SPIFLASH_SECTOR_OFFSET},
@@ -32,8 +32,8 @@ static const struct {
 #endif
 };
 
-u8 _drive_num = 0;
-u8 _stop_on_cr = 0;
+uint8_t _drive_num = 0;
+uint8_t _stop_on_cr = 0;
 
 DSTATUS disk_initialize (void)
 {

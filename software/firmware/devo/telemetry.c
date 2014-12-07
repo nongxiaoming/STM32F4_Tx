@@ -18,27 +18,27 @@
 #include "tx.h"
 #include "telemetry.h"
 
-static void _get_volt_str(char *str, u32 value);
+static void _get_volt_str(char *str, uint32_t value);
 static void _get_temp_str(char *str, int value);
-#include "telemetry/telem_devo.c"
-#include "telemetry/telem_dsm.c"
-#include "telemetry/telem_frsky.c"
+#include "telem_devo.c"
+#include "telem_dsm.c"
+#include "telem_frsky.c"
 
 #define CAP_DSM   1
 #define CAP_FRSKY 2
 #define CAP_TYPEMASK 0x03
 
 struct Telemetry Telemetry;
-static u32 alarm_duration[TELEM_NUM_ALARMS] = {0, 0, 0, 0, 0, 0};
-static u8 telem_idx = 0;
-static u8 alarm = 0;
-static u32 alarm_time = 0;
-static u8 last_updated[TELEM_UPDATE_SIZE];
-static u32 last_time;
+static uint32_t alarm_duration[TELEM_NUM_ALARMS] = {0, 0, 0, 0, 0, 0};
+static uint8_t telem_idx = 0;
+static uint8_t alarm = 0;
+static uint32_t alarm_time = 0;
+static uint8_t last_updated[TELEM_UPDATE_SIZE];
+static uint32_t last_time;
 #define CHECK_DURATION 500
 #define MUSIC_INTERVAL 2000 // DON'T need to play music in every 100ms
 
-void _get_volt_str(char *str, u32 value)
+void _get_volt_str(char *str, uint32_t value)
 {
     sprintf(str, "%d.%dV", (int)value /10, (int)value % 10);
 }
@@ -55,7 +55,7 @@ void _get_temp_str(char *str, int value)
         }
     }
 }
-u32 TELEMETRY_IsUpdated(int val)
+uint32_t TELEMETRY_IsUpdated(int val)
 {
     if (val == 0xff) {
         for(int i = 0; i < TELEM_UPDATE_SIZE; i++) {
@@ -145,12 +145,12 @@ const char * TELEMETRY_GetValueStrByValue(char *str, unsigned telem, s32 value)
             break;
         case TELEM_GPS_TIME:
         {
-            int year = 2000 + (((u32)Telemetry.gps.time >> 26) & 0x3F);
-            int month = ((u32)Telemetry.gps.time >> 22) & 0x0F;
-            int day = ((u32)Telemetry.gps.time >> 17) & 0x1F;
-            int hour = ((u32)Telemetry.gps.time >> 12) & 0x1F;
-            int min = ((u32)Telemetry.gps.time >> 6) & 0x3F;
-            int sec = ((u32)Telemetry.gps.time >> 0) & 0x3F;
+            int year = 2000 + (((uint32_t)Telemetry.gps.time >> 26) & 0x3F);
+            int month = ((uint32_t)Telemetry.gps.time >> 22) & 0x0F;
+            int day = ((uint32_t)Telemetry.gps.time >> 17) & 0x1F;
+            int hour = ((uint32_t)Telemetry.gps.time >> 12) & 0x1F;
+            int min = ((uint32_t)Telemetry.gps.time >> 6) & 0x3F;
+            int sec = ((uint32_t)Telemetry.gps.time >> 0) & 0x3F;
             sprintf(str, "%2d:%02d:%02d %4d-%02d-%02d",
                     hour, min, sec, year, month, day);
             break;
@@ -257,7 +257,7 @@ void TELEMETRY_SetType(int type)
 void TELEMETRY_Alarm()
 {
     //Update 'updated' state every time we get here
-    u32 current_time = CLOCK_getms();
+    uint32_t current_time = CLOCK_getms();
     if (current_time - last_time > TELEM_ERROR_TIME) {
         last_time = current_time;
         for(int i = 0; i < TELEM_UPDATE_SIZE; i++) {

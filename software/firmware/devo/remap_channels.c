@@ -28,9 +28,9 @@
 #include "target.h"
 #include "datalog.h"
 #include <stdlib.h>
-extern const u8 const EATRG[PROTO_MAP_LEN];
+extern const uint8_t const EATRG[PROTO_MAP_LEN];
 
-static void _map_inp(unsigned *chmap, u8 *val, int offset)
+static void _map_inp(unsigned *chmap, uint8_t *val, int offset)
 {
     int i;
     for(i = 0; i < PROTO_MAP_LEN; i++) {
@@ -40,14 +40,14 @@ static void _map_inp(unsigned *chmap, u8 *val, int offset)
         }
     }
 }
-static void map_inp(unsigned *chmap, u8 *val)
+static void map_inp(unsigned *chmap, uint8_t *val)
 {
     _map_inp(chmap, val, NUM_INPUTS + 1);
 }
-void RemapChannelsForProtocol(const u8 *oldmap)
+void RemapChannelsForProtocol(const uint8_t *oldmap)
 {
     int i, j;
-    const u8 *map = ProtocolChannelMap[Model.protocol];
+    const uint8_t *map = ProtocolChannelMap[Model.protocol];
     unsigned chmap[PROTO_MAP_LEN];
     //Automap assumes input is EATRG
     if(! oldmap)
@@ -73,8 +73,8 @@ void RemapChannelsForProtocol(const u8 *oldmap)
             }
         }
     }
-    u8 template[NUM_CHANNELS];
-    u8 safety[NUM_SOURCES];
+    uint8_t template[NUM_CHANNELS];
+    uint8_t safety[NUM_SOURCES];
     struct Limit limit[NUM_OUT_CHANNELS];
     memcpy(template, Model.templates, sizeof(template));
     memcpy(limit, Model.limits, sizeof(limit));

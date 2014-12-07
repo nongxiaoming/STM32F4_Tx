@@ -27,24 +27,24 @@
 // maybe useful if we get the real time via telemetry / gps
 // #define BEGINNING2012 1325376000    // for recalculation with linux epoch, seconds since 1970 in UTC
 
-void _RTC_SetDayStart(u32 value);
-int _RTC_GetSecond(u32 value);
-int _RTC_GetMinute(u32 value);
-int _RTC_GetHour(u32 value);
-int _RTC_GetDay(u32 value);
-int _RTC_GetMonth(u32 value);
-int _RTC_GetYear(u32 value);
-u32 _RTC_GetSerialTime(int hour, int minute, int second);
-u32 _RTC_GetSerialDate(int year, int month, int day);
-void _RTC_GetDateStringHelper(char *str, u32 date, unsigned year4);
+void _RTC_SetDayStart(uint32_t value);
+int _RTC_GetSecond(uint32_t value);
+int _RTC_GetMinute(uint32_t value);
+int _RTC_GetHour(uint32_t value);
+int _RTC_GetDay(uint32_t value);
+int _RTC_GetMonth(uint32_t value);
+int _RTC_GetYear(uint32_t value);
+uint32_t _RTC_GetSerialTime(int hour, int minute, int second);
+uint32_t _RTC_GetSerialDate(int year, int month, int day);
+void _RTC_GetDateStringHelper(char *str, uint32_t date, unsigned year4);
 
 static struct {
-    u32 DayStart;
+    uint32_t DayStart;
     int Day;
     int Month;
     int Year;
 } today; 
-static const u16 daysInYear[2][13] = { { 0,31,59,90,120,151,181,212,243,273,304,334,365},
+static const uint16_t daysInYear[2][13] = { { 0,31,59,90,120,151,181,212,243,273,304,334,365},
                                        { 0,31,60,91,121,152,182,213,244,274,305,335,366} };
 #define DAYSEC (60*60*24)
 
@@ -52,14 +52,14 @@ const char *usmonth[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG"
 const char *germanmonth[] = { "JAN", "FEB", "MRZ", "APR", "MAI", "JUN", "JUL", "AUG", "SEP", "OKT", "NOV", "DEZ" };
 
 // store actual serial number for dayStart for less often calculating the date values
-void _RTC_SetDayStart(u32 value)
+void _RTC_SetDayStart(uint32_t value)
 {
-    u32 days = value / DAYSEC;
+    uint32_t days = value / DAYSEC;
     if (today.DayStart != days) {
         today.DayStart = days;
         today.Year  = (4*days) / 1461; // = days/365.25
         unsigned leap = today.Year % 4 == 0;
-        days -= (u32)(today.Year * 365 + today.Year / 4);
+        days -= (uint32_t)(today.Year * 365 + today.Year / 4);
         days -= ((today.Year != 0 && days > daysInYear[leap][2]) ? 1 : 0);    //leap year correction for RTC_STARTYEAR
         today.Month = 0;
         for (today.Month=0; today.Month<12; today.Month++) {
@@ -69,17 +69,17 @@ void _RTC_SetDayStart(u32 value)
     }
 }
 
-int _RTC_GetSecond(u32 value)
+int _RTC_GetSecond(uint32_t value)
 {
     return (int)(value % 60);
 }
 
-int _RTC_GetMinute(u32 value)
+int _RTC_GetMinute(uint32_t value)
 {
     return (int)(value / 60) % 60;
 }
 
-int _RTC_GetHour(u32 value)
+int _RTC_GetHour(uint32_t value)
 {
     value /= 3600;
     if (Transmitter.rtcflags & CLOCK12HR) {
@@ -92,57 +92,57 @@ int _RTC_GetHour(u32 value)
     return value;
 }
 
-int _RTC_GetDay(u32 value)
+int _RTC_GetDay(uint32_t value)
 {
     _RTC_SetDayStart(value);
     return today.Day+1;
 }
 
-int _RTC_GetMonth(u32 value)
+int _RTC_GetMonth(uint32_t value)
 {
     _RTC_SetDayStart(value);
     return today.Month+1;
 }
 
-int _RTC_GetYear(u32 value)
+int _RTC_GetYear(uint32_t value)
 {
     _RTC_SetDayStart(value);
     return today.Year + RTC_STARTYEAR;
 }
 
-u32 _RTC_GetSerialTime(int hour, int minute, int second)
+uint32_t _RTC_GetSerialTime(int hour, int minute, int second)
 {
-    return (u32)(hour * 3600 + minute * 60 + second);
+    return (uint32_t)(hour * 3600 + minute * 60 + second);
 }
 
-u32 _RTC_GetSerialDate(int year, int month, int day)
+uint32_t _RTC_GetSerialDate(int year, int month, int day)
 {
     if (year>=RTC_STARTYEAR) year -= RTC_STARTYEAR;
     if (year>67) year = 67;
     if (year<0) year = 0;
-    return (u32)(day-1 + daysInYear[year%4 == 0 ? 1 : 0][month-1] + year*365 + year/4 + ((year != 0 && month > 2) ? 1 : 0)) * DAYSEC;
+    return (uint32_t)(day-1 + daysInYear[year%4 == 0 ? 1 : 0][month-1] + year*365 + year/4 + ((year != 0 && month > 2) ? 1 : 0)) * DAYSEC;
 }
 
 // get serial time (seconds since 01.01.RTC_STARTYEAR (now 2012), 0:00:00 - "deviation epoch")    //year = RTC_STARTYEAR-based
-u32 RTC_GetSerial(int year, int month, int day, int hour, int minute, int second)
+uint32_t RTC_GetSerial(int year, int month, int day, int hour, int minute, int second)
 {
     return _RTC_GetSerialTime(hour, minute, second) + _RTC_GetSerialDate(year, month, day);
 }
 
 // format time string
-void RTC_GetTimeString(char *str, u32 value)
+void RTC_GetTimeString(char *str, uint32_t value)
 {
     sprintf(str, "%2d:%02d:%02d", _RTC_GetHour(value), _RTC_GetMinute(value), _RTC_GetSecond(value));
 }
 
 // format time string
-void RTC_GetTimeStringShort(char *str, u32 value)
+void RTC_GetTimeStringShort(char *str, uint32_t value)
 {
     sprintf(str, "%2d:%02d", _RTC_GetHour(value), _RTC_GetMinute(value));
 }
 
 // format date string
-void _RTC_GetDateStringHelper(char *str, u32 date, unsigned year4)
+void _RTC_GetDateStringHelper(char *str, uint32_t date, unsigned year4)
 {
     _RTC_SetDayStart(date);
     if (year4) sprintf(str, "%2d.%02d.%04d", today.Day+1, today.Month+1, today.Year+RTC_STARTYEAR);
@@ -150,20 +150,20 @@ void _RTC_GetDateStringHelper(char *str, u32 date, unsigned year4)
 }
 
 // format date string (return year without century)
-void RTC_GetDateString(char *str, u32 date)
+void RTC_GetDateString(char *str, uint32_t date)
 {
     _RTC_GetDateStringHelper(str, date, 0);
 }
 
 // format date string (return year with century)
-void RTC_GetDateStringLong(char *str, u32 date)
+void RTC_GetDateStringLong(char *str, uint32_t date)
 {
     _RTC_GetDateStringHelper(str, date, 1);
 }
 
 // return formatted time string as stated in tx config
 const char *timeformats[] = { /*"default",*/ "hh:mm:ss", "hh:mm:ss am/pm" };
-void RTC_GetTimeFormatted(char *str, u32 time)
+void RTC_GetTimeFormatted(char *str, uint32_t time)
 {
     // which format to use?
     unsigned format = Transmitter.rtcflags & TIMEFMT;
@@ -184,7 +184,7 @@ void RTC_GetTimeFormatted(char *str, u32 time)
 
 // return formatted date string as stated in tx config
 const char *dateformats[] = { "YYYY-MM-DD", "MM/DD/YYYY", "DD.MM.YYYY", "Mon DD YYYY", "DD. Mon YYYY", "DD.MM.YY" };
-void RTC_GetDateFormatted(char *str, u32 date)
+void RTC_GetDateFormatted(char *str, uint32_t date)
 {
     // which format to use?
     unsigned format = (Transmitter.rtcflags & DATEFMT) >> 4;
@@ -243,7 +243,7 @@ void RTC_GetMonthFormatted(char *str, unsigned month)
     }
 }
 
-void RTC_GetDateFormattedOrder(unsigned index, u8 *left, u8 *middle, u8 *right)
+void RTC_GetDateFormattedOrder(unsigned index, uint8_t *left, uint8_t *middle, uint8_t *right)
 {
     *left = (index == 0) ? YEAR : ((index == 1 || index == 3) ? MONTH : DAY);
     *middle = (index == 1 || index == 3) ? DAY : MONTH;
@@ -251,14 +251,14 @@ void RTC_GetDateFormattedOrder(unsigned index, u8 *left, u8 *middle, u8 *right)
 }
 
 // for big boxes only these will fit
-void RTC_GetTimeFormattedBigbox(char *str, u32 time)
+void RTC_GetTimeFormattedBigbox(char *str, uint32_t time)
 {
     unsigned am = ((time % DAYSEC) / 3600) < 12;
     unsigned hour = _RTC_GetHour(time);
     if (hour == 12) hour = 0;
     sprintf(str, "%2d:%02d:%02d", hour + (am ? 0 : 12), _RTC_GetMinute(time), _RTC_GetSecond(time));
 }
-void RTC_GetDateFormattedBigbox(char *str, u32 date)
+void RTC_GetDateFormattedBigbox(char *str, uint32_t date)
 {
     _RTC_SetDayStart(date);
     sprintf(str, "%02d.%02d.%02d", today.Day + 1, today.Month + 1, (today.Year + RTC_STARTYEAR) % 100);
@@ -277,25 +277,25 @@ int RTC_GetNumberDateFormats()
 }
 
 // set time (don't change date)
-void RTC_SetTime(u16 hour, u16 minute, u16 second)
+void RTC_SetTime(uint16_t hour, uint16_t minute, uint16_t second)
 {
     RTC_SetValue(RTC_GetDateValue(RTC_GetValue()) * DAYSEC + _RTC_GetSerialTime((int)hour, (int)minute, (int)second));
 }
 
 // set date (don't change time)
-void RTC_SetDate(u16 year, u16 month, u16 day)
+void RTC_SetDate(uint16_t year, uint16_t month, uint16_t day)
 {
     RTC_SetValue(RTC_GetTimeValue(RTC_GetValue()) + _RTC_GetSerialDate((int)year, (int)month, (int)day));
 }
 
 // return only time-value
-u32 RTC_GetTimeValue(u32 time)
+uint32_t RTC_GetTimeValue(uint32_t time)
 {
     return time % DAYSEC;
 }
 
 // return only date-value
-u32 RTC_GetDateValue(u32 time)
+uint32_t RTC_GetDateValue(uint32_t time)
 {
     return time / DAYSEC;
 }

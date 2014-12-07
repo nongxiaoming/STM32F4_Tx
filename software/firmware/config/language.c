@@ -29,10 +29,10 @@ int CONFIG_IniParse(const char* filename,
 {
     return ini_parse(filename, handler, user);
 }
-void CONFIG_ReadLang(u8 idx) {(void)idx;}
+void CONFIG_ReadLang(uint8_t idx) {(void)idx;}
 void CONFIG_EnableLanguage(int state) {(void)state;}
 #else
-u16 fnv_16_str(const char *str);
+uint16_t fnv_16_str(const char *str);
 static char strings[8192];
 #define MAX_STRINGS 370
 #define MAX_LINE 300
@@ -44,8 +44,8 @@ static char strings[8192];
 
 #define dbg_printf if(0) printf
 static struct str_map {
-    u16 hash;
-    u16 pos;
+    uint16_t hash;
+    uint16_t pos;
 } lookupmap[MAX_STRINGS];
 
 const char *_tr(const char *str)
@@ -54,7 +54,7 @@ const char *_tr(const char *str)
     if (lookupmap[0].pos == 0xffff) {
         return str;
     }
-    u16 hash = fnv_16_str(str);
+    uint16_t hash = fnv_16_str(str);
     dbg_printf("%d: %s\n", hash, str);
     for(i = 0; i < MAX_STRINGS; i++) {
         if(lookupmap[i].pos == 0xffff)
@@ -92,9 +92,9 @@ unsigned fix_crlf(char *str)
     return len;
 }
 
-void CONFIG_ReadLang(u8 idx)
+void CONFIG_ReadLang(uint8_t idx)
 {
-    u8 cnt = 0;;
+    uint8_t cnt = 0;;
     char file[30];
     char filename[13];
     struct str_map *lookup = lookupmap;
@@ -126,7 +126,7 @@ void CONFIG_ReadLang(u8 idx)
         return;
     }
     while (fgets(line, sizeof(line), fh) != NULL) {
-        u16 hash;
+        uint16_t hash;
         if(line[0] == ':') {
             CLOCK_ResetWatchdog();
             fix_crlf(line+1);
@@ -160,7 +160,7 @@ void CONFIG_ReadLang(u8 idx)
 
 void CONFIG_EnableLanguage(int state)
 {
-    static u16 disable = 0xffff;
+    static uint16_t disable = 0xffff;
     if (! state) {
         disable = lookupmap[0].pos;
         lookupmap[0].pos = 0xffff;
@@ -172,7 +172,7 @@ int CONFIG_IniParse(const char* filename,
          int (*handler)(void*, const char*, const char*, const char*),
          void* user)
 {
-    u16 tmpval = lookupmap[0].pos;
+    uint16_t tmpval = lookupmap[0].pos;
     lookupmap[0].pos = 0xffff; //Disable Language parsing;
     int result = ini_parse(filename, handler, user);
     lookupmap[0].pos = tmpval;
@@ -210,9 +210,9 @@ int CONFIG_IniParse(const char* filename,
 /*
  * 32 bit magic FNV-0 and FNV-1 prime
  */
-#define FNV_32_PRIME ((u32)0x01000193)
-#define FNV1_32_INIT ((u32)0x811c9dc5)
-#define MASK_16 (((u32)1<<16)-1) /* i.e., (u_int32_t)0xffff */
+#define FNV_32_PRIME ((uint32_t)0x01000193)
+#define FNV1_32_INIT ((uint32_t)0x811c9dc5)
+#define MASK_16 (((uint32_t)1<<16)-1) /* i.e., (u_int32_t)0xffff */
 
 /*
  * fnv_16_str - perform a 32 bit Fowler/Noll/Vo hash on a string then fold to 16bit
@@ -224,10 +224,10 @@ int CONFIG_IniParse(const char* filename,
  *	16 bit hash as a static hash type
  *
  */
-u16 fnv_16_str(const char *str)
+uint16_t fnv_16_str(const char *str)
 {
     unsigned char *s = (unsigned char *)str;	/* unsigned string */
-    u32 hval = FNV1_32_INIT;
+    uint32_t hval = FNV1_32_INIT;
     /*
      * FNV-1 hash each octet in the buffer
      */
@@ -241,7 +241,7 @@ u16 fnv_16_str(const char *str)
 #endif
 
 	/* xor the bottom with the current octet */
-	hval ^= (u32)*s++;
+	hval ^= (uint32_t)*s++;
     }
 
     /* fold to 16bits (don't do this if you want 32bits */

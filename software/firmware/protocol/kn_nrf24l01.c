@@ -80,21 +80,21 @@ enum {
 };
 
 
-static u8 packet[PAYLOADSIZE];
-static u8 packet_sent;
-static u8 tx_id[TXID_SIZE];
-static u8 rf_ch_num;
-static u8 packet_count;
-static u16 bind_counter;
-static u32 total_packets;
-static u8 tx_power;
-static u16 throttle, rudder, elevator, aileron;
-static u8 flags;
-static u8 hopping_frequency[NFREQCHANNELS];
+static uint8_t packet[PAYLOADSIZE];
+static uint8_t packet_sent;
+static uint8_t tx_id[TXID_SIZE];
+static uint8_t rf_ch_num;
+static uint8_t packet_count;
+static uint16_t bind_counter;
+static uint32_t total_packets;
+static uint8_t tx_power;
+static uint16_t throttle, rudder, elevator, aileron;
+static uint8_t flags;
+static uint8_t hopping_frequency[NFREQCHANNELS];
 
 
 //
-static u8 phase;
+static uint8_t phase;
 enum {
     KN_INIT2 = 0,
     KN_INIT2_NO_BIND,
@@ -135,7 +135,7 @@ enum {
     PKT_TIMEOUT
 };
 
-static u8 packet_ack()
+static uint8_t packet_ack()
 {
     switch (NRF24L01_ReadReg(NRF24L01_07_STATUS) & (BV(NRF24L01_07_TX_DS) | BV(NRF24L01_07_MAX_RT))) {
     case BV(NRF24L01_07_TX_DS):
@@ -149,7 +149,7 @@ static u8 packet_ack()
 // 2-bytes CRC
 #define CRC_CONFIG (BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_CRCO))
 
-static u16 kn_init()
+static uint16_t kn_init()
 {
     NRF24L01_Initialize();
 
@@ -183,23 +183,23 @@ static u16 kn_init()
         // them by their numbers
         // It's all magic, eavesdropped from real transfer and not even from the
         // data sheet - it has slightly different values
-        NRF24L01_WriteRegisterMulti(0x00, (u8 *) "\x40\x4B\x01\xE2", 4);
-        NRF24L01_WriteRegisterMulti(0x01, (u8 *) "\xC0\x4B\x00\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x02, (u8 *) "\xD0\xFC\x8C\x02", 4);
-        NRF24L01_WriteRegisterMulti(0x03, (u8 *) "\xF9\x00\x39\x21", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x05, (u8 *) "\x24\x06\x7F\xA6", 4);
-//        NRF24L01_WriteRegisterMulti(0x06, (u8 *) &nul, 4);
-//        NRF24L01_WriteRegisterMulti(0x07, (u8 *) &nul, 4);
-//        NRF24L01_WriteRegisterMulti(0x08, (u8 *) &nul, 4);
-//        NRF24L01_WriteRegisterMulti(0x09, (u8 *) &nul, 4);
-//        NRF24L01_WriteRegisterMulti(0x0A, (u8 *) &nul, 4);
-//        NRF24L01_WriteRegisterMulti(0x0B, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0C, (u8 *) "\x00\x12\x73\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0D, (u8 *) "\x46\xB4\x80\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0E, (u8 *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC7\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x00, (uint8_t *) "\x40\x4B\x01\xE2", 4);
+        NRF24L01_WriteRegisterMulti(0x01, (uint8_t *) "\xC0\x4B\x00\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x02, (uint8_t *) "\xD0\xFC\x8C\x02", 4);
+        NRF24L01_WriteRegisterMulti(0x03, (uint8_t *) "\xF9\x00\x39\x21", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x05, (uint8_t *) "\x24\x06\x7F\xA6", 4);
+//        NRF24L01_WriteRegisterMulti(0x06, (uint8_t *) &nul, 4);
+//        NRF24L01_WriteRegisterMulti(0x07, (uint8_t *) &nul, 4);
+//        NRF24L01_WriteRegisterMulti(0x08, (uint8_t *) &nul, 4);
+//        NRF24L01_WriteRegisterMulti(0x09, (uint8_t *) &nul, 4);
+//        NRF24L01_WriteRegisterMulti(0x0A, (uint8_t *) &nul, 4);
+//        NRF24L01_WriteRegisterMulti(0x0B, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0C, (uint8_t *) "\x00\x12\x73\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0D, (uint8_t *) "\x46\xB4\x80\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0E, (uint8_t *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC7\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
     } else {
         printf("nRF24L01 detected\n");
     }
@@ -210,7 +210,7 @@ static u16 kn_init()
 }
 
 
-static u16 kn_init2()
+static uint16_t kn_init2()
 {
     NRF24L01_FlushTx();
     NRF24L01_FlushRx();
@@ -229,13 +229,13 @@ static void set_tx_for_bind()
 {
     NRF24L01_WriteReg(NRF24L01_05_RF_CH, 83);
     NRF24L01_SetBitrate(NRF24L01_BR_1M); // 1Mbps for binding
-    NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR, (u8 *) "KNDZK", 5);
+    NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR, (uint8_t *) "KNDZK", 5);
 }
 
 
 static void set_tx_for_data()
 {
-    u8 tx_addr[5];
+    uint8_t tx_addr[5];
     for (int i = 0; i < TXID_SIZE; ++i)
         tx_addr[i] = tx_id[i];
     tx_addr[4] = 'K';
@@ -247,16 +247,16 @@ static void set_tx_for_data()
     NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR, tx_addr, 5);
 }
 
-static void calc_fh_channels(u32 seed)
+static void calc_fh_channels(uint32_t seed)
 {
     int idx = 0;
-    u32 rnd = seed;
+    uint32_t rnd = seed;
     while (idx < NFREQCHANNELS) {
         int i;
         rnd = rnd * 0x0019660D + 0x3C6EF35F; // Randomization
 
         // Use least-significant byte. 73 is prime, so channels 76..77 are unused
-        u8 next_ch = ((rnd >> 8) % 73) + 2;
+        uint8_t next_ch = ((rnd >> 8) % 73) + 2;
         // Keep the distance 2 between the channels - either odd or even
         if (((next_ch ^ seed) & 0x01 )== 0)
             continue;
@@ -272,7 +272,7 @@ static void calc_fh_channels(u32 seed)
 }
 
 
-static void set_tx_id(u32 id)
+static void set_tx_id(uint32_t id)
 {
     tx_id[0] = (id >> 24) & 0xFF;
     tx_id[1] = (id >> 16) & 0xFF;
@@ -285,7 +285,7 @@ static void set_tx_id(u32 id)
 }
 
 
-static u16 convert_channel(u8 num)
+static uint16_t convert_channel(uint8_t num)
 {
     s32 ch = Channels[num];
     if (ch < CHAN_MIN_VALUE) {
@@ -293,12 +293,12 @@ static u16 convert_channel(u8 num)
     } else if (ch > CHAN_MAX_VALUE) {
         ch = CHAN_MAX_VALUE;
     }
-    return (u16) ((ch * 511 / CHAN_MAX_VALUE) + 512);
+    return (uint16_t) ((ch * 511 / CHAN_MAX_VALUE) + 512);
 }
 
 
-static void read_controls(u16* throttle, u16* aileron, u16* elevator, u16* rudder,
-                          u8* flags)
+static void read_controls(uint16_t* throttle, uint16_t* aileron, uint16_t* elevator, uint16_t* rudder,
+                          uint8_t* flags)
 {
     // Protocol is registered TAERG, that is
     // Throttle is channel 0, Aileron - 1, Elevator - 2, Rudder - 3
@@ -339,9 +339,9 @@ static void read_controls(u16* throttle, u16* aileron, u16* elevator, u16* rudde
 
 #define PACKET_COUNT_SHIFT 5
 #define RF_CHANNEL_SHIFT 2
-static void send_packet(u8 bind)
+static void send_packet(uint8_t bind)
 {
-    u8 rf_ch;
+    uint8_t rf_ch;
     if (bind) {
         rf_ch = 83;
         packet[0]  = 'K';
@@ -428,9 +428,9 @@ static void send_packet(u8 bind)
 
 
 MODULE_CALLTYPE
-static u16 kn_callback()
+static uint16_t kn_callback()
 {
-    u16 timeout = PACKET_PERIOD;
+    uint16_t timeout = PACKET_PERIOD;
     switch (phase) {
     case KN_INIT2:
         bind_counter = BIND_COUNT;
@@ -473,10 +473,10 @@ static u16 kn_callback()
 // Generate internal id from TX id and manufacturer id (STM32 unique id)
 static void initialize_tx_id()
 {
-    u32 lfsr = 0xb2c54a2ful;
+    uint32_t lfsr = 0xb2c54a2ful;
 
 #ifndef USE_FIXED_MFGID
-    u8 var[12];
+    uint8_t var[12];
     MCU_SerialNumber(var, 12);
     printf("Manufacturer id: ");
     for (int i = 0; i < 12; ++i) {
@@ -487,21 +487,21 @@ static void initialize_tx_id()
 #endif
 
     if (Model.fixed_id) {
-       for (u8 i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
+       for (uint8_t i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
            rand32_r(&lfsr, (Model.fixed_id >> j) & 0xff);
     }
     // Pump zero bytes for LFSR to diverge more
-    for (u8 i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
+    for (uint8_t i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
 
     set_tx_id(lfsr);
 }
 
-static void initialize(u8 bind)
+static void initialize(uint8_t bind)
 {
     CLOCK_StopTimer();
     tx_power = Model.tx_power;
     total_packets = 0;
-    u16 timeout = kn_init();
+    uint16_t timeout = kn_init();
     phase = bind ? KN_INIT2 : KN_INIT2_NO_BIND;
     if (bind) {
         PROTOCOL_SetBindState(BIND_COUNT * PACKET_PERIOD / 1000); //msec

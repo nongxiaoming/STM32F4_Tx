@@ -79,7 +79,7 @@ enum PktState {
     DEVO_BOUND_10,
 };
 
-static const u8 sopcodes[][8] = {
+static const uint8_t sopcodes[][8] = {
     /* Note these are in order transmitted (LSB 1st) */
     /* 0 */ {0x3C,0x37,0xCC,0x91,0xE2,0xF8,0xCC,0x91}, //0x91CCF8E291CC373C
     /* 1 */ {0x9B,0xC5,0xA1,0x0F,0xAD,0x39,0xA2,0x0F}, //0x0FA239AD0FA1C59B
@@ -96,24 +96,24 @@ static const u8 sopcodes[][8] = {
 
 static s16 bind_counter;
 static enum PktState state;
-static u8 txState;
-static u8 packet[16];
-static u32 fixed_id;
-static u8 radio_ch[5];
-static u8 *radio_ch_ptr;
-static u8 pkt_num;
-static u8 cyrfmfg_id[6];
-static u8 num_channels;
-static u8 ch_idx;
-static u8 use_fixed_id;
-static u8 failsafe_pkt;
+static uint8_t txState;
+static uint8_t packet[16];
+static uint32_t fixed_id;
+static uint8_t radio_ch[5];
+static uint8_t *radio_ch_ptr;
+static uint8_t pkt_num;
+static uint8_t cyrfmfg_id[6];
+static uint8_t num_channels;
+static uint8_t ch_idx;
+static uint8_t use_fixed_id;
+static uint8_t failsafe_pkt;
 
 static void scramble_pkt()
 {
 #ifdef NO_SCRAMBLE
     return;
 #else
-    u8 i;
+    uint8_t i;
     for(i = 0; i < 15; i++) {
         packet[i + 1] ^= cyrfmfg_id[i % 4];
     }
@@ -122,7 +122,7 @@ static void scramble_pkt()
 
 static void add_pkt_suffix()
 {
-    u8 bind_state;
+    uint8_t bind_state;
     if (use_fixed_id) {
         if (bind_counter > 0) {
             bind_state = 0xc0;
@@ -143,7 +143,7 @@ static void add_pkt_suffix()
 static void build_beacon_pkt(int upper)
 {
     packet[0] = ((num_channels << 4) | 0x07);
-    u8 enable = 0;
+    uint8_t enable = 0;
     int max = 8;
     int offset = 0;
     if (upper) {
@@ -185,9 +185,9 @@ static void build_bind_pkt()
 
 static void build_data_pkt()
 {
-    u8 i;
+    uint8_t i;
     packet[0] = (num_channels << 4) | (0x0b + ch_idx);
-    u8 sign = 0x0b;
+    uint8_t sign = 0x0b;
     for (i = 0; i < 4; i++) {
         s32 value = (s32)Channels[ch_idx * 4 + i] * 0x640 / CHAN_MAX_VALUE;
         if(value < 0) {
@@ -204,7 +204,7 @@ static void build_data_pkt()
     add_pkt_suffix();
 }
 
-static s32 float_to_int(u8 *ptr)
+static s32 float_to_int(uint8_t *ptr)
 {
     s32 value = 0;
     int seen_decimal = 0;
@@ -227,24 +227,24 @@ static s32 float_to_int(u8 *ptr)
     }
     return value;
 }
-static void parse_telemetry_packet(u8 *packet)
+static void parse_telemetry_packet(uint8_t *packet)
 {
-    static const u8 voltpkt[] = {
+    static const uint8_t voltpkt[] = {
             TELEM_DEVO_VOLT1, TELEM_DEVO_VOLT2, TELEM_DEVO_VOLT3,
             TELEM_DEVO_RPM1, TELEM_DEVO_RPM2, 0
         };
-    static const u8 temppkt[] = {
+    static const uint8_t temppkt[] = {
             TELEM_DEVO_TEMP1, TELEM_DEVO_TEMP2, TELEM_DEVO_TEMP3, TELEM_DEVO_TEMP4, 0
         };
-    static const u8 gpslongpkt[] = { TELEM_GPS_LONG, 0};
-    static const u8 gpslatpkt[] = { TELEM_GPS_LAT, 0};
-    static const u8 gpsaltpkt[] = { TELEM_GPS_ALT, 0};
-    static const u8 gpsspeedpkt[] = { TELEM_GPS_SPEED, 0};
-    static const u8 gpstimepkt[] = { TELEM_GPS_TIME, 0};
+    static const uint8_t gpslongpkt[] = { TELEM_GPS_LONG, 0};
+    static const uint8_t gpslatpkt[] = { TELEM_GPS_LAT, 0};
+    static const uint8_t gpsaltpkt[] = { TELEM_GPS_ALT, 0};
+    static const uint8_t gpsspeedpkt[] = { TELEM_GPS_SPEED, 0};
+    static const uint8_t gpstimepkt[] = { TELEM_GPS_TIME, 0};
 
     if((packet[0] & 0xF0) != 0x30)
         return;
-    const u8 *update = NULL;
+    const uint8_t *update = NULL;
     scramble_pkt(); //This will unscramble the packet
     if (packet[13] != (fixed_id  & 0xff)
         || packet[14] != ((fixed_id >> 8) & 0xff)
@@ -305,12 +305,12 @@ static void parse_telemetry_packet(u8 *packet)
     }
     if (packet[0] == 0x36) {
         update = gpstimepkt;
-        u8 hour  = (packet[1]-'0') * 10 + (packet[2]-'0');
-        u8 min   = (packet[3]-'0') * 10 + (packet[4]-'0');
-        u8 sec   = (packet[5]-'0') * 10 + (packet[6]-'0');
-        u8 day   = (packet[7]-'0') * 10 + (packet[8]-'0');
-        u8 month = (packet[9]-'0') * 10 + (packet[10]-'0');
-        u8 year  = (packet[11]-'0') * 10 + (packet[12]-'0'); // + 2000
+        uint8_t hour  = (packet[1]-'0') * 10 + (packet[2]-'0');
+        uint8_t min   = (packet[3]-'0') * 10 + (packet[4]-'0');
+        uint8_t sec   = (packet[5]-'0') * 10 + (packet[6]-'0');
+        uint8_t day   = (packet[7]-'0') * 10 + (packet[8]-'0');
+        uint8_t month = (packet[9]-'0') * 10 + (packet[10]-'0');
+        uint8_t year  = (packet[11]-'0') * 10 + (packet[12]-'0'); // + 2000
         Telemetry.gps.time = ((year & 0x3F) << 26)
                            | ((month & 0x0F) << 22)
                            | ((day & 0x1F) << 17)
@@ -328,10 +328,10 @@ static void parse_telemetry_packet(u8 *packet)
 static void cyrf_set_bound_sop_code()
 {
     /* crc == 0 isn't allowed, so use 1 if the math results in 0 */
-    u8 crc = (cyrfmfg_id[0] + (cyrfmfg_id[1] >> 6) + cyrfmfg_id[2]);
+    uint8_t crc = (cyrfmfg_id[0] + (cyrfmfg_id[1] >> 6) + cyrfmfg_id[2]);
     if(! crc)
         crc = 1;
-    u8 sopidx = (0xff &((cyrfmfg_id[0] << 2) + cyrfmfg_id[1] + cyrfmfg_id[2])) % 10;
+    uint8_t sopidx = (0xff &((cyrfmfg_id[0] << 2) + cyrfmfg_id[1] + cyrfmfg_id[2])) % 10;
     CYRF_SetTxRxMode(TX_EN);
     CYRF_ConfigCRCSeed((crc << 8) + crc);
     CYRF_ConfigSOPCode(sopcodes[sopidx]);
@@ -426,7 +426,7 @@ void DEVO_BuildPacket()
         pkt_num = 0;
 }
 MODULE_CALLTYPE
-static u16 devo_telemetry_cb()
+static uint16_t devo_telemetry_cb()
 {
     if (txState == 0) {
         txState = 1;
@@ -469,7 +469,7 @@ static u16 devo_telemetry_cb()
             txState = 15;
         }
 #ifdef EMULATOR
-        u8 telem_bit = rand32() % 7; // random number in [0, 7)
+        uint8_t telem_bit = rand32() % 7; // random number in [0, 7)
         packet[0] =  TELEMETRY_ENABLE + telem_bit; // allow emulator to simulate telemetry parsing to prevent future bugs in the telemetry monitor
         //printf("telem 1st packet: 0x%x\n", packet[0]);
         for(int i = 1; i < 13; i++)
@@ -496,7 +496,7 @@ static u16 devo_telemetry_cb()
 }
 
 MODULE_CALLTYPE
-static u16 devo_cb()
+static uint16_t devo_cb()
 {
     if (txState == 0) {
         txState = 1;
@@ -562,9 +562,9 @@ static void initialize()
     txState = 0;
 
     if(! Model.fixed_id) {
-        fixed_id = ((u32)(radio_ch[0] ^ cyrfmfg_id[0] ^ cyrfmfg_id[3]) << 16)
-                 | ((u32)(radio_ch[1] ^ cyrfmfg_id[1] ^ cyrfmfg_id[4]) << 8)
-                 | ((u32)(radio_ch[2] ^ cyrfmfg_id[2] ^ cyrfmfg_id[5]) << 0);
+        fixed_id = ((uint32_t)(radio_ch[0] ^ cyrfmfg_id[0] ^ cyrfmfg_id[3]) << 16)
+                 | ((uint32_t)(radio_ch[1] ^ cyrfmfg_id[1] ^ cyrfmfg_id[4]) << 8)
+                 | ((uint32_t)(radio_ch[2] ^ cyrfmfg_id[2] ^ cyrfmfg_id[5]) << 0);
         fixed_id = fixed_id % 1000000;
         bind_counter = BIND_COUNT;
         state = DEVO_BIND;

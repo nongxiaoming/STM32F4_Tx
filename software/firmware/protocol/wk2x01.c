@@ -59,21 +59,21 @@ enum PktState {
     WK_BOUND_8,
 };
 
-static const u8 sopcodes[8] = {
+static const uint8_t sopcodes[8] = {
     /* Note these are in order transmitted (LSB 1st) */
     0xDF,0xB1,0xC0,0x49,0x62,0xDF,0xC1,0x49 //0x49C1DF6249C0B1DF
 };
-static const u8 fail_map[8] = {2, 1, 0, 3, 4, 5, 6, 7};
+static const uint8_t fail_map[8] = {2, 1, 0, 3, 4, 5, 6, 7};
 
 static s16 bind_counter;
 static enum PktState state;
-static u8 txState;
-static u8 packet[16];
-static u32 fixed_id;
-static u8 radio_ch[3];
-static u8 *radio_ch_ptr;
-static u8 pkt_num;
-static u8 last_beacon;
+static uint8_t txState;
+static uint8_t packet[16];
+static uint32_t fixed_id;
+static uint8_t radio_ch[3];
+static uint8_t *radio_ch_ptr;
+static uint8_t pkt_num;
+static uint8_t last_beacon;
 
 static const char * const wk2601_opts[] = {
   _tr_noop("Chan mode"), _tr_noop("5+1"), _tr_noop("Heli"), _tr_noop("6+1"), NULL,
@@ -89,10 +89,10 @@ enum {
 };
 ctassert(LAST_PROTO_OPT <= NUM_PROTO_OPTS, too_many_protocol_opts);
 
-static void add_pkt_crc(u8 init)
+static void add_pkt_crc(uint8_t init)
 {
-    u8 add = init;
-    u8 xor = init;
+    uint8_t add = init;
+    uint8_t xor = init;
     int i;
     for (i = 0; i < 14; i++) {
         add += packet[i];
@@ -126,7 +126,7 @@ static void build_bind_pkt(const char *init)
     add_pkt_crc(init[4]);
 }
 
-static s16 get_channel(u8 ch, s32 scale, s32 center, s32 range)
+static s16 get_channel(uint8_t ch, s32 scale, s32 center, s32 range)
 {
     s32 value = (s32)Channels[ch] * scale / CHAN_MAX_VALUE + center;
     if (value < center - range)
@@ -138,15 +138,15 @@ static s16 get_channel(u8 ch, s32 scale, s32 center, s32 range)
 
 static void build_data_pkt_2401()
 {
-    u8 i;
-    u16 msb = 0;
-    u8 offset = 0;
+    uint8_t i;
+    uint16_t msb = 0;
+    uint8_t offset = 0;
     for (i = 0; i < 4; i++) {
         if (i == 2)
             offset = 1;
         s16 value = get_channel(i, 0x800, 0, 0xA00); //12 bits, allow value to go to 125%
-        u16 base = abs(value) >> 2;  //10 bits is the base value
-        u16 trim = abs(value) & 0x03; //lowest 2 bits represent trim
+        uint16_t base = abs(value) >> 2;  //10 bits is the base value
+        uint16_t trim = abs(value) & 0x03; //lowest 2 bits represent trim
         if (base >= 0x200) {  //if value is > 100%, remainder goes to trim
             trim = 4 *(base - 0x200);
             base = 0x1ff;
@@ -266,12 +266,12 @@ static void channels_heli_2601(int frame, int *v1, int *v2)
 
 static void build_data_pkt_2601()
 {
-    u8 i;
-    u8 msb = 0;
-    u8 frame = (pkt_num % 3);
+    uint8_t i;
+    uint8_t msb = 0;
+    uint8_t frame = (pkt_num % 3);
     for (i = 0; i < 4; i++) {
         s16 value = get_channel(i, 0x190, 0, 0x1FF);
-        u16 mag = value < 0 ? -value : value;
+        uint16_t mag = value < 0 ? -value : value;
         packet[i] = mag & 0xff;
         msb = (msb << 2) | ((mag >> 8) & 0x01) | (value < 0 ? 0x02 : 0x00);
     }
@@ -310,15 +310,15 @@ static void build_data_pkt_2601()
 
 static void build_data_pkt_2801()
 {
-    u8 i;
-    u16 msb = 0;
-    u8 offset = 0;
-    u8 sign = 0;
+    uint8_t i;
+    uint16_t msb = 0;
+    uint8_t offset = 0;
+    uint8_t sign = 0;
     for (i = 0; i < 8; i++) {
         if (i == 4)
             offset = 1;
         s16 value = get_channel(i, 0x190, 0, 0x3FF);
-        u16 mag = value < 0 ? -value : value;
+        uint16_t mag = value < 0 ? -value : value;
         packet[i+offset] = mag & 0xff;
         msb = (msb << 2) | ((mag >> 8) & 0x03);
         if (value < 0)
@@ -336,9 +336,9 @@ static void build_data_pkt_2801()
 static void build_beacon_pkt_2801()
 {
     last_beacon ^= 1;
-    u8 i;
-    u8 en = 0;
-    u8 bind_state;
+    uint8_t i;
+    uint8_t en = 0;
+    uint8_t bind_state;
     if (Model.fixed_id) {
         if (bind_counter) {
             bind_state = 0xe4;
@@ -479,7 +479,7 @@ void WK_BuildPacket_2401()
 }
 
 MODULE_CALLTYPE
-static u16 wk_cb()
+static uint16_t wk_cb()
 {
     if (txState == 0) {
         txState = 1;
@@ -533,7 +533,7 @@ static void initialize()
     txState = 0;
     last_beacon = 0;
     if (! Model.fixed_id) {
-        u8 cyrfmfg_id[6];
+        uint8_t cyrfmfg_id[6];
         CYRF_GetMfgData(cyrfmfg_id);
         fixed_id = ((radio_ch[0] ^ cyrfmfg_id[0] ^ cyrfmfg_id[3]) << 16)
                  | ((radio_ch[1] ^ cyrfmfg_id[1] ^ cyrfmfg_id[4]) << 8)

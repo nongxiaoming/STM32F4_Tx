@@ -18,13 +18,13 @@
 #include "tx.h"
 #include <stdlib.h>
 
-static struct {u8 note; u8 duration;} Notes[100];
-static u8 Volume;
-static u8 next_note;
-static u8 num_notes;
+static struct {uint8_t note; uint8_t duration;} Notes[100];
+static uint8_t Volume;
+static uint8_t next_note;
+static uint8_t num_notes;
 struct NoteMap {
     const char str[4];
-    u16 note;
+    uint16_t note;
 };
 static const struct NoteMap note_map[] = {
     {"xx",    0}, {"a",  220}, {"ax", 233}, {"b",  247},
@@ -75,7 +75,7 @@ static const char const *sections[] = {
     
 static int ini_handler(void* user, const char* section, const char* name, const char* value)
 {
-    u16 i;
+    uint16_t i;
     const char *requested_sec = (const char *)user;
     if (strcasecmp(section, requested_sec) == 0) {
         if (strcasecmp("volume", name) == 0) {
@@ -96,7 +96,7 @@ static int ini_handler(void* user, const char* section, const char* name, const 
     }
     return 1;
 }
-u16 next_note_cb() {
+uint16_t next_note_cb() {
     if (next_note == num_notes)
         return 0;
     SOUND_SetFrequency(note_map[Notes[next_note].note].note, Volume);
@@ -112,7 +112,7 @@ void MUSIC_Play(enum Music music)
     Volume = Transmitter.volume * 10;
     char filename[] = "media/sound.ini\0\0\0"; // placeholder for longer folder name
     #ifdef _DEVO12_TARGET_H_
-    static u8 checked;
+    static uint8_t checked;
         if(!checked) {
             FILE *fh;
             fh = fopen("mymedia/sound.ini", "r");
@@ -130,5 +130,5 @@ void MUSIC_Play(enum Music music)
     if(! num_notes)
         return;
     SOUND_SetFrequency(note_map[Notes[0].note].note, Volume);
-    SOUND_Start((u16)Notes[0].duration * 10, next_note_cb);
+    SOUND_Start((uint16_t)Notes[0].duration * 10, next_note_cb);
 }

@@ -116,55 +116,55 @@ struct gps {
     s32 longitude;
     s32 altitude;
     s32 velocity;
-    u32 time;
-    u32 heading;
-    u32 satcount;
+    uint32_t time;
+    uint32_t heading;
+    uint32_t satcount;
 };
 
 struct telem_devo {
-    u16 volt[3];
+    uint16_t volt[3];
     s16 temp[4];
-    u16 rpm[2];
+    uint16_t rpm[2];
 };
 struct telem_dsm_flog {
     //Do not change the order of these, they are aligned to the dsm packet
-    u8 fades[4];
-    u8 frameloss;
-    u8 holds;
-    u16 volt[2];
-    u16 rpm;
+    uint8_t fades[4];
+    uint8_t frameloss;
+    uint8_t holds;
+    uint16_t volt[2];
+    uint16_t rpm;
     s16 temp;
 };
 
 struct telem_dsm_pbox {
-    u16 volt[2];
-    u16 capacity[2];
-    u16 alarmv[2];
-    u16 alarmc[2];
+    uint16_t volt[2];
+    uint16_t capacity[2];
+    uint16_t alarmv[2];
+    uint16_t alarmc[2];
 };
 struct telem_dsm_sensors {
-    u16 amps;
-    u16 airspeed;
-    u16 altitude;
+    uint16_t amps;
+    uint16_t airspeed;
+    uint16_t altitude;
 };
 struct telem_dsm_gforce {
-    u16 x;
-    u16 y;
-    u16 z;
-    u16 xmax;
-    u16 ymax;
-    u16 zmax;
-    u16 zmin;
+    uint16_t x;
+    uint16_t y;
+    uint16_t z;
+    uint16_t xmax;
+    uint16_t ymax;
+    uint16_t zmax;
+    uint16_t zmin;
 };
 
 struct telem_dsm_jetcat {
-    u8 status;
-    u8 offcond;
-    u16 throttle;
-    u16 packvolt;
-    u16 pumpvolt;
-    u16 rpm;
-    u16 temp_egt;
+    uint8_t status;
+    uint8_t offcond;
+    uint16_t throttle;
+    uint16_t packvolt;
+    uint16_t pumpvolt;
+    uint16_t rpm;
+    uint16_t temp_egt;
 };
 
 struct telem_dsm {
@@ -176,12 +176,12 @@ struct telem_dsm {
 };
 
 struct telem_frsky {
-    u16 volt[3];
+    uint16_t volt[3];
     s16 temp[2];
-    u16 rpm;
+    uint16_t rpm;
     s32 altitude;
-    //u16 current;
-    //u16 fuel;
+    //uint16_t current;
+    //uint16_t fuel;
 };
 
 #define TELEM_UPDATE_SIZE (((TELEM_VALS + 7)+ 7) / 8)
@@ -192,8 +192,8 @@ struct Telemetry {
         struct telem_frsky frsky;
     } p;
     struct gps gps;
-    u16 capabilities;
-    volatile u8 updated[TELEM_UPDATE_SIZE];
+    uint16_t capabilities;
+    volatile uint8_t updated[TELEM_UPDATE_SIZE];
 };
 
 enum {
@@ -212,7 +212,7 @@ const char * TELEMETRY_ShortName(char *str, unsigned telem);
 s32 TELEMETRY_GetMaxValue(unsigned telem);
 void TELEMETRY_Alarm(void);
 int TELEMETRY_HasAlarm(int src);
-u32 TELEMETRY_IsUpdated(int val);
+uint32_t TELEMETRY_IsUpdated(int val);
 void TELEMETRY_SetUpdated(int telem);
 int TELEMETRY_Type(void);
 void TELEMETRY_SetType(int type);

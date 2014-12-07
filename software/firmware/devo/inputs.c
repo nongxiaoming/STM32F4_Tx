@@ -22,7 +22,7 @@
 #include "common.h"
 #include "mixer.h"
 #include "model.h"
-#include "config/tx.h"
+#include "tx.h"
 
 #ifndef HAS_MORE_THAN_32_INPUTS
     //Verify that INP_LAST is < 32 or HAS_MORE_THAN_32_INPUTS is defined
@@ -254,9 +254,9 @@ const char *INPUT_ButtonName(unsigned button)
     return "";
 }
 
-int INPUT_SelectSource(int src, int dir, u8 *changed)
+int INPUT_SelectSource(int src, int dir, uint8_t *changed)
 {
-    u8 is_neg = MIXER_SRC_IS_INV(src);
+    uint8_t is_neg = MIXER_SRC_IS_INV(src);
     int newsrc = GUI_TextSelectHelper(MIXER_SRC(src), 0, NUM_SOURCES, dir, 1, 1, changed);
     if(! dir)
         dir = -1;

@@ -20,17 +20,17 @@ enum TimerType {
     TIMER_LAST,
 };
 struct Timer {
-    u8 src;
-    u8 resetsrc;
-    u16 timer;
-    u32 val;
+    uint8_t src;
+    uint8_t resetsrc;
+    uint16_t timer;
+    uint32_t val;
     enum TimerType type;
 };
 
 struct CountDownTimerSettings {
-    u32 prealert_time;
-    u16 prealert_interval;
-    u16 timeup_interval;
+    uint32_t prealert_time;
+    uint16_t prealert_interval;
+    uint16_t timeup_interval;
 };
 
 void TIMER_SetString(char *str, s32 time);

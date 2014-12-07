@@ -14,7 +14,7 @@
  */
 
 #include "common.h"
-#include "gui/gui.h"
+#include "gui.h"
 #include "display.h"
 #include <stdlib.h>
 #include <string.h>
@@ -44,12 +44,12 @@ static const char * const BOX_VAL[] = { "none", "center", "fill", "outline", "un
 #define MATCH_VALUE(s)   strcasecmp(value,   s) == 0
 #define NUM_STR_ELEMS(s) (sizeof(s) / sizeof(char *))
 #define SET_FLAG(var, value, flag) ((value) ? ((var) | (flag)) : ((var) & ~(flag)))
-extern u8 FONT_GetFromString(const char *);
+extern uint8_t FONT_GetFromString(const char *);
 struct display_settings Display;
 
-u16 get_color(const char *value) {
-    u8 r, g, b;
-    u32 color = strtol(value, NULL, 16);
+uint16_t get_color(const char *value) {
+    uint8_t r, g, b;
+    uint32_t color = strtol(value, NULL, 16);
     r = 0xff & (color >> 16);
     g = 0xff & (color >> 8);
     b = 0xff & (color >> 0);
@@ -75,7 +75,7 @@ static int handle_label(struct LabelDesc *label, const char *name, const char *v
         return 1;
     }
     if(MATCH_KEY(BOX)) {
-        u8 idx;
+        uint8_t idx;
         for (idx = 0; idx < NUM_STR_ELEMS(BOX_VAL); idx++) {
             if(MATCH_VALUE(BOX_VAL[idx])) {
                 label->style = idx;
@@ -85,7 +85,7 @@ static int handle_label(struct LabelDesc *label, const char *name, const char *v
     return 0;
 }
 
-struct struct_map {const char *str;  u16 offset;};
+struct struct_map {const char *str;  uint16_t offset;};
 #define MAPSIZE(x)  (sizeof(x) / sizeof(struct struct_map))
 #define OFFSET(s,v) (((long)(&s.v) - (long)(&s)) | ((sizeof(s.v)-1) << 13))
 #define OFFSETS(s,v) (((long)(&s.v) - (long)(&s)) | ((sizeof(s.v)+3) << 13))
@@ -147,7 +147,7 @@ static const struct struct_map _secbargraph[] =
 
 static int ini_handler(void* user, const char* section, const char* name, const char* value)
 {
-    u8 idx;
+    uint8_t idx;
     struct display_settings *d = (struct display_settings *)user;
     int value_int = atoi(value);
 
@@ -159,15 +159,15 @@ static int ini_handler(void* user, const char* section, const char* name, const 
                 int offset = map[i].offset & 0x1FFF;
                 switch(size) {
                     case 0:
-                        *((u8 *)((long)ptr + offset)) = value_int; break;
+                        *((uint8_t *)((long)ptr + offset)) = value_int; break;
                     case 1:
-                        *((u16 *)((long)ptr + offset)) = value_int; break;
+                        *((uint16_t *)((long)ptr + offset)) = value_int; break;
                     case 2:
-                        *((u16 *)((long)ptr + offset)) = get_color(value); break;
+                        *((uint16_t *)((long)ptr + offset)) = get_color(value); break;
                     case 3:
-                        *((u32 *)((long)ptr + offset)) = value_int; break;
+                        *((uint32_t *)((long)ptr + offset)) = value_int; break;
                     case 6:
-                        *((u8 *)((long)ptr + offset)) = FONT_GetFromString(value);
+                        *((uint8_t *)((long)ptr + offset)) = FONT_GetFromString(value);
                 }
                 return 1;
             }
@@ -246,13 +246,13 @@ static int ini_handler(void* user, const char* section, const char* name, const 
     return 1;
 }
 
-u8 CONFIG_ReadDisplay()
+uint8_t CONFIG_ReadDisplay()
 {
     memset(&Display, 0, sizeof(Display));
     DEFAULT_FONT.font = 7;
     DEFAULT_FONT.font_color = 0xffff;
     char filename[] = "media/config.ini\0\0\0"; // placeholder for longer folder name
-    static u8 checked;
+    static uint8_t checked;
         if(!checked) {
             FILE *fh;
             fh = fopen("mymedia/config.ini", "r");

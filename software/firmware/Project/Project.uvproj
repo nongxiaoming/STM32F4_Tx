@@ -362,7 +362,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\User;..\Hardware;..\config;..\devo;..\protocol;..\petit_fat</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\User;..\Hardware;..\config;..\devo;..\protocol;..\petit_fat;..\gui;..\gui\320x240x16</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -883,7 +883,104 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>target</GroupName>
+          <GroupName>gui</GroupName>
+          <Files>
+            <File>
+              <FileName>bargraph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\bargraph.c</FilePath>
+            </File>
+            <File>
+              <FileName>button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\button.c</FilePath>
+            </File>
+            <File>
+              <FileName>dialog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\dialog.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\gui.c</FilePath>
+            </File>
+            <File>
+              <FileName>image.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\image.c</FilePath>
+            </File>
+            <File>
+              <FileName>keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\keyboard.c</FilePath>
+            </File>
+            <File>
+              <FileName>label.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\label.c</FilePath>
+            </File>
+            <File>
+              <FileName>listbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\listbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>rect.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\rect.c</FilePath>
+            </File>
+            <File>
+              <FileName>scrollable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\scrollable.c</FilePath>
+            </File>
+            <File>
+              <FileName>scrollbar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\scrollbar.c</FilePath>
+            </File>
+            <File>
+              <FileName>textsel.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\textsel.c</FilePath>
+            </File>
+            <File>
+              <FileName>xygraph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\xygraph.c</FilePath>
+            </File>
+            <File>
+              <FileName>_bargraph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\320x240x16\_bargraph.c</FilePath>
+            </File>
+            <File>
+              <FileName>_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\320x240x16\_button.c</FilePath>
+            </File>
+            <File>
+              <FileName>_dialog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\320x240x16\_dialog.c</FilePath>
+            </File>
+            <File>
+              <FileName>_gui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\320x240x16\_gui.c</FilePath>
+            </File>
+            <File>
+              <FileName>_keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\320x240x16\_keyboard.c</FilePath>
+            </File>
+            <File>
+              <FileName>_listbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\gui\320x240x16\_listbox.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Protocols</GroupName>

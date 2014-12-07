@@ -84,15 +84,15 @@ enum {
 #define PAYLOADSIZE 8       // receive data pipes set to this size, but unused
 #define MAX_PACKET_SIZE 9   // YD717 packets have 8-byte payload, Syma X4 is 9
 
-//static u8 packet[MAX_PACKET_SIZE];
+//static uint8_t packet[MAX_PACKET_SIZE];
 
-static u16 counter;
-static u32 packet_counter;
-static u8 tx_power, data_rate, rf_channel;
+static uint16_t counter;
+static uint32_t packet_counter;
+static uint8_t tx_power, data_rate, rf_channel;
 
-static u8 rx_tx_addr[TX_ADDR_SIZE];
+static uint8_t rx_tx_addr[TX_ADDR_SIZE];
 
-static u8 phase;
+static uint8_t phase;
 enum {
     CFLIE_INIT_SEARCH = 0,
     CFLIE_INIT_DATA,
@@ -126,8 +126,8 @@ enum {
 };
 #define PACKET_CHKTIME 500      // time to wait if packet not yet acknowledged or timed out    
 
-static u16 dbg_cnt = 0;
-static u8 packet_ack()
+static uint16_t dbg_cnt = 0;
+static uint8_t packet_ack()
 {
     if (++dbg_cnt > 50) {
         dbgprintf("S: %02x\n", NRF24L01_ReadReg(NRF24L01_07_STATUS));
@@ -142,7 +142,7 @@ static u8 packet_ack()
     return PKT_PENDING;
 }
 
-static void set_rate_channel(u8 rate, u8 channel)
+static void set_rate_channel(uint8_t rate, uint8_t channel)
 {
     NRF24L01_WriteReg(NRF24L01_05_RF_CH, channel);     // Defined by model id
     NRF24L01_SetBitrate(rate);             // Defined by model id
@@ -189,15 +189,15 @@ static void frac2float(s32 n, float* res)
         *res = 0.0;
         return;
     }
-    u32 m = n < 0 ? -n : n;
+    uint32_t m = n < 0 ? -n : n;
     int i;
     for (i = (31-FRAC_MANTISSA); (m & 0x80000000) == 0; i--, m <<= 1) ;
     m <<= 1; // Clear implicit leftmost 1
     m >>= 9;
-    u32 e = 127 + i;
+    uint32_t e = 127 + i;
     if (n < 0) m |= 0x80000000;
     m |= e << 23;
-    *((u32 *) res) = m;
+    *((uint32_t *) res) = m;
 }
 
 static void send_cmd_packet()
@@ -340,23 +340,23 @@ static int cflie_init()
         // them by their numbers
         // It's all magic, eavesdropped from real transfer and not even from the
         // data sheet - it has slightly different values
-        NRF24L01_WriteRegisterMulti(0x00, (u8 *) "\x40\x4B\x01\xE2", 4);
-        NRF24L01_WriteRegisterMulti(0x01, (u8 *) "\xC0\x4B\x00\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x02, (u8 *) "\xD0\xFC\x8C\x02", 4);
-        NRF24L01_WriteRegisterMulti(0x03, (u8 *) "\xF9\x00\x39\x21", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x05, (u8 *) "\x24\x06\x7F\xA6", 4);
-        NRF24L01_WriteRegisterMulti(0x06, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x07, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x08, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x09, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0A, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0B, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0C, (u8 *) "\x00\x12\x73\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0D, (u8 *) "\x46\xB4\x80\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0E, (u8 *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC7\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x00, (uint8_t *) "\x40\x4B\x01\xE2", 4);
+        NRF24L01_WriteRegisterMulti(0x01, (uint8_t *) "\xC0\x4B\x00\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x02, (uint8_t *) "\xD0\xFC\x8C\x02", 4);
+        NRF24L01_WriteRegisterMulti(0x03, (uint8_t *) "\xF9\x00\x39\x21", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x05, (uint8_t *) "\x24\x06\x7F\xA6", 4);
+        NRF24L01_WriteRegisterMulti(0x06, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x07, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x08, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x09, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0A, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0B, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0C, (uint8_t *) "\x00\x12\x73\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0D, (uint8_t *) "\x46\xB4\x80\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0E, (uint8_t *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC7\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
     } else {
         dbgprintf("nRF24L01 detected\n");
     }
@@ -369,7 +369,7 @@ static int cflie_init()
 
 #ifdef CFLIE_TELEMETRY
 static void update_telemetry() {
-  static u8 frameloss = 0;
+  static uint8_t frameloss = 0;
 
   frameloss += NRF24L01_ReadReg(NRF24L01_08_OBSERVE_TX) >> 4;
   NRF24L01_WriteReg(NRF24L01_05_RF_CH, rf_channel);   // reset packet loss counter
@@ -382,7 +382,7 @@ static void update_telemetry() {
 
 
 MODULE_CALLTYPE
-static u16 cflie_callback()
+static uint16_t cflie_callback()
 {
     switch (phase) {
     case CFLIE_INIT_SEARCH:
@@ -422,7 +422,7 @@ static u16 cflie_callback()
 
 
 // Generate address to use from TX id and manufacturer id (STM32 unique id)
-static u8 initialize_rx_tx_addr()
+static uint8_t initialize_rx_tx_addr()
 {
     rx_tx_addr[0] = 
     rx_tx_addr[1] = 

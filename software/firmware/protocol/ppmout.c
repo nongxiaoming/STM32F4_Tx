@@ -30,8 +30,8 @@
   const unsigned long protocol_type = (unsigned long)&_data_loadaddr;
 #endif
 #define PPMOUT_MAX_CHANNELS NUM_OUT_CHANNELS
-static volatile u16 pulses[PPMOUT_MAX_CHANNELS+1];
-u8 num_channels;
+static volatile uint16_t pulses[PPMOUT_MAX_CHANNELS+1];
+uint8_t num_channels;
 
 /* FIXME:  The original imlementation used a PWM to output the PPM signal.
            However, I could not get TIM1 woring properly.
@@ -59,7 +59,7 @@ enum {
 };
 ctassert(LAST_PROTO_OPT <= NUM_PROTO_OPTS, too_many_protocol_opts);
 
-volatile u8 state;
+volatile uint8_t state;
 static void build_data_pkt()
 {
     int i;
@@ -73,10 +73,10 @@ static void build_data_pkt()
 
 #ifdef BITBANG_PPM
 MODULE_CALLTYPE
-static u16 ppmout_cb()
+static uint16_t ppmout_cb()
 {
-    static volatile u16 accum;
-    u16 val;
+    static volatile uint16_t accum;
+    uint16_t val;
     if (state == 0) {
         accum = 0;
         build_data_pkt();
@@ -98,7 +98,7 @@ static u16 ppmout_cb()
 }
 #else
 MODULE_CALLTYPE
-static u16 ppmout_cb()
+static uint16_t ppmout_cb()
 {
     build_data_pkt();
     PPM_Enable(Model.proto_opts[NOTCH_PW], pulses); //400us 'flat notch'

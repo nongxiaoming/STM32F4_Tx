@@ -48,11 +48,11 @@ enum {
 };
 ctassert(LAST_PROTO_OPT <= NUM_PROTO_OPTS, too_many_protocol_opts);
 
-static u8 packet[16];
-static u32 state;
-static u32 seed;
-static u32 fixed_id;
-static u8 crc;
+static uint8_t packet[16];
+static uint32_t state;
+static uint32_t seed;
+static uint32_t fixed_id;
+static uint8_t crc;
 static s8 course;
 static s8 fine;
 
@@ -161,7 +161,7 @@ static void frsky_init()
 
 }
 
-static u8 crc8(u32 result, u8 *data, int len)
+static uint8_t crc8(uint32_t result, uint8_t *data, int len)
 {
     int polynomial = 0x07;
     for(int i = 0; i < len; i++) {
@@ -177,10 +177,10 @@ static u8 crc8(u32 result, u8 *data, int len)
     return result & 0xff;
 }
 
-static u8 crc8_le(u32 _result, u8 *data, int len)
+static uint8_t crc8_le(uint32_t _result, uint8_t *data, int len)
 {
-    u32 polynomial = 0x83; //x^9 + x^8 + x^7 + 1 
-    u32 result = 0;
+    uint32_t polynomial = 0x83; //x^9 + x^8 + x^7 + 1 
+    uint32_t result = 0;
     for(int i = 0; i < 8; i++) {
         result = (result << 1) | (_result & 0x01);
         _result >>= 1;
@@ -218,7 +218,7 @@ static void build_bind_packet_1way()
     packet[14] = crc8(0x93, packet, 14);
 }
 
-static u8 calc_channel()
+static uint8_t calc_channel()
 {
     seed = (seed * 0xaa) % 0x7673;
     return (seed & 0xff) % 0x32;
@@ -251,7 +251,7 @@ static void build_data_packet_1way()
     packet[14] = crc8(crc, packet, 14);
 //for(int i = 0; i < 15; i++) printf("%02x ", packet[i]); printf("\n");
 }
-static u16 frsky_cb()
+static uint16_t frsky_cb()
 {
     if (state < FRSKY_BIND_DONE) {
         build_bind_packet_1way();
@@ -266,7 +266,7 @@ static u16 frsky_cb()
         PROTOCOL_SetBindState(0);
     }
     if (state >= FRSKY_DATA1) {
-        u8 chan = calc_channel();
+        uint8_t chan = calc_channel();
         CC2500_Strobe(CC2500_SIDLE);
         if (fine != (s8)Model.proto_opts[PROTO_OPTS_FREQFINE] || course != (s8)Model.proto_opts[PROTO_OPTS_FREQCOURSE]) {
             course = Model.proto_opts[PROTO_OPTS_FREQCOURSE];
@@ -294,18 +294,18 @@ static u16 frsky_cb()
 // Generate internal id from TX id and manufacturer id (STM32 unique id)
 static void get_tx_id()
 {
-    u32 lfsr = 0x7649eca9ul;
+    uint32_t lfsr = 0x7649eca9ul;
 
-    u8 var[12];
+    uint8_t var[12];
     MCU_SerialNumber(var, 12);
     for (int i = 0; i < 12; ++i) {
         rand32_r(&lfsr, var[i]);
     }
-    for (u8 i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
+    for (uint8_t i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
         rand32_r(&lfsr, (Model.fixed_id >> j) & 0xff);
     fixed_id = rand32_r(&lfsr, 0) & 0xffff;
     //fixed_id = 0x1257;
-    u8 data[2] = {(fixed_id >> 8) & 0xff, fixed_id & 0xff};
+    uint8_t data[2] = {(fixed_id >> 8) & 0xff, fixed_id & 0xff};
     crc = crc8_le(0x6b, data, 2);
     //crc = 0xa6;
 }

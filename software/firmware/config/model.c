@@ -22,7 +22,7 @@
 
 struct Model Model;
 /*set this to write all model data even if it is the same as the default */
-static u32 crc32;
+static uint32_t crc32;
 
 const char * const MODEL_TYPE_VAL[MODELTYPE_LAST] = { "heli", "plane" };
 const char * const RADIO_TX_POWER_VAL[TXPOWER_LAST] =
@@ -35,7 +35,7 @@ const char * const RADIO_TX_POWER_VAL[TXPOWER_LAST] =
 #define NUM_STR_ELEMS(s) (sizeof(s) / sizeof(char *))
 
 #define WRITE_FULL_MODEL 0
-static u8 auto_map;
+static uint8_t auto_map;
 
 const char *MODEL_NAME = "name";
 const char *MODEL_ICON = "icon";
@@ -187,7 +187,7 @@ s8 mapstrcasecmp(const char *s1, const char *s2)
         return(s1[i] < s2[i] ? -1 : 1);
     }
 }
-static u8 get_source(const char *section, const char *value)
+static uint8_t get_source(const char *section, const char *value)
 {
     unsigned i;
     unsigned val;
@@ -214,9 +214,9 @@ static u8 get_source(const char *section, const char *value)
     return 0;
 }
 
-static u8 get_button(const char *section, const char *value)
+static uint8_t get_button(const char *section, const char *value)
 {
-    u8 i;
+    uint8_t i;
     for (i = 0; i <= NUM_TX_BUTTONS; i++) {
         if(strcasecmp(INPUT_ButtonName(i), value) == 0) {
             return i;
@@ -282,12 +282,12 @@ static const char * parse_partial_int_list(const char *ptr, void *vals, int *max
                 else if (value_int < -127)
                     value_int = -127;
                 ((s8 *)vals)[idx] = value_int;
-            } else if (type == U8) {
+            } else if (type == uint8_t) {
                 if (value_int > 255)
                     value_int = 255;
                 else if (value_int < 0)
                     value_int = 0;
-                ((u8 *)vals)[idx] = value_int;
+                ((uint8_t *)vals)[idx] = value_int;
             } else {
                 ((s16 *)vals)[idx] = value_int;
             }
@@ -331,12 +331,12 @@ static void create_element(struct elem *elem, int type, s16 *data)
 static int layout_ini_handler(void* user, const char* section, const char* name, const char* value)
 {
     struct Model *m = (struct Model *)user;
-    u16 i;
+    uint16_t i;
     int offset_x = 0, offset_y = 0;
     CLOCK_ResetWatchdog();
     int idx;
     if (MATCH_START(name, GUI_QUICKPAGE)) {
-        u8 idx = name[9] - '1';
+        uint8_t idx = name[9] - '1';
         if (idx >= NUM_QUICKPAGES) {
             printf("%s: Only %d quickpages are supported\n", section, NUM_QUICKPAGES);
             return 1;
@@ -352,7 +352,7 @@ static int layout_ini_handler(void* user, const char* section, const char* name,
         return 1;
     }
 #ifdef ENABLE_320x240_GUI
-    static u8 seen_res = 0;
+    static uint8_t seen_res = 0;
     enum {
         LOWRES = 1,
         HIRES,
@@ -439,7 +439,7 @@ static int layout_ini_handler(void* user, const char* section, const char* name,
                 }
             }
             if (src == -1) {
-                u8 newsrc = get_source(section, ptr);
+                uint8_t newsrc = get_source(section, ptr);
                 if(newsrc >= NUM_INPUTS) {
                     src = newsrc - (NUM_INPUTS + 1 - (NUM_RTC + NUM_TIMERS + NUM_TELEM + 1));
                 }
@@ -453,7 +453,7 @@ static int layout_ini_handler(void* user, const char* section, const char* name,
         {
             if (count != 3)
                 return 1;
-            u8 src = get_source(section, ptr);
+            uint8_t src = get_source(section, ptr);
             if (src < NUM_INPUTS)
                 src = 0;
             data[5] = src - NUM_INPUTS;
@@ -477,7 +477,7 @@ static int layout_ini_handler(void* user, const char* section, const char* name,
     return 1;
 }
 
-struct struct_map {const char *str;  u16 offset; u16 defval;};
+struct struct_map {const char *str;  uint16_t offset; uint16_t defval;};
 #define MAPSIZE(x)  (sizeof(x) / sizeof(struct struct_map))
 #define OFFSET(s,v) (((long)(&s.v) - (long)(&s)) | ((sizeof(s.v)-1) << 13))
 #define OFFSETS(s,v) (((long)(&s.v) - (long)(&s)) | ((sizeof(s.v)+3) << 13))
@@ -539,19 +539,19 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             int offset = map[i].offset & 0x1FFF;
             switch(size) {
                 case 0:
-                    *((u8 *)((long)ptr + offset)) = value_int; break;
+                    *((uint8_t *)((long)ptr + offset)) = value_int; break;
                 case 1:
-                    *((u16 *)((long)ptr + offset)) = value_int; break;
+                    *((uint16_t *)((long)ptr + offset)) = value_int; break;
                 case 2:
-                    *((u8 *)((long)ptr + offset)) = get_source(section, value); break;
+                    *((uint8_t *)((long)ptr + offset)) = get_source(section, value); break;
                 case 3:
-                    *((u32 *)((long)ptr + offset)) = value_int; break;
+                    *((uint32_t *)((long)ptr + offset)) = value_int; break;
                 case 4:
                     *((s8 *)((long)ptr + offset)) = value_int; break;
                 case 5:
                     *((s16 *)((long)ptr + offset)) = value_int; break;
                 case 6:
-                    *((u8 *)((long)ptr + offset)) = get_button(section, value); break;
+                    *((uint8_t *)((long)ptr + offset)) = get_button(section, value); break;
                 case 7:
                     *((s32 *)((long)ptr + offset)) = value_int; break;
             }
@@ -693,7 +693,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
         return 0;
     }
     if (MATCH_START(section, SECTION_CHANNEL)) {
-        u8 idx = atoi(section + sizeof(SECTION_CHANNEL)-1);
+        uint8_t idx = atoi(section + sizeof(SECTION_CHANNEL)-1);
         if (idx == 0) {
             printf("Unknown Channel: %s\n", section);
             return 0;
@@ -740,7 +740,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
         return 0;
     }
     if (MATCH_START(section, SECTION_VIRTCHAN)) {
-        u8 idx = atoi(section + sizeof(SECTION_VIRTCHAN)-1);
+        uint8_t idx = atoi(section + sizeof(SECTION_VIRTCHAN)-1);
         if (idx == 0) {
             printf("Unknown Virtual Channel: %s\n", section);
             return 0;
@@ -768,7 +768,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
         return 0;
     }
     if (MATCH_START(section, SECTION_TRIM)) {
-        u8 idx = atoi(section + sizeof(SECTION_TRIM)-1);
+        uint8_t idx = atoi(section + sizeof(SECTION_TRIM)-1);
         if (idx == 0) {
             printf("Unknown Trim: %s\n", section);
             return 0;
@@ -827,7 +827,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             return 1;
     }
     if (MATCH_START(section, SECTION_TIMER)) {
-        u8 idx = atoi(section + sizeof(SECTION_TIMER)-1);
+        uint8_t idx = atoi(section + sizeof(SECTION_TIMER)-1);
         if (idx == 0) {
             printf("Unknown Timer: %s\n", section);
             return 0;
@@ -851,7 +851,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             return 1;
     }
     if (MATCH_START(section, SECTION_TELEMALARM)) {
-        u8 idx = atoi(section + sizeof(SECTION_TELEMALARM)-1);
+        uint8_t idx = atoi(section + sizeof(SECTION_TELEMALARM)-1);
         if (idx == 0) {
             printf("Unknown Telem-alarm: %s\n", section);
             return 0;
@@ -910,7 +910,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
 #endif //HAS_DATALOG
     if (MATCH_START(section, SECTION_SAFETY)) {
         int found = 0;
-        u8 src;
+        uint8_t src;
         if (MATCH_KEY("auto")) {
             src = 0;
             found = 1;
@@ -918,7 +918,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             src = get_source(section, name);
         }
         if(found || src) {
-            u8 i;
+            uint8_t i;
             for (i = 0; i < NUM_STR_ELEMS(SAFETY_VAL); i++) {
                 if (MATCH_VALUE(SAFETY_VAL[i])) {
                     m->safety[src] = i;
@@ -947,7 +947,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
         if(assign_int(m, _secppm, MAPSIZE(_secppm)))
             return 1;
         if (MATCH_START(name, PPMIN_MAP)) {
-            u8 idx = atoi(name + sizeof(PPMIN_MAP)-1) -1;
+            uint8_t idx = atoi(name + sizeof(PPMIN_MAP)-1) -1;
             if (idx < MAX_PPM_IN_CHANNELS) {
                 m->ppm_map[idx]  = get_source(section, value);
                 if (PPMin_Mode() == PPM_IN_TRAIN1) {
@@ -963,7 +963,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
     return 0;
 }
 
-static void get_model_file(char *file, u8 model_num)
+static void get_model_file(char *file, uint8_t model_num)
 {
     if (model_num == 0)
         sprintf(file, "models/default.ini");
@@ -984,9 +984,9 @@ void write_int(FILE *fh, void* ptr, const struct struct_map *map, int map_size)
             case 0: 
             case 2: //SRC
             case 6: //BUTTON
-                    value = *((u8 *)((long)ptr + offset)); break;
-            case 1: value = *((u16 *)((long)ptr + offset)); break;
-            case 3: value = *((u32 *)((long)ptr + offset)); break;
+                    value = *((uint8_t *)((long)ptr + offset)); break;
+            case 1: value = *((uint16_t *)((long)ptr + offset)); break;
+            case 3: value = *((uint32_t *)((long)ptr + offset)); break;
             case 4: value = *((s8 *)((long)ptr + offset)); break;
             case 5: value = *((s16 *)((long)ptr + offset)); break;
             case 7: value = *((s32 *)((long)ptr + offset)); break;
@@ -1001,12 +1001,12 @@ void write_int(FILE *fh, void* ptr, const struct struct_map *map, int map_size)
     }
 }
 
-u8 write_mixer(FILE *fh, struct Model *m, u8 channel)
+uint8_t write_mixer(FILE *fh, struct Model *m, uint8_t channel)
 {
     int idx;
     int i;
     char tmpstr[20];
-    u8 changed = 0;
+    uint8_t changed = 0;
     for(idx = 0; idx < NUM_MIXERS; idx++) {
         if (! WRITE_FULL_MODEL && (m->mixers[idx].src == 0 || m->mixers[idx].dest != channel))
             continue;
@@ -1021,7 +1021,7 @@ u8 write_mixer(FILE *fh, struct Model *m, u8 channel)
             fprintf(fh, "%s=%s\n", MIXER_MUXTYPE, MIXER_MUXTYPE_VAL[MIXER_MUX(&m->mixers[idx])]);
         if(WRITE_FULL_MODEL || CURVE_TYPE(&m->mixers[idx].curve)) {
             fprintf(fh, "%s=%s\n", MIXER_CURVETYPE, MIXER_CURVETYPE_VAL[CURVE_TYPE(&m->mixers[idx].curve)]);
-            u8 num_points = CURVE_NumPoints(&m->mixers[idx].curve);
+            uint8_t num_points = CURVE_NumPoints(&m->mixers[idx].curve);
             if (num_points > 0) {
                 fprintf(fh, "%s=", MIXER_CURVE_POINTS);
                 for (i = 0; i < num_points; i++) {
@@ -1064,11 +1064,11 @@ static void write_proto_opts(FILE *fh, struct Model *m)
     fprintf(fh, "\n");
 }
 
-u8 CONFIG_WriteModel(u8 model_num) {
+uint8_t CONFIG_WriteModel(uint8_t model_num) {
     char file[20];
     FILE *fh;
-    u8 idx;
-    u8 i;
+    uint8_t idx;
+    uint8_t i;
     struct Model *m = &Model;
 
 
@@ -1251,7 +1251,7 @@ u8 CONFIG_WriteModel(u8 model_num) {
     }
     for(idx = 0; idx < NUM_QUICKPAGES; idx++) {
         if (WRITE_FULL_MODEL || m->pagecfg2.quickpage[idx]) {
-            u8 val = m->pagecfg2.quickpage[idx];
+            uint8_t val = m->pagecfg2.quickpage[idx];
             fprintf(fh, "%s%d=%s\n", GUI_QUICKPAGE, idx+1, PAGE_GetName(val));
         }
     }
@@ -1260,9 +1260,9 @@ u8 CONFIG_WriteModel(u8 model_num) {
     return 1;
 }
 
-void clear_model(u8 full)
+void clear_model(uint8_t full)
 {
-    u8 i;
+    uint8_t i;
     if (full) {
         memset(&Model, 0, sizeof(Model));
     } else {
@@ -1292,7 +1292,7 @@ void clear_model(u8 full)
     Model.ppmin_deltapw = 400;
 }
 
-u8 CONFIG_ReadModel(u8 model_num) {
+uint8_t CONFIG_ReadModel(uint8_t model_num) {
     crc32 = 0;
     Transmitter.current_model = model_num;
     clear_model(1);
@@ -1324,12 +1324,12 @@ u8 CONFIG_ReadModel(u8 model_num) {
     return 1;
 }
 
-u8 CONFIG_IsModelChanged() {
-    u32 newCrc = Crc(&Model, sizeof(Model));
+uint8_t CONFIG_IsModelChanged() {
+    uint32_t newCrc = Crc(&Model, sizeof(Model));
     return (crc32 != newCrc);
 }
 
-u8 CONFIG_SaveModelIfNeeded() {
+uint8_t CONFIG_SaveModelIfNeeded() {
     if (CONFIG_IsModelChanged())
         CONFIG_WriteModel(Transmitter.current_model);
     return 1;
@@ -1337,14 +1337,14 @@ u8 CONFIG_SaveModelIfNeeded() {
 
 void CONFIG_ResetModel()
 {
-    u8 model_num = Transmitter.current_model;
+    uint8_t model_num = Transmitter.current_model;
     PROTOCOL_DeInit();
     CONFIG_ReadModel(0);
     Transmitter.current_model = model_num;
     sprintf(Model.name, "Model%d", model_num);
 }
 
-u8 CONFIG_GetCurrentModel() {
+uint8_t CONFIG_GetCurrentModel() {
     return Transmitter.current_model;
 }
 
@@ -1371,7 +1371,7 @@ void CONFIG_ParseIconName(char *name, const char *value)
 
 enum ModelType CONFIG_ParseModelType(const char *value)
 {
-    u8 i;
+    uint8_t i;
     for (i = 0; i < NUM_STR_ELEMS(MODEL_TYPE_VAL); i++) {
         if (MATCH_VALUE(MODEL_TYPE_VAL[i])) {
             return i;
@@ -1381,7 +1381,7 @@ enum ModelType CONFIG_ParseModelType(const char *value)
     return 0;
 }
 
-u8 CONFIG_ReadTemplateByIndex(u8 template_num) {
+uint8_t CONFIG_ReadTemplateByIndex(uint8_t template_num) {
     char filename[13];
     int type;
     if (! FS_OpenDir("template")) {
@@ -1404,7 +1404,7 @@ u8 CONFIG_ReadTemplateByIndex(u8 template_num) {
     return CONFIG_ReadTemplate(filename);
 }
 
-u8 CONFIG_ReadTemplate(const char *filename) {
+uint8_t CONFIG_ReadTemplate(const char *filename) {
     char file[25];
 
     sprintf(file, "template/%s", filename);
@@ -1423,7 +1423,7 @@ u8 CONFIG_ReadTemplate(const char *filename) {
     return 1;
 }
 
-u8 CONFIG_ReadLayout(const char *filename) {
+uint8_t CONFIG_ReadLayout(const char *filename) {
     memset(&Model.pagecfg2, 0, sizeof(Model.pagecfg2));
     if (CONFIG_IniParse(filename, layout_ini_handler, &Model)) {
         printf("Failed to parse Layout file: %s\n", filename);

@@ -20,15 +20,15 @@
 #include "tx.h"
 #include <stdlib.h>
 
-static u8 timer_state[NUM_TIMERS];
+static uint8_t timer_state[NUM_TIMERS];
 static s32 timer_val[NUM_TIMERS];
 static s32 last_time[NUM_TIMERS];
 
 void TIMER_SetString(char *str, s32 time)
 {
-    //u8 h = time / 3600;
-    //u8 m = (time - h*3600) / 60;
-    //u8 s = time -h*3600 - m*60;
+    //uint8_t h = time / 3600;
+    //uint8_t m = (time - h*3600) / 60;
+    //uint8_t s = time -h*3600 - m*60;
     //sprintf(str, "%02d:%02d:%02d", h, m, s);
     char neg;
     if (time < 0) {
@@ -107,11 +107,11 @@ void TIMER_Init()
 }
 
 void TIMER_Power(){
-    static u32 timer = 0;
-    u32 alert = Transmitter.power_alarm * 60 * 1000;
-    static u16 throttle;
-    u16 new_throttle;
-    u16 elevator;
+    static uint32_t timer = 0;
+    uint32_t alert = Transmitter.power_alarm * 60 * 1000;
+    static uint16_t throttle;
+    uint16_t new_throttle;
+    uint16_t elevator;
     unsigned mode = MODE_2 == Transmitter.mode || MODE_4 == Transmitter.mode ? 2 : 1;
 
     if( 0 == timer)
@@ -137,7 +137,7 @@ void TIMER_Update()
 {
     unsigned i;
     unsigned chan_val = 0;
-    u32 t = CLOCK_getms();
+    uint32_t t = CLOCK_getms();
     if (PROTOCOL_WaitingForSafe())
         return;
     if( Transmitter.power_alarm > 0 )

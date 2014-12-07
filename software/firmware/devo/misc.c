@@ -16,7 +16,7 @@
 #include "common.h"
 #include <stdlib.h>
 
-void Delay(u32 count)
+void Delay(uint32_t count)
 {
     while(count) {
         int i = 0; //72000;
@@ -32,10 +32,10 @@ void Delay(u32 count)
 // C99 winzip crc function, by Scott Duplichan
 //We could use the internal CRC implementation in the STM32, but this is really small
 //and perfomrance isn't really an issue
-u32 Crc(const void *buffer, u32 size)
+uint32_t Crc(const void *buffer, uint32_t size)
 {
-   u32 crc = ~0;
-   const u8  *position = buffer;
+   uint32_t crc = ~0;
+   const uint8_t  *position = buffer;
 
    while (size--) 
       {
@@ -54,7 +54,7 @@ u32 Crc(const void *buffer, u32 size)
 /* Note that the following does no error checking on whether the string
  * is valid utf-8 or even if the length is ok.  Caveat Emptor.
  */
-const char *utf8_to_u32(const char *str, u32 *ch)
+const char *utf8_to_uint32_t(const char *str, uint32_t *ch)
 {
     const char str1 = 0x3f & *(str + 1);
     const char str2 = 0x3f & *(str + 2);
@@ -125,7 +125,7 @@ int exact_atoi(const char *str)
     return value;
 }
 
-static u32 rand_seed = 0xb2c54a2ful;
+static uint32_t rand_seed = 0xb2c54a2ful;
 // Linear feedback shift register with 32-bit Xilinx polinomial x^32 + x^22 + x^2 + x + 1
 static const uint32_t LFSR_FEEDBACK = 0x80200003ul;
 static const uint32_t LFSR_INTAP = 32-1;
@@ -136,14 +136,14 @@ static void update_lfsr(uint32_t *lfsr, uint8_t b)
         b >>= 1;
     }
 }
-u32 rand32_r(u32 *seed, u8 update)
+uint32_t rand32_r(uint32_t *seed, uint8_t update)
 {
     if(! seed)
         seed = &rand_seed;
     update_lfsr(seed, update);
     return *seed;
 }
-u32 rand32()
+uint32_t rand32()
 {
     return rand32_r(0, 0);
 }
@@ -163,7 +163,7 @@ void wait_press()
     printf("Wait Press\n");
     while(1) {
         CLOCK_ResetWatchdog();
-        u32 buttons = ScanButtons();
+        uint32_t buttons = ScanButtons();
         if (CHAN_ButtonIsPressed(buttons, BUT_ENTER))
             break;
         if(PWR_CheckPowerSwitch())
@@ -177,7 +177,7 @@ void wait_release()
     printf("Wait Release\n");
     while(1) {
         CLOCK_ResetWatchdog();
-        u32 buttons = ScanButtons();
+        uint32_t buttons = ScanButtons();
         if (! CHAN_ButtonIsPressed(buttons, BUT_ENTER))
             break;
         if(PWR_CheckPowerSwitch())

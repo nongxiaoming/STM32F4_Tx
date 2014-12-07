@@ -78,7 +78,7 @@ enum CurveType {
 struct Curve {
     enum CurveType type;
     s8 points[MAX_POINTS];
-    //u8 index;
+    //uint8_t index;
     //s8 p1;
     //s8 p2;
 };
@@ -122,12 +122,12 @@ enum SwashType {
 #define MIXER_SET_SRC_INV(x, y) x = (y) ? ((x) | 0x80) : ((x) & ~0x80)
 struct Mixer {
     struct Curve curve;
-    u8 src;
-    u8 dest;
-    u8 sw;
+    uint8_t src;
+    uint8_t dest;
+    uint8_t sw;
     s8 scalar;
     s8 offset;
-    u8 flags;
+    uint8_t flags;
     //apply_trim;
     //enum MuxType mux;
 };
@@ -148,24 +148,24 @@ enum LimitMask {
 };
 
 struct Limit {
-    u8 flags;
-    u8 safetysw;
+    uint8_t flags;
+    uint8_t safetysw;
     s16 safetyval;  // allow safetyval to be over +/-125
-    u8 max;
-    u8 min;
-    u8 servoscale;
-    u8 servoscale_neg;
+    uint8_t max;
+    uint8_t min;
+    uint8_t servoscale;
+    uint8_t servoscale_neg;
     s8 failsafe;
-    u8 speed;     //measured in degrees/100msec
+    uint8_t speed;     //measured in degrees/100msec
     s16 subtrim;  // need to support value greater than 250
 };
 
 struct Trim {
-    u8 src;
-    u8 pos;
-    u8 neg;
-    u8 step;
-    u8 sw;
+    uint8_t src;
+    uint8_t pos;
+    uint8_t neg;
+    uint8_t step;
+    uint8_t sw;
     s8 value[3];
 };
 
@@ -206,7 +206,7 @@ const char *MIXER_TemplateName(enum TemplateType t);
 const char *MIXER_SwashType(enum SwashType);
 unsigned MIXER_SourceHasTrim(unsigned src);
 unsigned MIXER_MapChannel(unsigned channel);
-unsigned MIXER_UpdateTrim(u32 buttons, unsigned flags, void *data);
+unsigned MIXER_UpdateTrim(uint32_t buttons, unsigned flags, void *data);
 s8 *MIXER_GetTrim(unsigned i);
 s32 MIXER_GetTrimValue(int i);
 

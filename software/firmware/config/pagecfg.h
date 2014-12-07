@@ -1,7 +1,7 @@
 #ifndef _PAGECFG_H_
 #define _PAGECFG_H_
 #define GUI_ADVANCED 1
-#include "gui/gui.h"
+#include "gui.h"
 
 #define NUM_QUICKPAGES 4
 enum DisplayTrims {
@@ -20,51 +20,51 @@ enum BarSize {
 };
 
 struct elem_xy {
-    u16 x;
-    u16 y;
+    uint16_t x;
+    uint16_t y;
 };
 struct elem_trim {
     struct elem_xy pos;
-    u8 src;
-    u8 is_vert;
+    uint8_t src;
+    uint8_t is_vert;
 };
 struct elem_toggle {
     struct elem_xy pos;
-    u8 src;
-    u8 ico[3];
+    uint8_t src;
+    uint8_t ico[3];
 };
 struct elem_box {
     struct elem_xy pos;
-    u8 src;
-    u8 type;
+    uint8_t src;
+    uint8_t type;
 };
 struct elem_modelico {
     struct elem_xy pos;
 };
 struct elem_bar {
     struct elem_xy pos;
-    u8 src;
+    uint8_t src;
 };
 
 struct elem {
-    u8 blob[3];
-    u8 src;
-    u8 extra[3];
+    uint8_t blob[3];
+    uint8_t src;
+    uint8_t extra[3];
 };
 
-#define ELEM_X(elem)    (*((u32 *)(&(elem))) & 0x1FF)
-#define ELEM_Y(elem)    ((*((u32 *)(&(elem))) >> 9) & 0x1FF)
-#define ELEM_USED(elem) (*((u32 *)(&(elem))) & 0x3FE00)
-#define ELEM_TYPE(elem) ((*((u32 *)(&(elem))) >> 18) & 0x0F)
-#define ELEM_SET_X(elem, x)       *((u32 *)(&(elem))) = ((*((u32 *)(&(elem))) & ~0x1FF) | (x))
-#define ELEM_SET_Y(elem, y)       *((u32 *)(&(elem))) = ((*((u32 *)(&(elem))) & ~(0x1FF << 9)) | ((y) << 9))
-#define ELEM_SET_TYPE(elem, type) *((u32 *)(&(elem))) = ((*((u32 *)(&(elem))) & ~(0x0F << 18)) | ((type) << 18))
+#define ELEM_X(elem)    (*((uint32_t *)(&(elem))) & 0x1FF)
+#define ELEM_Y(elem)    ((*((uint32_t *)(&(elem))) >> 9) & 0x1FF)
+#define ELEM_USED(elem) (*((uint32_t *)(&(elem))) & 0x3FE00)
+#define ELEM_TYPE(elem) ((*((uint32_t *)(&(elem))) >> 18) & 0x0F)
+#define ELEM_SET_X(elem, x)       *((uint32_t *)(&(elem))) = ((*((uint32_t *)(&(elem))) & ~0x1FF) | (x))
+#define ELEM_SET_Y(elem, y)       *((uint32_t *)(&(elem))) = ((*((uint32_t *)(&(elem))) & ~(0x1FF << 9)) | ((y) << 9))
+#define ELEM_SET_TYPE(elem, type) *((uint32_t *)(&(elem))) = ((*((uint32_t *)(&(elem))) & ~(0x0F << 18)) | ((type) << 18))
 
 #define ELEM_ICO(elem, j) ((elem).extra[j])
-//#define ELEM_TRIM_IS_VERT(elem)       (*((u32 *)((elem).blob)) & (1 << 22))
-//#define ELEM_BOX_IS_BIG(elem)         (*((u32 *)((elem).blob)) & (1 << 22))
-//#define ELEM_TRIM_SET_VERT(elem, val) ((*((u32 *)((elem).blob)) & ~(1 << 22)) | (val) << 22)
-//#define ELEM_BOX_SET_BIG(elem, val)   ((*((u32 *)((elem).blob)) & ~(1 << 22)) | (val) << 22)
+//#define ELEM_TRIM_IS_VERT(elem)       (*((uint32_t *)((elem).blob)) & (1 << 22))
+//#define ELEM_BOX_IS_BIG(elem)         (*((uint32_t *)((elem).blob)) & (1 << 22))
+//#define ELEM_TRIM_SET_VERT(elem, val) ((*((uint32_t *)((elem).blob)) & ~(1 << 22)) | (val) << 22)
+//#define ELEM_BOX_SET_BIG(elem, val)   ((*((uint32_t *)((elem).blob)) & ~(1 << 22)) | (val) << 22)
 //NUM_TRIM_ELEMS + NUM_BOX_ELEMS + NUM_BAR_ELEMS + NUM_TOGGLE_ELEMS
 #ifndef NUM_ELEMS
     #define NUM_ELEMS (6 + 8 + 8 + 4 + 1)
@@ -76,7 +76,7 @@ struct elem {
 
 struct PageCfg2 {
     struct elem elem[NUM_ELEMS];
-    u8 quickpage[NUM_QUICKPAGES];
+    uint8_t quickpage[NUM_QUICKPAGES];
 };
 
 enum {

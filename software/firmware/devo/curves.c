@@ -120,12 +120,12 @@ s16 interpolate(struct Curve *curve, s32 value)
  * f(x,k)=1+(x-1)*(x-1)*(x-1)*k/10 + (x-1)*(1-k/10) ;P[0,1,2,3,4,5,6,7,8,9,10]
  */
 
-s16 expou(u32 x, u16 k)
+s16 expou(uint32_t x, uint16_t k)
 {
     // k*x*x*x + (1-k)*x
     // 0 <= k <= 100
     #define KMAX 100
-    u32 val = (x * x / CHAN_MAX_VALUE * x / CHAN_MAX_VALUE * k
+    uint32_t val = (x * x / CHAN_MAX_VALUE * x / CHAN_MAX_VALUE * k
                + (KMAX - k) * x + KMAX / 2) / KMAX;
     return val;
 }
@@ -154,7 +154,7 @@ s16 expo(struct Curve *curve, s32 value)
 s16 deadband(struct Curve *curve, s32 value)
 {
     unsigned neg = value < 0;
-    s32 k = neg ? (u8)curve->points[1] : (u8)curve->points[0];
+    s32 k = neg ? (uint8_t)curve->points[1] : (uint8_t)curve->points[0];
 
     if (k == 0)
         return CHAN_MAX_VALUE;

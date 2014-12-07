@@ -73,12 +73,12 @@ enum A7105_MASK {
 };
 
 void A7105_Initialize(void);
-void A7105_WriteReg(u8 addr, u8 value);
-void A7105_WriteData(u8 *dpbuffer, u8 len, u8 channel);
-void A7105_ReadData(u8 *dpbuffer, u8 len);
-u8 A7105_ReadReg(u8 addr);
+void A7105_WriteReg(uint8_t addr, uint8_t value);
+void A7105_WriteData(uint8_t *dpbuffer, uint8_t len, uint8_t channel);
+void A7105_ReadData(uint8_t *dpbuffer, uint8_t len);
+uint8_t A7105_ReadReg(uint8_t addr);
 int A7105_Reset(void);
-void A7105_WriteID(u32 id);
+void A7105_WriteID(uint32_t id);
 void A7105_Strobe(enum A7105_State);
 void A7105_SetPower(int power);
 void A7105_SetTxRxMode(enum TXRX_State);

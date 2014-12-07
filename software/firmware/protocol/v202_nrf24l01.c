@@ -84,20 +84,20 @@ enum {
 
 #define PAYLOADSIZE 16
 
-static u8 packet[PAYLOADSIZE];
-static u8 packet_sent;
-static u8 tx_id[3];
-static u8 rf_ch_num;
-static u16 counter;
-static u32 packet_counter;
-static u8 tx_power;
-//static u8 auto_flip; // Channel 6 <= 0 - disabled > 0 - enabled
-static u16 led_blink_count;
-static u8 throttle, rudder, elevator, aileron, flags;
+static uint8_t packet[PAYLOADSIZE];
+static uint8_t packet_sent;
+static uint8_t tx_id[3];
+static uint8_t rf_ch_num;
+static uint16_t counter;
+static uint32_t packet_counter;
+static uint8_t tx_power;
+//static uint8_t auto_flip; // Channel 6 <= 0 - disabled > 0 - enabled
+static uint16_t led_blink_count;
+static uint8_t throttle, rudder, elevator, aileron, flags;
 
 
 //
-static u8 phase;
+static uint8_t phase;
 enum {
     V202_INIT2 = 0,
     V202_INIT2_NO_BIND,
@@ -127,7 +127,7 @@ enum {
     USEBLINK_YES = 1,
 };
 
-// static u32 bind_count;
+// static uint32_t bind_count;
 
 // This is frequency hopping table for V202 protocol
 // The table is the first 4 rows of 32 frequency hopping
@@ -137,7 +137,7 @@ enum {
 // number in this case.
 // The pattern is defined by 5 least significant bits of
 // sum of 3 bytes comprising TX id
-static const u8 freq_hopping[][16] = {
+static const uint8_t freq_hopping[][16] = {
  { 0x27, 0x1B, 0x39, 0x28, 0x24, 0x22, 0x2E, 0x36,
    0x19, 0x21, 0x29, 0x14, 0x1E, 0x12, 0x2D, 0x18 }, //  00
  { 0x2E, 0x33, 0x25, 0x38, 0x19, 0x12, 0x18, 0x16,
@@ -147,7 +147,7 @@ static const u8 freq_hopping[][16] = {
  { 0x22, 0x27, 0x17, 0x39, 0x34, 0x28, 0x2B, 0x1D,
    0x18, 0x2A, 0x21, 0x38, 0x10, 0x26, 0x20, 0x1F }  //  03
 };
-static u8 rf_channels[16];
+static uint8_t rf_channels[16];
 
 // Bit vector from bit position
 #define BV(bit) (1 << bit)
@@ -159,7 +159,7 @@ enum {
     PKT_TIMEOUT
 };
 
-static u8 packet_ack()
+static uint8_t packet_ack()
 {
     switch (NRF24L01_ReadReg(NRF24L01_07_STATUS) & (BV(NRF24L01_07_TX_DS) | BV(NRF24L01_07_MAX_RT))) {
     case BV(NRF24L01_07_TX_DS):
@@ -197,8 +197,8 @@ static void v202_init()
     NRF24L01_WriteReg(NRF24L01_15_RX_PW_P4, PAYLOADSIZE);
     NRF24L01_WriteReg(NRF24L01_16_RX_PW_P5, PAYLOADSIZE);
     NRF24L01_WriteReg(NRF24L01_17_FIFO_STATUS, 0x00); // Just in case, no real bits to write here
-    u8 rx_tx_addr[] = {0x66, 0x88, 0x68, 0x68, 0x68};
-    u8 rx_p1_addr[] = {0x88, 0x66, 0x86, 0x86, 0x86};
+    uint8_t rx_tx_addr[] = {0x66, 0x88, 0x68, 0x68, 0x68};
+    uint8_t rx_p1_addr[] = {0x88, 0x66, 0x86, 0x86, 0x86};
     NRF24L01_WriteRegisterMulti(NRF24L01_0A_RX_ADDR_P0, rx_tx_addr, 5);
     NRF24L01_WriteRegisterMulti(NRF24L01_0B_RX_ADDR_P1, rx_p1_addr, 5);
     NRF24L01_WriteRegisterMulti(NRF24L01_10_TX_ADDR, rx_tx_addr, 5);
@@ -217,23 +217,23 @@ static void v202_init()
         // them by their numbers
         // It's all magic, eavesdropped from real transfer and not even from the
         // data sheet - it has slightly different values
-        NRF24L01_WriteRegisterMulti(0x00, (u8 *) "\x40\x4B\x01\xE2", 4);
-        NRF24L01_WriteRegisterMulti(0x01, (u8 *) "\xC0\x4B\x00\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x02, (u8 *) "\xD0\xFC\x8C\x02", 4);
-        NRF24L01_WriteRegisterMulti(0x03, (u8 *) "\xF9\x00\x39\x21", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x05, (u8 *) "\x24\x06\x7F\xA6", 4);
-        NRF24L01_WriteRegisterMulti(0x06, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x07, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x08, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x09, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0A, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0B, (u8 *) &nul, 4);
-        NRF24L01_WriteRegisterMulti(0x0C, (u8 *) "\x00\x12\x73\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0D, (u8 *) "\x46\xB4\x80\x00", 4);
-        NRF24L01_WriteRegisterMulti(0x0E, (u8 *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC7\x96\x9A\x1B", 4);
-        NRF24L01_WriteRegisterMulti(0x04, (u8 *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x00, (uint8_t *) "\x40\x4B\x01\xE2", 4);
+        NRF24L01_WriteRegisterMulti(0x01, (uint8_t *) "\xC0\x4B\x00\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x02, (uint8_t *) "\xD0\xFC\x8C\x02", 4);
+        NRF24L01_WriteRegisterMulti(0x03, (uint8_t *) "\xF9\x00\x39\x21", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x05, (uint8_t *) "\x24\x06\x7F\xA6", 4);
+        NRF24L01_WriteRegisterMulti(0x06, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x07, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x08, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x09, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0A, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0B, (uint8_t *) &nul, 4);
+        NRF24L01_WriteRegisterMulti(0x0C, (uint8_t *) "\x00\x12\x73\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0D, (uint8_t *) "\x46\xB4\x80\x00", 4);
+        NRF24L01_WriteRegisterMulti(0x0E, (uint8_t *) "\x41\x10\x04\x82\x20\x08\x08\xF2\x7D\xEF\xFF", 11);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC7\x96\x9A\x1B", 4);
+        NRF24L01_WriteRegisterMulti(0x04, (uint8_t *) "\xC1\x96\x9A\x1B", 4);
     } else {
         printf("nRF24L01 detected\n");
     }
@@ -250,25 +250,25 @@ static void V202_init2()
     rf_ch_num = 0;
 
     // Turn radio power on
-    u8 config = BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_CRCO) | BV(NRF24L01_00_PWR_UP);
+    uint8_t config = BV(NRF24L01_00_EN_CRC) | BV(NRF24L01_00_CRCO) | BV(NRF24L01_00_PWR_UP);
     NRF24L01_WriteReg(NRF24L01_00_CONFIG, config);
     // Implicit delay in callback
     // delayMicroseconds(150);
 }
 
-static void set_tx_id(u32 id)
+static void set_tx_id(uint32_t id)
 {
-    u8 sum;
+    uint8_t sum;
     tx_id[0] = (id >> 16) & 0xFF;
     tx_id[1] = (id >> 8) & 0xFF;
     tx_id[2] = (id >> 0) & 0xFF;
     sum = tx_id[0] + tx_id[1] + tx_id[2];
     // Base row is defined by lowest 2 bits
-    const u8 *fh_row = freq_hopping[sum & 0x03];
+    const uint8_t *fh_row = freq_hopping[sum & 0x03];
     // Higher 3 bits define increment to corresponding row
-    u8 increment = (sum & 0x1e) >> 2;
-    for (u8 i = 0; i < 16; ++i) {
-        u8 val = fh_row[i] + increment;
+    uint8_t increment = (sum & 0x1e) >> 2;
+    for (uint8_t i = 0; i < 16; ++i) {
+        uint8_t val = fh_row[i] + increment;
         // Strange avoidance of channels divisible by 16
         rf_channels[i] = (val & 0x0f) ? val : val - 3;
     }
@@ -276,13 +276,13 @@ static void set_tx_id(u32 id)
 
 static void add_pkt_checksum()
 {
-  u8 sum = 0;
-  for (u8 i = 0; i < 15;  ++i) sum += packet[i];
+  uint8_t sum = 0;
+  for (uint8_t i = 0; i < 15;  ++i) sum += packet[i];
   packet[15] = sum;
 }
 
 
-static u8 convert_channel(u8 num)
+static uint8_t convert_channel(uint8_t num)
 {
     s32 ch = Channels[num];
     if (ch < CHAN_MIN_VALUE) {
@@ -290,12 +290,12 @@ static u8 convert_channel(u8 num)
     } else if (ch > CHAN_MAX_VALUE) {
         ch = CHAN_MAX_VALUE;
     }
-    return (u8) (((ch * 0xFF / CHAN_MAX_VALUE) + 0x100) >> 1);
+    return (uint8_t) (((ch * 0xFF / CHAN_MAX_VALUE) + 0x100) >> 1);
 }
 
 
-static void read_controls(u8* throttle, u8* rudder, u8* elevator, u8* aileron,
-                          u8* flags, u16* led_blink_count)
+static void read_controls(uint8_t* throttle, uint8_t* rudder, uint8_t* elevator, uint8_t* aileron,
+                          uint8_t* flags, uint16_t* led_blink_count)
 {
     // Protocol is registered AETRG, that is
     // Aileron is channel 0, Elevator - 1, Throttle - 2, Rudder - 3
@@ -303,7 +303,7 @@ static void read_controls(u8* throttle, u8* rudder, u8* elevator, u8* aileron,
     // throttle can be less than CHAN_MIN_VALUE or larger than
     // CHAN_MAX_VALUE. As we have no space here, we hard-limit
     // channels values by min..max range
-    u8 a;
+    uint8_t a;
 
     // Channel 3
     *throttle = convert_channel(CHANNEL3);
@@ -322,7 +322,7 @@ static void read_controls(u8* throttle, u8* rudder, u8* elevator, u8* aileron,
 
     // Channel 5
     // 512 - slow blinking (period 4ms*2*512 ~ 4sec), 64 - fast blinking (4ms*2*64 ~ 0.5sec)
-    u16 new_led_blink_count;
+    uint16_t new_led_blink_count;
     s32 ch = Channels[CHANNEL5];
     if (ch == CHAN_MIN_VALUE) {
         new_led_blink_count = BLINK_COUNT_MAX + 1;
@@ -369,7 +369,7 @@ static void read_controls(u8* throttle, u8* rudder, u8* elevator, u8* aileron,
     }
 }
 
-static void send_packet(u8 bind)
+static void send_packet(uint8_t bind)
 {
     if (bind) {
         flags     = FLAG_BIND;
@@ -416,7 +416,7 @@ static void send_packet(u8 bind)
     // hops to a new frequency as soon as valid packet
     // received it does not matter that the packet is
     // not the same one repeated twice - nobody checks this
-    u8 rf_ch = rf_channels[rf_ch_num >> 1];
+    uint8_t rf_ch = rf_channels[rf_ch_num >> 1];
     rf_ch_num = (rf_ch_num + 1) & 0x1F;
     //  Serial.print(rf_ch); Serial.write("\n");
     NRF24L01_WriteReg(NRF24L01_05_RF_CH, rf_ch);
@@ -444,7 +444,7 @@ static void send_packet(u8 bind)
 
 
 MODULE_CALLTYPE
-static u16 v202_callback()
+static uint16_t v202_callback()
 {
     switch (phase) {
     case V202_INIT2:
@@ -453,12 +453,12 @@ static u16 v202_callback()
 //        phase = V202_BIND1;
         phase = V202_BIND2;
         return 150;
-        break;
+		
     case V202_INIT2_NO_BIND:
         V202_init2();
         phase = V202_DATA;
         return 150;
-        break;
+
     case V202_BIND1:
         send_packet(1);
         if (throttle >= 240) phase = V202_BIND2;
@@ -501,10 +501,10 @@ static u16 v202_callback()
 // Generate internal id from TX id and manufacturer id (STM32 unique id)
 static void initialize_tx_id()
 {
-    u32 lfsr = 0xb2c54a2ful;
+    uint32_t lfsr = 0xb2c54a2ful;
 
 #ifndef USE_FIXED_MFGID
-    u8 var[12];
+    uint8_t var[12];
     MCU_SerialNumber(var, 12);
     printf("Manufacturer id: ");
     for (int i = 0; i < 12; ++i) {
@@ -515,16 +515,16 @@ static void initialize_tx_id()
 #endif
 
     if (Model.fixed_id) {
-       for (u8 i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
+       for (uint8_t i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
            rand32_r(&lfsr, (Model.fixed_id >> j) & 0xff);
     }
     // Pump zero bytes for LFSR to diverge more
-    for (u8 i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
+    for (uint8_t i = 0; i < sizeof(lfsr); ++i) rand32_r(&lfsr, 0);
 
     set_tx_id(lfsr);
 }
 
-static void initialize(u8 bind)
+static void initialize(uint8_t bind)
 {
     CLOCK_StopTimer();
     tx_power = Model.tx_power;

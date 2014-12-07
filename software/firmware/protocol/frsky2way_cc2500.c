@@ -52,10 +52,10 @@ ctassert(LAST_PROTO_OPT <= NUM_PROTO_OPTS, too_many_protocol_opts);
 
 #define TELEM_ON 0
 #define TELEM_OFF 1
-static u8 packet[40];
-static u32 state;
-static u8 counter;
-static u32 fixed_id;
+static uint8_t packet[40];
+static uint32_t state;
+static uint8_t counter;
+static uint32_t fixed_id;
 static s8 course;
 static s8 fine;
 
@@ -195,7 +195,7 @@ static void frsky2way_build_data_packet()
     //}
 }
 
-static void frsky2way_parse_telem(u8 *pkt, int len)
+static void frsky2way_parse_telem(uint8_t *pkt, int len)
 {
     //byte1 == data len (+ 2 for CRC)
     //byte 2,3 = fixed=id
@@ -208,16 +208,16 @@ static void frsky2way_parse_telem(u8 *pkt, int len)
         return;
     len -= 2;
     //Get voltage A1 (52mv/count)
-    Telemetry.p.frsky.volt[0] = (u32)pkt[3] * 52 / 100; //In 1/10 of Volts
+    Telemetry.p.frsky.volt[0] = (uint32_t)pkt[3] * 52 / 100; //In 1/10 of Volts
     TELEMETRY_SetUpdated(TELEM_FRSKY_VOLT1);
     //Get voltage A2 (~13.2mv/count) (Docs say 1/4 of A1)
-    Telemetry.p.frsky.volt[1] = (u32)pkt[4] * 132 / 1000; //In 1/10 of Volts
+    Telemetry.p.frsky.volt[1] = (uint32_t)pkt[4] * 132 / 1000; //In 1/10 of Volts
     TELEMETRY_SetUpdated(TELEM_FRSKY_VOLT2);
     //Telemetry.p.frsky.rssi = pkt[5];
     for(int i = 6; i < len - 4; i++) {
         if(pkt[i] != 0x5e || pkt[i+4] != 0x5e)
            continue;
-        u16 value = (pkt[i+3] << 8) + pkt[i+2];
+        uint16_t value = (pkt[i+3] << 8) + pkt[i+2];
         switch(pkt[i+1]) {
           //defined in protocol_sensor_hub.pdf
           case 0x01: //GPS_ALT (whole number & sign) -500m-9000m (.01m/count)
@@ -321,7 +321,7 @@ static void frsky2way_parse_telem(u8 *pkt, int len)
     }
 }
 
-static u16 frsky2way_cb()
+static uint16_t frsky2way_cb()
 {
     if (state < FRSKY_BIND_DONE) {
         frsky2way_build_bind_packet();
@@ -360,8 +360,8 @@ static u16 frsky2way_cb()
                 frsky2way_parse_telem(packet, len);
             }
 #ifdef EMULATOR
-            const u8 t[] = {0x24, 0x25, 0x26, 0x10, 0x21, 0x02, 0x05, 0x06, 0x28, 0x3a, 0x3b, 0x03, 0x14, 0x1c, 0x13, 0x1b, 0x23, 0x12, 0x1a, 0x22, 0x11, 0x19, 0x01, 0x09, 0x04, 0x15, 0x16, 0x17, 0x18};
-            u8 p[sizeof(t) * 4 + 4 +5];
+            const uint8_t t[] = {0x24, 0x25, 0x26, 0x10, 0x21, 0x02, 0x05, 0x06, 0x28, 0x3a, 0x3b, 0x03, 0x14, 0x1c, 0x13, 0x1b, 0x23, 0x12, 0x1a, 0x22, 0x11, 0x19, 0x01, 0x09, 0x04, 0x15, 0x16, 0x17, 0x18};
+            uint8_t p[sizeof(t) * 4 + 4 +5];
             p[0] = sizeof(p) - 3;
             p[1] = fixed_id & 0xff;
             p[2] = fixed_id >> 8;
@@ -401,14 +401,14 @@ static u16 frsky2way_cb()
 // Generate internal id from TX id and manufacturer id (STM32 unique id)
 static int get_tx_id()
 {
-    u32 lfsr = 0x7649eca9ul;
+    uint32_t lfsr = 0x7649eca9ul;
 
-    u8 var[12];
+    uint8_t var[12];
     MCU_SerialNumber(var, 12);
     for (int i = 0; i < 12; ++i) {
         rand32_r(&lfsr, var[i]);
     }
-    for (u8 i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
+    for (uint8_t i = 0, j = 0; i < sizeof(Model.fixed_id); ++i, j += 8)
         rand32_r(&lfsr, (Model.fixed_id >> j) & 0xff);
     return rand32_r(&lfsr, 0);
 }

@@ -11,9 +11,9 @@
 #define DEFAULT_SPLASH_DELAY 35 //3.5sec
 
 struct StickCalibration {
-    u16 max;
-    u16 min;
-    u16 zero;
+    uint16_t max;
+    uint16_t min;
+    uint16_t zero;
 };
 
 struct TouchCalibration {
@@ -24,8 +24,8 @@ struct TouchCalibration {
 };
 
 struct mcu_pin {
-    u32 port;
-    u16 pin;
+    uint32_t port;
+    uint16_t pin;
 };
 
 enum ExtraHardware {
@@ -39,32 +39,32 @@ enum ExtraHardware {
 #define DATEFMT   0xF0  //0b11110000
 
 struct Transmitter {
-    u8 current_model;
-    u8 language;
-    u8 brightness;
-    u8 contrast;
-    u8 telem;
-    u8 music_shutdown;
-    u8 extra_hardware;
+    uint8_t current_model;
+    uint8_t language;
+    uint8_t brightness;
+    uint8_t contrast;
+    uint8_t telem;
+    uint8_t music_shutdown;
+    uint8_t extra_hardware;
     enum Mode mode;
-    u16 batt_alarm;
-    u8 power_alarm;
-    u16 batt_critical;
-    u16 batt_warning_interval;
-    u8 splash_delay;
-    u8 volume;
-    u8 vibration_state; // for future vibration on/off support
+    uint16_t batt_alarm;
+    uint8_t power_alarm;
+    uint16_t batt_critical;
+    uint16_t batt_warning_interval;
+    uint8_t splash_delay;
+    uint8_t volume;
+    uint8_t vibration_state; // for future vibration on/off support
 #if HAS_RTC
-    u8 rtcflags;    // bit0: clock12hr, bit1-3: time format, bit4-7 date format (see pages/320x240x16/rtc_config.c)
+    uint8_t rtcflags;    // bit0: clock12hr, bit1-3: time format, bit4-7 date format (see pages/320x240x16/rtc_config.c)
 #endif
     #ifdef HAS_MORE_THAN_32_INPUTS
         u64 ignore_src;
     #else
-        u32 ignore_src;
+        uint32_t ignore_src;
     #endif
     struct mcu_pin module_enable[TX_MODULE_LAST];
-    u8 module_poweramp;
-    u32 txid;
+    uint8_t module_poweramp;
+    uint32_t txid;
     struct StickCalibration calibration[INP_HAS_CALIBRATION];
     struct TouchCalibration touch;
     struct AutoDimmer auto_dimmer;
@@ -74,7 +74,7 @@ struct Transmitter {
 extern struct Transmitter Transmitter;
 #define MODULE_ENABLE Transmitter.module_enable
 
-void CONFIG_LoadTx();
-void CONFIG_LoadHardware();
+void CONFIG_LoadTx(void);
+void CONFIG_LoadHardware(void);
 
 #endif
