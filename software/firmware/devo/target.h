@@ -1,6 +1,6 @@
 #ifndef _TARGET_H_
 #define _TARGET_H_
-//#define printf if(0) printf
+#include <stdint.h>
 
 #define OPTIONAL 2
 //Load target-specific include
@@ -45,7 +45,7 @@ enum {
 /* The following functions must be provided by every target */
 
 /* General Functions */
-void TxName(u8 *var, int len);
+void TxName(uint8_t *var, int len);
 
 /* Backlight Functions */
 void BACKLIGHT_Init(void);
@@ -67,19 +67,19 @@ void LCD_DrawStop(void);
 
 /* Touchscreen */
 struct touch {
-    u16 x;
-    u16 y;
-    u16 z1;
-    u16 z2;
+    uint16_t x;
+    uint16_t y;
+    uint16_t z1;
+    uint16_t z2;
 };
 void SPITouch_Init(void);
 struct touch SPITouch_GetCoords(void);
 int SPITouch_IRQ(void);
-void SPITouch_Calibrate(s32 xscale, s32 yscale, s32 xoff, s32 yoff);
+void SPITouch_Calibrate(int32_t xscale, int32_t yscale, int32_t xoff, int32_t yoff);
 
 /* Buttons and switches */
 void Initialize_ButtonMatrix(void);
-u32 ScanButtons(void);
+uint32_t ScanButtons(void);
 
 /* Power functions */
 void PWR_Init(void);
@@ -98,106 +98,106 @@ enum MsecCallback {
 };
 
 void CLOCK_Init(void);
-u32 CLOCK_getms(void);
-void CLOCK_StartTimer(unsigned us, u16 (*cb)(void));
-void CLOCK_StopTimer();
-void CLOCK_SetMsecCallback(int cb, u32 msec);
-void CLOCK_StartWatchdog();
-void CLOCK_ResetWatchdog();
+uint32_t CLOCK_getms(void);
+void CLOCK_StartTimer(unsigned us, uint16_t (*cb)(void));
+void CLOCK_StopTimer(void);
+void CLOCK_SetMsecCallback(int cb, uint32_t msec);
+void CLOCK_StartWatchdog(void);
+void CLOCK_ResetWatchdog(void);
 
 /*PWM/PPM functions */
-void PWM_Initialize();
-void PWM_Stop();
+void PWM_Initialize(void);
+void PWM_Stop(void);
 void PWM_Set(int);
-void PPM_Enable(unsigned low_time, volatile u16 *pulses);
+void PPM_Enable(unsigned low_time, volatile uint16_t *pulses);
 
 /* PPM-In functions */
 #define MAX_PPM_IN_CHANNELS 8
-void PPMin_TIM_Init();
-void PPMin_Start();
-void PPMin_Stop();
+void PPMin_TIM_Init(void);
+void PPMin_Start(void);
+void PPMin_Stop(void);
 
 
 /* Sticks */
-void CHAN_Init();
-s16  CHAN_ReadInput(int channel);
-s32  CHAN_ReadRawInput(int channel);
+void CHAN_Init(void);
+int16_t  CHAN_ReadInput(int channel);
+int32_t  CHAN_ReadRawInput(int channel);
 extern void CHAN_SetSwitchCfg(const char *str);
 #define CHAN_ButtonIsPressed(buttons, btn) (buttons & (CHAN_ButtonMask(btn)))
 
 /* SPI Flash */
-void SPIFlash_Init();
-u32  SPIFlash_ReadID();
-void SPIFlash_EraseSector(u32 sectorAddress);
-void SPIFlash_BulkErase();
-void SPIFlash_WriteBytes(u32 writeAddress, u32 length, const u8 * buffer);
-void SPIFlash_WriteByte(u32 writeAddress, const unsigned byte);
-void SPIFlash_ReadBytes(u32 readAddress, u32 length, u8 * buffer);
-int  SPIFlash_ReadBytesStopCR(u32 readAddress, u32 length, u8 * buffer);
+void SPIFlash_Init(void);
+uint32_t  SPIFlash_ReadID(void);
+void SPIFlash_EraseSector(uint32_t sectorAddress);
+void SPIFlash_BulkErase(void);
+void SPIFlash_WriteBytes(uint32_t writeAddress, uint32_t length, const uint8_t * buffer);
+void SPIFlash_WriteByte(uint32_t writeAddress, const unsigned byte);
+void SPIFlash_ReadBytes(uint32_t readAddress, uint32_t length, uint8_t * buffer);
+int  SPIFlash_ReadBytesStopCR(uint32_t readAddress, uint32_t length, uint8_t * buffer);
 void SPI_FlashBlockWriteEnable(unsigned enable);
 
 /* Sound */
-void SOUND_Init();
+void SOUND_Init(void);
 void SOUND_SetFrequency(unsigned freq, unsigned volume);
-void SOUND_Start(unsigned msec, u16 (*next_note_cb)());
-void SOUND_StartWithoutVibrating(unsigned msec, u16(*next_note_cb)());
-void SOUND_Stop();
+void SOUND_Start(unsigned msec, uint16_t (*next_note_cb)(void));
+void SOUND_StartWithoutVibrating(unsigned msec, uint16_t(*next_note_cb)(void));
+void SOUND_Stop(void);
 
 /* Vibrating motor */
-void VIBRATINGMOTOR_Init();
-void VIBRATINGMOTOR_Start();
-void VIBRATINGMOTOR_Stop();
+void VIBRATINGMOTOR_Init(void);
+void VIBRATINGMOTOR_Start(void);
+void VIBRATINGMOTOR_Stop(void);
 
 /* UART & Debug */
-void UART_Initialize();
-void UART_Stop();
+void UART_Initialize(void);
+void UART_Stop(void);
 
 /* USB*/
 void USB_Enable(unsigned type, unsigned use_interrupt);
-void USB_Disable();
-void USB_HandleISR();
-void USB_Connect();
-void HID_Enable();
-void HID_Disable();
+void USB_Disable(void);
+void USB_HandleISR(void);
+void USB_Connect(void);
+void HID_Enable(void);
+void HID_Disable(void);
 
 /* Filesystem */
 int FS_Mount(void *FAT, const char *drive);
-void FS_Unmount();
+void FS_Unmount(void);
 int FS_OpenDir(const char *path);
 int FS_ReadDir(char *path);
-void FS_CloseDir();
+void FS_CloseDir(void);
 
-void _usleep(u32 usec);
+void _usleep(uint32_t usec);
 #define usleep _usleep
 
 /* Abstract bootloader access */
 enum {
     BL_ID = 0,
 };
-u8 *BOOTLOADER_Read(int idx);
+uint8_t *BOOTLOADER_Read(int idx);
 
 #define PROTO_HAS_CYRF6936
 #define PROTO_HAS_A7105
 #define PROTO_HAS_CC2500
 #define PROTO_HAS_NRF24L01
 //Ensure functions are loaded for protocol modules
-void SPI_ProtoInit();
-void SPI_AVRProgramInit();
+void SPI_ProtoInit(void);
+void SPI_AVRProgramInit(void);
 int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low);
 int SPI_ProtoGetPinConfig(int module, int state);
-u32 AVR_StartProgram(void);
+uint32_t AVR_StartProgram(void);
 int AVR_Erase(void);
-int AVR_Program(u32 address, u8 *data, int pagesize);
+int AVR_Program(uint32_t address, uint8_t *data, int pagesize);
 int AVR_SetFuses(void);
 int AVR_ResetFuses(void);
 int AVR_VerifyFuses(void);
-int AVR_Verify(u8 *data, int size);
+int AVR_Verify(uint8_t *data, int size);
 
 struct mcu_pin;
 void MCU_InitModules(void);
 int MCU_SetPin(struct mcu_pin *, const char *name);
 const char *MCU_GetPinName(char *str, struct mcu_pin *);
-void MCU_SerialNumber(u8 *var, int len);
+void MCU_SerialNumber(uint8_t *var, int len);
 #ifdef MODULAR
   #define MODULE_CALLTYPE __attribute__((__long_call__))
 #else
