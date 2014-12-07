@@ -14,7 +14,7 @@
  */
 #include "common.h"
 #include "target.h"
-#include "gui/gui.h"
+#include "gui.h"
 #include "tx.h"
 
 #include <stdlib.h>

@@ -16,8 +16,8 @@
 #include "common.h"
 #include "music.h"
 #include "interface.h"
-#include "config/model.h"
-#include "config/tx.h"
+#include "model.h"
+#include "tx.h"
 
 #include <stdlib.h>
 

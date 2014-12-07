@@ -21,7 +21,7 @@
 #include "common.h"
 #include "interface.h"
 #include "mixer.h"
-#include "config/model.h"
+#include "model.h"
 #include "telemetry.h"
 
 #ifdef MODULAR

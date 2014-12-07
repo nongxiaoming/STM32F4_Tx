@@ -22,8 +22,8 @@
 #include "common.h"
 #include "mixer.h"
 #include "buttons.h"
-#include "config/model.h"
-#include "config/tx.h"
+#include "model.h"
+#include "tx.h"
 #include "music.h"
 #include "target.h"
 #include <stdlib.h>

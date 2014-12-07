@@ -12,7 +12,7 @@
 enum { DAY=0, MONTH, YEAR, SECOND, MINUTE, HOUR };
 
 // initialize RTC clock
-void RTC_Init();
+void RTC_Init(void);
 
 // set date value (deviation epoch = seconds since 1.1.2012, 00:00:00)
 void RTC_SetValue(u32 value);
@@ -22,7 +22,7 @@ void RTC_SetTime(u16 hour, u16 minute, u16 second);
 void RTC_SetDate(u16 year, u16 month, u16 day);
 
 // get date value (deviation epoch = seconds since 1.1.2012, 00:00:00)
-u32 RTC_GetValue();
+u32 RTC_GetValue(void);
 
 // get serial time (seconds since 01.01.2012, 0:00:00 - "deviation epoch")
 u32 RTC_GetSerial(int year, int month, int day, int hour, int minute, int second);
@@ -38,8 +38,8 @@ u32 RTC_GetTimeValue(u32 time);
 u32 RTC_GetDateValue(u32 time);
 
 // to avoid sizeof() in rtc_config
-int RTC_GetNumberTimeFormats();
-int RTC_GetNumberDateFormats();
+int RTC_GetNumberTimeFormats(void);
+int RTC_GetNumberDateFormats(void);
 
 // return formatted time/date string as stated in tx config
 void RTC_GetTimeFormatted(char *str, u32 time);

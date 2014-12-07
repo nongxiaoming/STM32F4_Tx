@@ -115,7 +115,7 @@ int PAGE_GetStartPage(void);
 #define PROTODEF(proto, module, map, init, name) proto,
 enum Protocols {
     PROTOCOL_NONE,
-    #include "protocol/protocol.h"
+    #include "protocol.h"
     PROTOCOL_COUNT,
 };
 #undef PROTODEF

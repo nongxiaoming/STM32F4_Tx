@@ -15,7 +15,7 @@
 
 #include "common.h"
 #include "music.h"
-#include "config/tx.h"
+#include "tx.h"
 #include <stdlib.h>
 
 static struct {u8 note; u8 duration;} Notes[100];

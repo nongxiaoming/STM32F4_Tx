@@ -22,7 +22,7 @@ void Delay(u32 count)
         int i = 0; //72000;
         while(i) {
             i--;
-            asm volatile ("nop"); // prevent the optimizer from removing this loop
+            __asm volatile ("nop"); // prevent the optimizer from removing this loop
         }
         count--;
     }

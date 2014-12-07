@@ -21,8 +21,8 @@
 #include "common.h"
 #include "interface.h"
 #include "mixer.h"
-#include "config/model.h"
-#include "config/tx.h" // for Transmitter
+#include "model.h"
+#include "tx.h" // for Transmitter
 #include "music.h"
 
 #ifdef MODULAR

@@ -175,7 +175,7 @@ const char *CURVE_GetName(char *str, struct Curve *curve);
 unsigned CURVE_NumPoints(struct Curve *curve);
 
 /* Mixer functions */
-volatile s16 *MIXER_GetInputs();
+volatile s16 *MIXER_GetInputs(void);
 s16 MIXER_GetChannel(unsigned channel, enum LimitMask flags);
 
 int MIXER_GetMixers(int ch, struct Mixer *mixers, int count);
@@ -193,11 +193,11 @@ void MIXER_ApplyMixer(struct Mixer *mixer, volatile s16 *raw, s16 *orig_value);
 void MIXER_EvalMixers(volatile s16 *raw);
 int MIXER_GetCachedInputs(s16 *raw, unsigned threshold);
 
-struct Mixer *MIXER_GetAllMixers();
+struct Mixer *MIXER_GetAllMixers(void);
 
-struct Trim *MIXER_GetAllTrims();
+struct Trim *MIXER_GetAllTrims(void);
 
-void MIXER_RegisterTrimButtons();
+void MIXER_RegisterTrimButtons(void);
 
 s16 MIXER_ApplyLimits(unsigned channel, struct Limit *limit, volatile s16 *_raw,
                       volatile s16 *_Channels, enum LimitMask flags);
@@ -210,6 +210,6 @@ unsigned MIXER_UpdateTrim(u32 buttons, unsigned flags, void *data);
 s8 *MIXER_GetTrim(unsigned i);
 s32 MIXER_GetTrimValue(int i);
 
-void MIXER_Init();
+void MIXER_Init(void);
 
 #endif

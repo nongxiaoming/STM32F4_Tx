@@ -15,7 +15,7 @@
  */
 
 #include "common.h"
-#include "config/tx.h"
+#include "tx.h"
 #include "music.h"
 
 static u8 warned = 0;

@@ -41,13 +41,13 @@ struct datalog {
     u8 source[(7 + NUM_DATALOG) / 8];
 };
 
-extern void DATALOG_Init();
-extern void DATALOG_Update();
+extern void DATALOG_Init(void);
+extern void DATALOG_Update(void);
 extern const char *DATALOG_Source(char *str, int idx);
-extern int DATALOG_Remaining();
-extern void DATALOG_Reset();
-extern void DATALOG_UpdateState();
-extern int DATALOG_IsEnabled();
+extern int DATALOG_Remaining(void);
+extern void DATALOG_Reset(void);
+extern void DATALOG_UpdateState(void);
+extern int DATALOG_IsEnabled(void);
 extern const char *DATALOG_RateString(int idx);
 extern void DATALOG_ApplyMask(int idx, int set);
 #endif

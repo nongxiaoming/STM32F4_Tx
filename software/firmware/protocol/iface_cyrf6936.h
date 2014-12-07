@@ -57,15 +57,15 @@ enum CYRF_PWR {
 };
 
 /* SPI CYRF6936 */
-void CYRF_Initialize();
-int CYRF_Reset();
+void CYRF_Initialize(void);
+int CYRF_Reset(void);
 void CYRF_GetMfgData(u8 data[]);
 
 void CYRF_SetTxRxMode(enum TXRX_State);
 void CYRF_ConfigRFChannel(u8 ch);
 void CYRF_SetPower(u8 power);
 void CYRF_ConfigCRCSeed(u16 crc);
-void CYRF_StartReceive();
+void CYRF_StartReceive(void);
 void CYRF_ConfigSOPCode(const u8 *sopcodes);
 void CYRF_ConfigDataCode(const u8 *datacodes, u8 len);
 u8 CYRF_ReadRSSI(u32 dodummyread);
@@ -75,6 +75,6 @@ void CYRF_WriteDataPacketLen(const u8 dpbuffer[], u8 len);
 void CYRF_WriteRegister(u8 address, u8 data);
 u8 CYRF_ReadRegister(u8 address);
 void CYRF_WritePreamble(u32 preamble);
-u8 CYRF_MaxPower();
+u8 CYRF_MaxPower(void);
 void CYRF_FindBestChannels(u8 *channels, u8 len, u8 minspace, u8 minchan, u8 maxchan);
 #endif

@@ -16,8 +16,8 @@
 #include "common.h"
 #include "timer.h"
 #include "music.h"
-#include "config/model.h"
-#include "config/tx.h"
+#include "model.h"
+#include "tx.h"
 #include <stdlib.h>
 
 static u8 timer_state[NUM_TIMERS];

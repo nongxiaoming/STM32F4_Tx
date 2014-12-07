@@ -15,7 +15,7 @@
 
 #include "common.h"
 #include "autodimmer.h"
-#include "config/tx.h"
+#include "tx.h"
 
 static u32 last_time;  // last_time must be u32
 static AutoDimmerState auto_dimmer_state = AUTODIMMER_STOP;  //backlight on

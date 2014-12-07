@@ -39,6 +39,6 @@ void TIMER_StartStop(unsigned timer);
 void TIMER_Reset(unsigned timer);
 s32 TIMER_GetValue(unsigned timer);
 void TIMER_SetValue(unsigned timer, s32 value);
-void TIMER_Update();
-void TIMER_Init();
+void TIMER_Update(void);
+void TIMER_Init(void);
 #endif

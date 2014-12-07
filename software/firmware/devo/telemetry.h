@@ -210,13 +210,13 @@ const char * TELEMETRY_GetValueStrByValue(char *str, unsigned telem, s32 value);
 const char * TELEMETRY_Name(char *str, unsigned telem);
 const char * TELEMETRY_ShortName(char *str, unsigned telem);
 s32 TELEMETRY_GetMaxValue(unsigned telem);
-void TELEMETRY_Alarm();
+void TELEMETRY_Alarm(void);
 int TELEMETRY_HasAlarm(int src);
 u32 TELEMETRY_IsUpdated(int val);
 void TELEMETRY_SetUpdated(int telem);
-int TELEMETRY_Type();
+int TELEMETRY_Type(void);
 void TELEMETRY_SetType(int type);
 void TELEMETRY_SetTypeByProtocol(enum Protocols protocol);
-int TELEMETRY_GetNumTelemSrc();
-int TELEMETRY_GetNumTelem();
+int TELEMETRY_GetNumTelemSrc(void);
+int TELEMETRY_GetNumTelem(void);
 #endif

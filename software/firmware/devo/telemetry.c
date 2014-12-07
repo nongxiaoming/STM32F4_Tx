@@ -14,8 +14,8 @@
  */
 #include "common.h"
 #include "music.h"
-#include "config/model.h"
-#include "config/tx.h"
+#include "model.h"
+#include "tx.h"
 #include "telemetry.h"
 
 static void _get_volt_str(char *str, u32 value);

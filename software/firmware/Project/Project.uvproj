@@ -356,13 +356,13 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
+            <uC99>1</uC99>
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\User;..\Hardware;..\config;..\devo</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\User;..\Hardware;..\config;..\devo;..\protocol;..\petit_fat</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -884,6 +884,146 @@
         </Group>
         <Group>
           <GroupName>target</GroupName>
+        </Group>
+        <Group>
+          <GroupName>Protocols</GroupName>
+          <Files>
+            <File>
+              <FileName>cflie_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\cflie_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>devo_cyrf6936.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\devo_cyrf6936.c</FilePath>
+            </File>
+            <File>
+              <FileName>dsm2_cyrf6936.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\dsm2_cyrf6936.c</FilePath>
+            </File>
+            <File>
+              <FileName>esky_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\esky_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>esky150_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\esky150_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>flysky_a7105.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\flysky_a7105.c</FilePath>
+            </File>
+            <File>
+              <FileName>frsky1way_cc2500.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\frsky1way_cc2500.c</FilePath>
+            </File>
+            <File>
+              <FileName>frsky2way_cc2500.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\frsky2way_cc2500.c</FilePath>
+            </File>
+            <File>
+              <FileName>h377_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\h377_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>hisky_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\hisky_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>hm830_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\hm830_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>hubsan_a7105.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\hubsan_a7105.c</FilePath>
+            </File>
+            <File>
+              <FileName>j6pro_cyrf6936.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\j6pro_cyrf6936.c</FilePath>
+            </File>
+            <File>
+              <FileName>kn_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\kn_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>ne260_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\ne260_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>ppmout.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\ppmout.c</FilePath>
+            </File>
+            <File>
+              <FileName>protocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\protocol.c</FilePath>
+            </File>
+            <File>
+              <FileName>skyartec_cc2500.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\skyartec_cc2500.c</FilePath>
+            </File>
+            <File>
+              <FileName>slt_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\slt_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>testrf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\testrf.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbhid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\usbhid.c</FilePath>
+            </File>
+            <File>
+              <FileName>v202_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\v202_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>wk2x01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\wk2x01.c</FilePath>
+            </File>
+            <File>
+              <FileName>yd717_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\yd717_nrf24l01.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>petit_fat</GroupName>
+          <Files>
+            <File>
+              <FileName>petit_fat.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\petit_fat\petit_fat.c</FilePath>
+            </File>
+            <File>
+              <FileName>petit_io.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\petit_fat\petit_io.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

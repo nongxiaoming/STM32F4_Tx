@@ -24,7 +24,7 @@
 #include "interface.h"
 #include "mixer.h"
 #include "telemetry.h"
-#include "config/model.h"
+#include "model.h"
 
 #ifdef MODULAR
   #pragma long_calls_off

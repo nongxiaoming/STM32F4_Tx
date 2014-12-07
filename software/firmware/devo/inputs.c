@@ -21,7 +21,7 @@
 
 #include "common.h"
 #include "mixer.h"
-#include "config/model.h"
+#include "model.h"
 #include "config/tx.h"
 
 #ifndef HAS_MORE_THAN_32_INPUTS
