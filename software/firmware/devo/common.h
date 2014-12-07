@@ -50,9 +50,9 @@ void CONFIG_EnableLanguage(int state);
 int CONFIG_IniParse(const char* filename,
          int (*handler)(void*, const char*, const char*, const char*),
          void* user);
-u8 CONFIG_IsModelChanged();
-u8 CONFIG_SaveModelIfNeeded();
-void CONFIG_SaveTxIfNeeded();
+u8 CONFIG_IsModelChanged(void);
+u8 CONFIG_SaveModelIfNeeded(void);
+void CONFIG_SaveTxIfNeeded(void);
 extern const char * const MODULE_NAME[TX_MODULE_LAST];
 
 /* LCD primitive functions */
@@ -66,7 +66,7 @@ void LCD_SetXY(unsigned int x, unsigned int y);
 void LCD_GetStringDimensions(const u8 *str, u16 *width, u16 *height);
 void LCD_GetCharDimensions(u32 c, u16 *width, u16 *height);
 u8 LCD_SetFont(unsigned int idx);
-u8  LCD_GetFont();
+u8  LCD_GetFont(void);
 void LCD_SetFontColor(u16 color);
     /* Graphics */
 void LCD_DrawCircle(u16 x0, u16 y0, u16 r, u16 color);
@@ -91,25 +91,25 @@ void LCD_DrawUSBLogo(int lcd_width, int lcd_height);
 /* Music */
 
 /* Mixer functions */
-void MIXER_CalcChannels();
+void MIXER_CalcChannels(void);
 
 /* GUI Pages */
-void PAGE_Init();
+void PAGE_Init(void);
 void PAGE_Change(int dir);
-void PAGE_Event();
-int PAGE_DialogVisible();
-void PAGE_ShowSafetyDialog();
-void PAGE_CloseBindingDialog();
+void PAGE_Event(void);
+int PAGE_DialogVisible(void);
+void PAGE_ShowSafetyDialog(void);
+void PAGE_CloseBindingDialog(void);
 void PAGE_ShowBindingDialog(u8 update);
-void PAGE_ShowLowBattDialog();
+void PAGE_ShowLowBattDialog(void);
 void PAGE_DisableSafetyDialog(u8 disable);
 void PAGE_ShowResetPermTimerDialog(void *guiObject, void *data);
-void PAGE_ShowInvalidModule();
+void PAGE_ShowInvalidModule(void);
 void PAGE_ShowModuleDialog(const char **missing);
 void PAGE_ShowWarning(const char *title, const char *str);
 const char *PAGE_GetName(int idx);
-int PAGE_GetNumPages();
-int PAGE_GetStartPage();
+int PAGE_GetNumPages(void);
+int PAGE_GetStartPage(void);
 
 /* Protocol */
 #define PROTODEF(proto, module, map, init, name) proto,
@@ -143,27 +143,27 @@ enum TxPower {
 
 void PROTOCOL_Init(u8 force);
 void PROTOCOL_Load(int no_dlg);
-void PROTOCOL_DeInit();
-u8 PROTOCOL_WaitingForSafe();
-u64 PROTOCOL_CheckSafe();
-u32 PROTOCOL_Binding();
-u8 PROTOCOL_AutoBindEnabled();
-void PROTOCOL_Bind();
+void PROTOCOL_DeInit(void);
+u8 PROTOCOL_WaitingForSafe(void);
+u64 PROTOCOL_CheckSafe(void);
+u32 PROTOCOL_Binding(void);
+u8 PROTOCOL_AutoBindEnabled(void);
+void PROTOCOL_Bind(void);
 void PROTOCOL_SetBindState(u32 msec);
-int PROTOCOL_NumChannels();
-u8 PROTOCOL_GetTelemCapability();
-int PROTOCOL_DefaultNumChannels();
-void PROTOCOL_CheckDialogs();
-u32 PROTOCOL_CurrentID();
-const char **PROTOCOL_GetOptions();
-void PROTOCOL_SetOptions();
-int PROTOCOL_GetTelemetryState();
+int PROTOCOL_NumChannels(void);
+u8 PROTOCOL_GetTelemCapability(void);
+int PROTOCOL_DefaultNumChannels(void);
+void PROTOCOL_CheckDialogs(void);
+u32 PROTOCOL_CurrentID(void);
+const char **PROTOCOL_GetOptions(void);
+void PROTOCOL_SetOptions(void);
+int PROTOCOL_GetTelemetryState(void);
 int PROTOCOL_MapChannel(int input, int default_ch);
 int PROTOCOL_HasModule(int idx);
 int PROTOCOL_HasPowerAmp(int idx);
 int PROTOCOL_SetSwitch(int module);
 int PROTOCOL_SticksMoved(int init);
-void PROTOCOL_InitModules();
+void PROTOCOL_InitModules(void);
 
 
 /* Input */
@@ -190,14 +190,14 @@ size_t strlcpy(char* dst, const char* src, size_t bufsize);
 void tempstring_cpy(const char* src);
 int fexists(const char *file);
 u32 rand32_r(u32 *seed, u8 update); //LFSR based PRNG
-u32 rand32(); //LFSR based PRNG
+u32 rand32(void); //LFSR based PRNG
 extern volatile u8 priority_ready;
-void medium_priority_cb();
+void medium_priority_cb(void);
 void debug_timing(u32 type, int startend); //This is only defined if TIMING_DEBUG is defined
 /* Battery */
 #define BATTERY_CRITICAL 0x01
 #define BATTERY_LOW      0x02
-u8 BATTERY_Check();
+u8 BATTERY_Check(void);
 
 /* Mixer mode */
 typedef enum {
@@ -206,15 +206,15 @@ typedef enum {
     MIXER_ALL,
 } MixerMode;
 void PAGE_ShowInvalidStandardMixerDialog(void *guiObj);
-void STDMIXER_Preset();
-void STDMIXER_SetChannelOrderByProtocol();
-unsigned STDMIXER_ValidateTraditionModel();
+void STDMIXER_Preset(void);
+void STDMIXER_SetChannelOrderByProtocol(void);
+unsigned STDMIXER_ValidateTraditionModel(void);
 const char *STDMIXER_ModeName(int mode);
-void STDMIXER_InitSwitches();
-void STDMIXER_SaveSwitches();
+void STDMIXER_InitSwitches(void);
+void STDMIXER_SaveSwitches(void);
 const char *GetElemName(int type);
 const char *GetBoxSource(char *str, int src);
 const char *GetBoxSourceReal(char *str, int src);
 void RemapChannelsForProtocol(const u8 *oldmap);
-#define PPMin_Mode() (Model.num_ppmin >> 6)
+#define PPMin_Mode(void) (Model.num_ppmin >> 6)
 #endif
