@@ -12,7 +12,7 @@
  You should have received a copy of the GNU General Public License
  along with Deviation.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <stdint.h>
+#include "gui.h"
 
 #define TEXTBOX_X_OFFSET 5
 #define TEXTBOX_Y_OFFSET (2 + (LCD_HEIGHT - 240) / 2)

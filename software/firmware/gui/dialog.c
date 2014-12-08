@@ -16,7 +16,7 @@
 #include "common.h"
 #define ENABLE_GUIOBJECT
 #include "gui.h"
-#include "config/display.h"
+#include "display.h"
 
 #include "_dialog.c"
 

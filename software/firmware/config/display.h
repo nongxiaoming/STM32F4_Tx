@@ -101,5 +101,5 @@ struct display_settings {
 extern struct display_settings Display;
 
 
-uint8_t CONFIG_ReadDisplay();
+uint8_t CONFIG_ReadDisplay(void);
 #endif

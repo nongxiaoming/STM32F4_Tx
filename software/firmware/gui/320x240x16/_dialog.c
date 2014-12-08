@@ -12,6 +12,8 @@
  You should have received a copy of the GNU General Public License
  along with Deviation.  If not, see <http://www.gnu.org/licenses/>.
  */
+ #include "gui.h"
+ 
 #define DIALOG_HEADER_Y 24
 void _draw_dialog_box(struct guiBox *box, int x, const char *title)
 {

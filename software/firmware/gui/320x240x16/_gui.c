@@ -12,6 +12,7 @@
  You should have received a copy of the GNU General Public License
  along with Deviation.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <gui.h>
 
 const struct ImageMap image_map[] = {
     {"media/btn96_24.bmp", 96, 24, 0, 0}, /*FILE_BTN96_24 */
@@ -26,11 +27,11 @@ const struct ImageMap image_map[] = {
     {"media/spin32.bmp",   32, 16, 0, 0}, /*FILE_SPIN32 */
     {"media/spinp96.bmp",   96, 16, 0, 0}, /*FILE_SPINPRESS96 */
     {"media/spinp64.bmp",   64, 16, 0, 0}, /*FILE_SPINPRESS64 */
-    {"media/spinp32.bmp",   32, 16, 0, 0}, /*FILE_SPINPRESS32 */
-    {"media/arrows16.bmp", 16, 16, 0, 0}, /*FILE_ARROW_16_UP */
-    {"media/arrows16.bmp", 16, 16, 16, 0}, /*FILE_ARROW_16_DOWN */
-    {"media/arrows16.bmp", 16, 16, 32, 0}, /*FILE_ARROW_16_RIGHT */
-    {"media/arrows16.bmp", 16, 16, 48, 0}, /*FILE_ARROW_16_LEFT */
+    {"media/spinp32.bmp",   32, 16, 0, 0}, /*FILE_SPINPRESint32_t */
+    {"media/arrowint16_t.bmp", 16, 16, 0, 0}, /*FILE_ARROW_16_UP */
+    {"media/arrowint16_t.bmp", 16, 16, 16, 0}, /*FILE_ARROW_16_DOWN */
+    {"media/arrowint16_t.bmp", 16, 16, 32, 0}, /*FILE_ARROW_16_RIGHT */
+    {"media/arrowint16_t.bmp", 16, 16, 48, 0}, /*FILE_ARROW_16_LEFT */
 };
 
 void _gui_hilite_selected(struct guiObject *obj)
@@ -66,7 +67,7 @@ void GUI_HandleModalButtons(uint8_t enable)
 // Below view-related functions are dummy funcitons as the views are only available for devo10
 void GUI_ViewInit() {}
 
-s8 GUI_GetViewId(s16 x, s16 y)
+int8_t GUI_GetViewId(int16_t x, int16_t y)
 {
     (void)x;
     (void)y;

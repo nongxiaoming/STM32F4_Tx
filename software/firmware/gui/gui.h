@@ -10,6 +10,7 @@
 #define GUI_H_
 
 #include <stdint.h>
+#include "target.h"
 #include "_gui.h"
 
 #define RGB888_to_RGB565(r, g, b) (((r & 0xf8) << 8) | ((g & 0xfc) << 3) | ((b & 0xf8) >>3))
@@ -129,7 +130,7 @@ typedef struct guiImage {
     uint16_t x_off;
     uint16_t y_off;
     uint32_t crc;
-    void (*callback)(struct guiObject *obj, s8 press_type, const void *data);
+    void (*callback)(struct guiObject *obj, int8_t press_type, const void *data);
     const void *cb_data;
 } guiImage_t;
 
@@ -137,7 +138,7 @@ typedef struct guiLabel {
     struct guiHeader header;
     struct LabelDesc desc;
     const char *(*strCallback)(struct guiObject *obj, const void *data);
-    void (*pressCallback)(struct guiObject *obj, s8 press_type, const void *data);
+    void (*pressCallback)(struct guiObject *obj, int8_t press_type, const void *data);
     const void *cb_data;
 } guiLabel_t;
 
@@ -147,7 +148,7 @@ typedef struct guiKeyboard {
     uint8_t last_col;
     uint8_t lastchar;
     char *text;
-    s32 max_size;
+    int32_t max_size;
     uint8_t flags;
     enum KeyboardType type;
     buttonAction_t action;
@@ -162,7 +163,7 @@ typedef struct guiScrollbar {
     uint8_t cur_pos;
     buttonAction_t action;
     struct guiObject *parent;
-    int (*callback)(struct guiObject *obj, uint8_t pos, s8 dir, void *data);
+    int (*callback)(struct guiObject *obj, uint8_t pos, int8_t dir, void *data);
     void *cb_data;
 } guiScrollbar_t;
 
@@ -184,7 +185,7 @@ typedef struct guiListbox {
     uint8_t entries_per_page;
     uint8_t item_count;
     uint8_t cur_pos;
-    s16 selected;
+    int16_t selected;
     struct guiScrollbar scrollbar;
     const char * (*string_cb)(uint8_t idx, void * data);
     void (*select_cb)(struct guiObject *obj, uint16_t selected, void * data);
@@ -214,24 +215,24 @@ typedef struct guiScrollable {
  
 typedef struct guiXYGraph {
     struct guiHeader header;
-    s16 min_x;
-    s16 min_y;
-    s16 max_x;
-    s16 max_y;
+    int16_t min_x;
+    int16_t min_y;
+    int16_t max_x;
+    int16_t max_y;
     uint16_t grid_x;
     uint16_t grid_y;
-    s16 (*CallBack)(s16 xval, void * data);
-    uint8_t (*point_cb)(s16 *x, s16 *y, uint8_t pos, void *data);
-    uint8_t (*touch_cb)(s16 x, s16 y, void *data);
+    int16_t (*CallBack)(int16_t xval, void * data);
+    uint8_t (*point_cb)(int16_t *x, int16_t *y, uint8_t pos, void *data);
+    uint8_t (*touch_cb)(int16_t x, int16_t y, void *data);
     void *cb_data;
 } guiXYGraph_t;
 
 typedef struct guiBarGraph {
     struct guiHeader header;
-    s16 min;
-    s16 max;
+    int16_t min;
+    int16_t max;
     uint8_t direction;
-    s16 (*CallBack)(void * data);
+    int16_t (*CallBack)(void * data);
     void *cb_data;
 } guiBarGraph_t;
 
@@ -305,10 +306,10 @@ int GUI_ScrollableVisibleRows(guiScrollable_t *scrollable);
 
 
 void GUI_DrawKeyboard(struct guiObject *obj);
-uint8_t GUI_TouchKeyboard(struct guiObject *obj, struct touch *coords, s8 press_type);
+uint8_t GUI_TouchKeyboard(struct guiObject *obj, struct touch *coords, int8_t press_type);
 
 void GUI_DrawTextSelect(struct guiObject *obj);
-uint8_t GUI_TouchTextSelect(struct guiObject *obj, struct touch *coords, s8 press_type);
+uint8_t GUI_TouchTextSelect(struct guiObject *obj, struct touch *coords, int8_t press_type);
 void GUI_PressTextSelect(struct guiObject *obj, uint32_t button, uint8_t press_type);
 
 void GUI_DrawXYGraph(struct guiObject *obj);
@@ -319,19 +320,19 @@ uint8_t GUI_TouchListbox(struct guiObject *obj, struct touch *coords, uint8_t lo
 void GUI_PressListbox(struct guiObject *obj, uint32_t button, uint8_t press_type);
 
 void GUI_DrawLabel(struct guiObject *obj);
-uint8_t GUI_TouchLabel(struct guiObject *obj, struct touch *coords, s8 press_type);
+uint8_t GUI_TouchLabel(struct guiObject *obj, struct touch *coords, int8_t press_type);
 
 void GUI_DrawDialog(struct guiObject *obj);
 void GUI_DialogDrawBackground(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
 void DialogClose(struct guiObject *obj, uint8_t state);
 
 void GUI_DrawImage(struct guiObject *obj);
-uint8_t GUI_TouchImage(struct guiObject *obj, struct touch *coords, s8 press_type);
+uint8_t GUI_TouchImage(struct guiObject *obj, struct touch *coords, int8_t press_type);
 
 void GUI_DrawButton(struct guiObject *obj);
 void GUI_DrawBarGraph(struct guiObject *obj);
 void GUI_DrawScrollbar(struct guiObject *obj);
-uint8_t GUI_TouchScrollbar(struct guiObject *obj, struct touch *coords, s8 press_type);
+uint8_t GUI_TouchScrollbar(struct guiObject *obj, struct touch *coords, int8_t press_type);
 
 void GUI_DrawRect(struct guiObject *obj);
 
@@ -351,7 +352,7 @@ guiObject_t *GUI_CreateDialog(guiDialog_t *,uint16_t x, uint16_t y, uint16_t wid
 #define GUI_CreateLabel(obj, x, y, cb, desc, data) GUI_CreateLabelBox(obj, x, y, 0, 0, &desc, cb, NULL, data)
 guiObject_t *GUI_CreateLabelBox(guiLabel_t *,uint16_t x, uint16_t y, uint16_t width, uint16_t height, const struct LabelDesc *desc,
              const char *(*strCallback)(guiObject_t *, const void *),
-             void (*pressCallback)(guiObject_t *obj, s8 press_type, const void *data),
+             void (*pressCallback)(guiObject_t *obj, int8_t press_type, const void *data),
              const void *data);
 void GUI_DrawLabelHelper(uint16_t obj_x, uint16_t obj_y, uint16_t obj_width, uint16_t obj_height,
         const char *str, const struct LabelDesc *desc, uint8_t is_selected);
@@ -359,7 +360,7 @@ void GUI_SetLabelDesc(guiLabel_t *obj, struct LabelDesc *desc);
 
 #define GUI_CreateImage(obj, x, y, w,h, file) GUI_CreateImageOffset(obj, x, y, w, h, 0, 0, file, NULL, NULL)
 guiObject_t *GUI_CreateImageOffset(guiImage_t *, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t x_off, uint16_t y_off, const char *file,
-        void (*CallBack)(guiObject_t *obj, s8 press_type, const void *data), const void *cb_data);
+        void (*CallBack)(guiObject_t *obj, int8_t press_type, const void *data), const void *cb_data);
 
 guiObject_t *GUI_CreateButton(guiButton_t *, uint16_t x, uint16_t y, enum ButtonType type,
         const char *(*strCallback)(guiObject_t *, const void *),
@@ -372,12 +373,12 @@ guiObject_t *GUI_CreateIcon(guiButton_t *, uint16_t x, uint16_t y, const struct 
 void GUI_ButtonEnable(guiObject_t *obj, uint8_t enable);
 uint8_t GUI_IsButtonEnabled(guiObject_t *obj);
 
-guiObject_t *GUI_CreateListBox(guiListbox_t *, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t item_count, s16 selected,
+guiObject_t *GUI_CreateListBox(guiListbox_t *, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t item_count, int16_t selected,
         const char *(*string_cb)(uint8_t idx, void *data),
         void (*select_cb)(guiObject_t *obj, uint16_t selected, void *data),
         void (*longpress_cb)(guiObject_t *obj, uint16_t selected, void *data),
         void *cb_data);
-guiObject_t *GUI_CreateListBoxPlateText(guiListbox_t *, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t item_count, s16 selected,
+guiObject_t *GUI_CreateListBoxPlateText(guiListbox_t *, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t item_count, int16_t selected,
         const struct LabelDesc *desc, enum ListBoxNavigateKeyType keyType,
         const char *(*string_cb)(uint8_t idx, void *data),
         void (*select_cb)(guiObject_t *obj, uint16_t selected, void *data),
@@ -396,14 +397,14 @@ guiObject_t *GUI_ShowScrollableRowCol(guiScrollable_t *scrollable, int absrow, i
 guiObject_t *GUI_ShowScrollableRowOffset(guiScrollable_t *scrollable, int row_idx);
 
 guiObject_t *GUI_CreateXYGraph(guiXYGraph_t *, uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-                      s16 min_x, s16 min_y, s16 max_x, s16 max_y,
+                      int16_t min_x, int16_t min_y, int16_t max_x, int16_t max_y,
                       uint16_t gridx, uint16_t gridy,
-                      s16 (*Callback)(s16 xval, void *data), 
-                      uint8_t (*point_cb)(s16 *x, s16 *y, uint8_t pos, void *data),
-                      uint8_t (*touch_cb)(s16 x, s16 y, void *data),
+                      int16_t (*Callback)(int16_t xval, void *data), 
+                      uint8_t (*point_cb)(int16_t *x, int16_t *y, uint8_t pos, void *data),
+                      uint8_t (*touch_cb)(int16_t x, int16_t y, void *data),
                       void *cb_data);
-guiObject_t *GUI_CreateBarGraph(guiBarGraph_t *, uint16_t x, uint16_t y, uint16_t width, uint16_t height, s16 min,
-        s16 max, uint8_t direction, s16 (*Callback)(void * data), void * cb_data);
+guiObject_t *GUI_CreateBarGraph(guiBarGraph_t *, uint16_t x, uint16_t y, uint16_t width, uint16_t height, int16_t min,
+        int16_t max, uint8_t direction, int16_t (*Callback)(void * data), void * cb_data);
 guiObject_t *GUI_CreateTextSelect(guiTextSelect_t *, uint16_t x, uint16_t y, enum TextSelectType type,
         void (*select_cb)(guiObject_t *obj, void *data),
         const char *(*value_cb)(guiObject_t *obj, int value, void *data),
@@ -412,12 +413,12 @@ guiObject_t *GUI_CreateTextSelectPlate(guiTextSelect_t *, uint16_t x, uint16_t y
         void (*select_cb)(guiObject_t *obj, void *data),
         const char *(*value_cb)(guiObject_t *obj, int value, void *data),
         void *cb_data);
-guiObject_t *GUI_CreateKeyboard(guiKeyboard_t *, enum KeyboardType type, char *text, s32 max_size,
+guiObject_t *GUI_CreateKeyboard(guiKeyboard_t *, enum KeyboardType type, char *text, int32_t max_size,
         void (*CallBack)(guiObject_t *obj, void *data), void *cb_data);
 
 guiObject_t *GUI_CreateScrollbar(guiScrollbar_t *, uint16_t x, uint16_t y, uint16_t height,
         uint8_t num_items, guiObject_t *parent,
-        int (*press_cb)(guiObject_t *parent, uint8_t pos, s8 direction, void *data), void *data);
+        int (*press_cb)(guiObject_t *parent, uint8_t pos, int8_t direction, void *data), void *data);
 void GUI_SetScrollbar(guiScrollbar_t *obj, uint8_t pos);
 uint8_t GUI_GetScrollbarNumItems(guiScrollbar_t *obj);
 
@@ -447,7 +448,7 @@ struct guiObject *GUI_GetNextSelectable(struct guiObject *origObj);
 struct guiObject *GUI_GetPrevSelectable(struct guiObject *origObj);
 void GUI_GetSize(guiObject_t *obj, int *width, int *height);
 
-s32 GUI_TextSelectHelper(s32 value, s32 min, s32 max, s8 dir, uint32_t shortstep, uint32_t longstep, uint8_t *_changed);
+int32_t GUI_TextSelectHelper(int32_t value, int32_t min, int32_t max, int8_t dir, uint32_t shortstep, uint32_t longstep, uint8_t *_changed);
 void GUI_TextSelectEnablePress(guiTextSelect_t *obj, uint8_t enable);
 void GUI_TextSelectEnable(guiTextSelect_t *obj, uint8_t enable);
 uint8_t GUI_IsTextSelectEnabled(struct guiObject *obj);
@@ -466,8 +467,8 @@ struct viewObject {
     enum GUIType Type;
     uint8_t flags;
     /*end*/
-    s16 orgin_relativeX;  // can be negative to indicate the whole view is hidden
-    s16 orgin_relativeY; // can be negative to indicate the whole view is hidden
+    int16_t orgin_relativeX;  // can be negative to indicate the whole view is hidden
+    int16_t orgin_relativeY; // can be negative to indicate the whole view is hidden
     uint16_t boundary;
 };
 typedef struct viewObject viewObject_t;
@@ -480,12 +481,12 @@ uint8_t GUI_IsCoordinateInsideLogicalView(uint16_t *x, uint16_t *y);
 void GUI_SetupLogicalView(uint8_t view_id, uint16_t view_orgin_relativeX, uint16_t view_orgin_relativeY, uint8_t width, uint8_t height,
         uint8_t view_origin_absoluteX, uint8_t view_origin_absoluteY);
 uint16_t GUI_MapToLogicalView(uint8_t view_id, uint16_t x_or_y);
-void GUI_SetRelativeOrigin(uint8_t view_id, s16 new_originX, s16 new_originY);
-void GUI_ScrollLogicalView(uint8_t view_id, s16 y_offset);
-void GUI_ScrollLogicalViewToObject(uint8_t view_id, struct guiObject *obj, s8 direction);
-s16 GUI_GetLogicalViewOriginRelativeY(uint8_t view_id);
+void GUI_SetRelativeOrigin(uint8_t view_id, int16_t new_originX, int16_t new_originY);
+void GUI_ScrollLogicalView(uint8_t view_id, int16_t y_offset);
+void GUI_ScrollLogicalViewToObject(uint8_t view_id, struct guiObject *obj, int8_t direction);
+int16_t GUI_GetLogicalViewOriginRelativeY(uint8_t view_id);
 void GUI_Select1stSelectableObj(void);
-s8 GUI_GetViewId(s16 x, s16 y);
+int8_t GUI_GetViewId(int16_t x, int16_t y);
 void GUI_ViewInit(void);
 int GUI_IsEmpty(void);
 void GUI_SelectionNotify(void (*notify_cb)(guiObject_t *obj));

@@ -12,6 +12,7 @@
  You should have received a copy of the GNU General Public License
  along with Deviation.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui.h"
 
 #define TRANSPARENT_BARGRAPH
 #define TRIM_THICKNESS          7
@@ -19,21 +20,21 @@
 #define TRIM_MARGIN             1
 
 
-uint32_t _bargraph_get_color(s32 val, struct guiBarGraph *graph, struct disp_bargraph *disp)
+uint32_t _bargraph_get_color(int32_t val, struct guiBarGraph *graph, struct disp_bargraph *disp)
 {
-    s32 center = (graph->max + graph->min) / 2;
+    int32_t center = (graph->max + graph->min) / 2;
     return val > center
            ? disp->fg_color_pos
            : val < center
              ? disp->fg_color_neg
              : disp->fg_color_zero;
 }
-void _bargraph_trim_horizontal(int x, int y, int width, int height, s32 val, uint32_t color,
+void _bargraph_trim_horizontal(int x, int y, int width, int height, int32_t val, uint32_t color,
         struct guiBarGraph *graph, struct disp_bargraph *disp, struct guiBox *box)
 {
     (void)box;
     val = (TRIM_THICKNESS / 2) + (width - TRIM_THICKNESS) * (val - graph->min) / (graph->max - graph->min);
-    s16 xpos = graph->direction == TRIM_HORIZONTAL ? x + val : x + width - val;
+    int16_t xpos = graph->direction == TRIM_HORIZONTAL ? x + val : x + width - val;
     if (Display.flags & TRIM_TRANSPARENT) {
         GUI_DrawBackground(x, y, width, height);
     } else {
@@ -58,7 +59,7 @@ void _bargraph_trim_horizontal(int x, int y, int width, int height, s32 val, uin
                      TRIM_INNER_THICKNESS, height - TRIM_MARGIN * 4, disp->outline_color);
     }
 }
-void _bargraph_trim_vertical(int x, int y, int width, int height, s32 val, uint32_t color,
+void _bargraph_trim_vertical(int x, int y, int width, int height, int32_t val, uint32_t color,
         struct guiBarGraph *graph, struct disp_bargraph *disp, struct guiBox *box)
 {
     (void)box;

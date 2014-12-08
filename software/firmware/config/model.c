@@ -282,7 +282,7 @@ static const char * parse_partial_int_list(const char *ptr, void *vals, int *max
                 else if (value_int < -127)
                     value_int = -127;
                 ((s8 *)vals)[idx] = value_int;
-            } else if (type == uint8_t) {
+            } else if (type == U8) {
                 if (value_int > 255)
                     value_int = 255;
                 else if (value_int < 0)
@@ -527,12 +527,10 @@ static const struct struct_map _secppm[] = {
     {PPMIN_DELTAPW,  OFFSET(Model, ppmin_deltapw), 0},
     {PPMIN_SWITCH,   OFFSET_SRC(Model, train_sw), 0xFFFF},
 };
-static int ini_handler(void* user, const char* section, const char* name, const char* value)
-{
-    int value_int = atoi(value);
-    struct Model *m = (struct Model *)user;
-int assign_int(void* ptr, const struct struct_map *map, int map_size)
-{
+
+int assign_int(const char* section,const char* name, const char* value,void* ptr, const struct struct_map *map, int map_size)
+{  
+	int value_int = atoi(value);
     for(int i = 0; i < map_size; i++) {
         if(MATCH_KEY(map[i].str)) {
             int size = map[i].offset >> 13;
@@ -560,6 +558,12 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
     }
     return 0;
 }
+
+static int ini_handler(void* user, const char* section, const char* name, const char* value)
+{
+    int value_int = atoi(value);
+    struct Model *m = (struct Model *)user;
+
     CLOCK_ResetWatchdog();
     unsigned i;
     if (MATCH_SECTION("")) {
@@ -575,7 +579,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             CONFIG_ParseIconName(m->icon, value);
             return 1;
         }
-        if(assign_int(&Model, _secnone, MAPSIZE(_secnone)))
+        if(assign_int(section,name,value,&Model, _secnone, MAPSIZE(_secnone)))
             return 1;
         if (MATCH_KEY(MODEL_TYPE)) {
             for (i = 0; i < NUM_STR_ELEMS(MODEL_TYPE_VAL); i++) {
@@ -611,7 +615,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             printf("Unknown protocol: %s\n", value);
             return 1;
         }
-        if(assign_int(&Model, _secradio, MAPSIZE(_secradio)))
+        if(assign_int(section,name,value,&Model, _secradio, MAPSIZE(_secradio)))
             return 1;
         if (MATCH_KEY(RADIO_TX_POWER)) {
             for (i = 0; i < NUM_STR_ELEMS(RADIO_TX_POWER_VAL); i++) {
@@ -651,7 +655,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             m->mixers[idx].dest = get_source(section, value) - NUM_INPUTS - 1;
             return 1;
         }
-        if(assign_int(&m->mixers[idx], _secmixer, MAPSIZE(_secmixer)))
+        if(assign_int(section,name,value,&m->mixers[idx], _secmixer, MAPSIZE(_secmixer)))
             return 1;
         if (MATCH_KEY(MIXER_USETRIM)) {
             MIXER_SET_APPLY_TRIM(&m->mixers[idx], value_int);
@@ -720,7 +724,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             return 1;
         }
        
-        if(assign_int(&m->limits[idx], _seclimit, MAPSIZE(_seclimit)))
+        if(assign_int(section,name,value,&m->limits[idx], _seclimit, MAPSIZE(_seclimit)))
             return 1;
         if (MATCH_KEY(CHAN_LIMIT_MIN)) {
             m->limits[idx].min = -value_int;
@@ -778,7 +782,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             return 1;
         }
         idx--;
-        if(assign_int(&m->trims[idx], _sectrim, MAPSIZE(_sectrim)))
+        if(assign_int(section,name,value,&m->trims[idx], _sectrim, MAPSIZE(_sectrim)))
             return 1;
         if (MATCH_KEY(TRIM_SWITCH)) {
             for (int i = 0; i <= NUM_SOURCES; i++) {
@@ -823,7 +827,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
                 m->swash_invert |= 0x04;
             return 1;
         }
-        if(assign_int(m, _secswash, MAPSIZE(_secswash)))
+        if(assign_int(section,name,value,m, _secswash, MAPSIZE(_secswash)))
             return 1;
     }
     if (MATCH_START(section, SECTION_TIMER)) {
@@ -847,7 +851,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             printf("%s: Unknown timer type: %s\n", section, value);
             return 1;
         }
-        if(assign_int(&m->timer[idx], _sectimer, MAPSIZE(_sectimer)))
+        if(assign_int(section,name,value,&m->timer[idx], _sectimer, MAPSIZE(_sectimer)))
             return 1;
     }
     if (MATCH_START(section, SECTION_TELEMALARM)) {
@@ -944,7 +948,7 @@ int assign_int(void* ptr, const struct struct_map *map, int map_size)
             }
             return 1;
         }
-        if(assign_int(m, _secppm, MAPSIZE(_secppm)))
+        if(assign_int(section,name,value,m, _secppm, MAPSIZE(_secppm)))
             return 1;
         if (MATCH_START(name, PPMIN_MAP)) {
             uint8_t idx = atoi(name + sizeof(PPMIN_MAP)-1) -1;

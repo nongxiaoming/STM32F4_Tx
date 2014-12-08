@@ -144,15 +144,9 @@ static const struct struct_map _secbargraph[] =
     {FG_COLOR_ZERO,          OFFSET_COL(Display.bargraph, fg_color_zero)},
     {OUTLINE_COLOR,          OFFSET_COL(Display.bargraph, outline_color)},
 };
-
-static int ini_handler(void* user, const char* section, const char* name, const char* value)
-{
-    uint8_t idx;
-    struct display_settings *d = (struct display_settings *)user;
-    int value_int = atoi(value);
-
-    int assign_int(void* ptr, const struct struct_map *map, int map_size)
-    {
+inline  int assign_int( const char* name,const char* value,void* ptr, const struct struct_map *map, int map_size)
+ {
+       int value_int = atoi(value);
         for(int i = 0; i < map_size; i++) {
             if(MATCH_KEY(map[i].str)) {
                 int size = map[i].offset >> 13;
@@ -174,6 +168,13 @@ static int ini_handler(void* user, const char* section, const char* name, const 
         }
         return 0;
     }
+static int ini_handler(void* user, const char* section, const char* name, const char* value)
+{
+    uint8_t idx;
+    struct display_settings *d = (struct display_settings *)user;
+    int value_int = atoi(value);
+
+
 
     if(MATCH_START(section, FONT) && strlen(section) > sizeof(FONT)) {
         for (idx = 0; idx < NUM_STR_ELEMS(FONT_VAL); idx++) {
@@ -196,27 +197,27 @@ static int ini_handler(void* user, const char* section, const char* name, const 
 #endif
             return 1;
         }
-        if(assign_int(&d->metrics, _secgeneral, MAPSIZE(_secgeneral)))
+        if(assign_int(name,value,&d->metrics, _secgeneral, MAPSIZE(_secgeneral)))
             return 1;
     }
     if(MATCH_START(section, "select")) {
-        if(assign_int(d, _secselect, MAPSIZE(_secselect)))
+        if(assign_int(name,value,d, _secselect, MAPSIZE(_secselect)))
             return 1;
     }
     if(MATCH_START(section, "keyboard")) {
-        if(assign_int(&d->keyboard, _seckeybd, MAPSIZE(_seckeybd)))
+        if(assign_int(name,value,&d->keyboard, _seckeybd, MAPSIZE(_seckeybd)))
             return 1;
     }
     if(MATCH_START(section, "listbox")) {
-        if(assign_int(&d->listbox, _seclistbox, MAPSIZE(_seclistbox)))
+        if(assign_int(name,value,&d->listbox, _seclistbox, MAPSIZE(_seclistbox)))
             return 1;
     }
     if(MATCH_START(section, "scrollbar")) {
-        if(assign_int(&d->scrollbar, _secscroll, MAPSIZE(_secscroll)))
+        if(assign_int(name,value,&d->scrollbar, _secscroll, MAPSIZE(_secscroll)))
             return 1;
     }
     if(MATCH_SECTION("xygraph")) {
-        if(assign_int(&d->xygraph, _secxygraph, MAPSIZE(_secxygraph)))
+        if(assign_int(name,value,&d->xygraph, _secxygraph, MAPSIZE(_secxygraph)))
             return 1;
     }
     for (idx = 0; idx < NUM_STR_ELEMS(BARGRAPH_VAL); idx++) {
@@ -238,7 +239,7 @@ static int ini_handler(void* user, const char* section, const char* name, const 
                 graph->fg_color_pos = graph->fg_color_neg = graph->fg_color_zero = get_color(value);
                 return 1;
             }
-            assign_int(graph, _secbargraph, MAPSIZE(_secbargraph));
+            assign_int(name,value,graph, _secbargraph, MAPSIZE(_secbargraph));
             return 1;
         }
     }
