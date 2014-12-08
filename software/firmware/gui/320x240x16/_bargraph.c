@@ -12,7 +12,7 @@
  You should have received a copy of the GNU General Public License
  along with Deviation.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui.h"
+#include "display.h"
 
 #define TRANSPARENT_BARGRAPH
 #define TRIM_THICKNESS          7
