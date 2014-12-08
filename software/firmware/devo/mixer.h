@@ -1,5 +1,6 @@
 #ifndef _MIXER_H_
 #define _MIXER_H_
+#include <stdint.h>
 
 #define DEFAULT_SERVO_LIMIT 150
 #define SWASH_INV_ELEVATOR_MASK   1
@@ -77,7 +78,7 @@ enum CurveType {
 
 struct Curve {
     enum CurveType type;
-    s8 points[MAX_POINTS];
+    int8_t points[MAX_POINTS];
     //uint8_t index;
     //s8 p1;
     //s8 p2;
@@ -125,8 +126,8 @@ struct Mixer {
     uint8_t src;
     uint8_t dest;
     uint8_t sw;
-    s8 scalar;
-    s8 offset;
+    int8_t scalar;
+    int8_t offset;
     uint8_t flags;
     //apply_trim;
     //enum MuxType mux;
@@ -150,14 +151,14 @@ enum LimitMask {
 struct Limit {
     uint8_t flags;
     uint8_t safetysw;
-    s16 safetyval;  // allow safetyval to be over +/-125
+    int16_t safetyval;  // allow safetyval to be over +/-125
     uint8_t max;
     uint8_t min;
     uint8_t servoscale;
     uint8_t servoscale_neg;
-    s8 failsafe;
+    int8_t failsafe;
     uint8_t speed;     //measured in degrees/100msec
-    s16 subtrim;  // need to support value greater than 250
+    int16_t subtrim;  // need to support value greater than 250
 };
 
 struct Trim {
@@ -166,17 +167,17 @@ struct Trim {
     uint8_t neg;
     uint8_t step;
     uint8_t sw;
-    s8 value[3];
+    int8_t value[3];
 };
 
 /* Curve functions */
-s16 CURVE_Evaluate(s16 value, struct Curve *curve);
+int16_t CURVE_Evaluate(int16_t value, struct Curve *curve);
 const char *CURVE_GetName(char *str, struct Curve *curve);
 unsigned CURVE_NumPoints(struct Curve *curve);
 
 /* Mixer functions */
-volatile s16 *MIXER_GetInputs(void);
-s16 MIXER_GetChannel(unsigned channel, enum LimitMask flags);
+volatile int16_t *MIXER_GetInputs(void);
+int16_t MIXER_GetChannel(unsigned channel, enum LimitMask flags);
 
 int MIXER_GetMixers(int ch, struct Mixer *mixers, int count);
 int MIXER_SetMixers(struct Mixer *mixers, int count);
@@ -189,9 +190,9 @@ enum TemplateType MIXER_GetTemplate(int ch);
 
 void MIXER_InitMixer(struct Mixer *mixer, unsigned ch);
 
-void MIXER_ApplyMixer(struct Mixer *mixer, volatile s16 *raw, s16 *orig_value);
-void MIXER_EvalMixers(volatile s16 *raw);
-int MIXER_GetCachedInputs(s16 *raw, unsigned threshold);
+void MIXER_ApplyMixer(struct Mixer *mixer, volatile int16_t *raw, int16_t *orig_value);
+void MIXER_EvalMixers(volatile int16_t *raw);
+int MIXER_GetCachedInputs(int16_t *raw, unsigned threshold);
 
 struct Mixer *MIXER_GetAllMixers(void);
 
@@ -199,16 +200,16 @@ struct Trim *MIXER_GetAllTrims(void);
 
 void MIXER_RegisterTrimButtons(void);
 
-s16 MIXER_ApplyLimits(unsigned channel, struct Limit *limit, volatile s16 *_raw,
-                      volatile s16 *_Channels, enum LimitMask flags);
+int16_t MIXER_ApplyLimits(unsigned channel, struct Limit *limit, volatile int16_t *_raw,
+                      volatile int16_t *_Channels, enum LimitMask flags);
 void MIXER_SetDefaultLimit(struct Limit *limit);
 const char *MIXER_TemplateName(enum TemplateType t);
 const char *MIXER_SwashType(enum SwashType);
 unsigned MIXER_SourceHasTrim(unsigned src);
 unsigned MIXER_MapChannel(unsigned channel);
 unsigned MIXER_UpdateTrim(uint32_t buttons, unsigned flags, void *data);
-s8 *MIXER_GetTrim(unsigned i);
-s32 MIXER_GetTrimValue(int i);
+int8_t *MIXER_GetTrim(unsigned i);
+int32_t MIXER_GetTrimValue(int i);
 
 void MIXER_Init(void);
 

@@ -39,7 +39,7 @@
 #endif
 //if sizeof(packet) changes, must change wMaxPacketSize to match in Joystick_ConfigDescriptor
 static s8 packet[USBHID_ANALOG_CHANNELS + 1];
-uint8_t num_channels;
+static uint8_t num_channels;
 volatile uint8_t PrevXferComplete;
 extern void HID_Write(s8 *packet, uint8_t num_channels);
 

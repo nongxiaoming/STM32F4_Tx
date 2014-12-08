@@ -50,7 +50,6 @@ extern volatile uint8_t ppmin_num_channels;
 
 volatile s16 Channels[NUM_OUT_CHANNELS];
 
-struct Transmitter Transmitter;
 
 static volatile s16 raw[NUM_SOURCES + 1];
 static buttonAction_t button_action;

@@ -144,7 +144,7 @@ static const struct struct_map _secbargraph[] =
     {FG_COLOR_ZERO,          OFFSET_COL(Display.bargraph, fg_color_zero)},
     {OUTLINE_COLOR,          OFFSET_COL(Display.bargraph, outline_color)},
 };
-inline  int assign_int( const char* name,const char* value,void* ptr, const struct struct_map *map, int map_size)
+static  int assign_int( const char* name,const char* value,void* ptr, const struct struct_map *map, int map_size)
  {
        int value_int = atoi(value);
         for(int i = 0; i < map_size; i++) {

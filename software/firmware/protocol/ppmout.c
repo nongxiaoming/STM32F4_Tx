@@ -31,7 +31,7 @@
 #endif
 #define PPMOUT_MAX_CHANNELS NUM_OUT_CHANNELS
 static volatile uint16_t pulses[PPMOUT_MAX_CHANNELS+1];
-uint8_t num_channels;
+static uint8_t num_channels;
 
 /* FIXME:  The original imlementation used a PWM to output the PPM signal.
            However, I could not get TIM1 woring properly.

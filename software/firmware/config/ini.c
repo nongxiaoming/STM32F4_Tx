@@ -8,7 +8,6 @@ http://code.google.com/p/inih/
 */
 
 #include <stdio.h>
-//#include <ctype.h> //Ctype pulls in unneccessary dependencies, so don't use it for isspace
 #include <string.h>
 
 #include "ini.h"

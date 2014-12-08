@@ -41,8 +41,8 @@ const char *MODEL_NAME = "name";
 const char *MODEL_ICON = "icon";
 const char *MODEL_TYPE = "type";
 const char *MODEL_TEMPLATE = "template";
-const char *MODEL_AUTOMAP = "automap";
-const char *MODEL_MIXERMODE = "mixermode";
+static const char *MODEL_AUTOMAP = "automap";
+static const char *MODEL_MIXERMODE = "mixermode";
 
 /* Section: Radio */
 static const char SECTION_RADIO[]   = "radio";
@@ -528,7 +528,7 @@ static const struct struct_map _secppm[] = {
     {PPMIN_SWITCH,   OFFSET_SRC(Model, train_sw), 0xFFFF},
 };
 
-int assign_int(const char* section,const char* name, const char* value,void* ptr, const struct struct_map *map, int map_size)
+static  int assign_int(const char* section,const char* name, const char* value,void* ptr, const struct struct_map *map, int map_size)
 {  
 	int value_int = atoi(value);
     for(int i = 0; i < map_size; i++) {

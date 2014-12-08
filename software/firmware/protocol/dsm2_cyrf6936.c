@@ -165,7 +165,7 @@ static const uint8_t cyrfmfg_id[6] = {0xd4, 0x62, 0xd6, 0xad, 0xd3, 0xff}; //dx6
 #else
 static uint8_t cyrfmfg_id[6];
 #endif
-uint8_t num_channels;
+static uint8_t num_channels;
 uint16_t crc;
 uint8_t model;
 

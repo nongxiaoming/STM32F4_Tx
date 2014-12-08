@@ -30,6 +30,7 @@ static buttonAction_t button_modalaction;
 uint8_t FullRedraw;
 
 static unsigned handle_buttons(uint32_t button, unsigned flags, void*data);
+
 #include "_gui.c"
 
 void connect_object(struct guiObject *obj)
@@ -495,7 +496,7 @@ void GUI_HandleButtons(uint8_t enable)
                 NULL);
 }
 
-unsigned handle_buttons(uint32_t button, unsigned flags, void *data)
+static unsigned handle_buttons(uint32_t button, unsigned flags, void *data)
 {
     (void)data;
     //When modal, we capture all button presses

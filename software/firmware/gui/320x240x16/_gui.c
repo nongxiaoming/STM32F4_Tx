@@ -13,6 +13,7 @@
  along with Deviation.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <gui.h>
+#include "display.h"
 
 const struct ImageMap image_map[] = {
     {"media/btn96_24.bmp", 96, 24, 0, 0}, /*FILE_BTN96_24 */

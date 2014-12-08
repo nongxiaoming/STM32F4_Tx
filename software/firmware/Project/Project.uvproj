@@ -950,36 +950,6 @@
               <FileType>1</FileType>
               <FilePath>..\gui\xygraph.c</FilePath>
             </File>
-            <File>
-              <FileName>_bargraph.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\gui\320x240x16\_bargraph.c</FilePath>
-            </File>
-            <File>
-              <FileName>_button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\gui\320x240x16\_button.c</FilePath>
-            </File>
-            <File>
-              <FileName>_dialog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\gui\320x240x16\_dialog.c</FilePath>
-            </File>
-            <File>
-              <FileName>_gui.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\gui\320x240x16\_gui.c</FilePath>
-            </File>
-            <File>
-              <FileName>_keyboard.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\gui\320x240x16\_keyboard.c</FilePath>
-            </File>
-            <File>
-              <FileName>_listbox.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\gui\320x240x16\_listbox.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
