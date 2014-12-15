@@ -12,11 +12,9 @@
     You should have received a copy of the GNU General Public License
     along with Deviation.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <libopencm3/stm32/rcc.h>
-#include <libopencm3/stm32/gpio.h>
-#include <libopencm3/stm32/spi.h>
+#include "stm32f4xx.h"
 #include "common.h"
-#include "config/tx.h"
+#include "tx.h"
 #include "devo.h"
 
 #define START   (1 << 7)     // 1 = user command, 0 = reserved for factory purposes

@@ -12,9 +12,7 @@
     You should have received a copy of the GNU General Public License
     along with Deviation.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <libopencm3/stm32/rcc.h>
-#include <libopencm3/stm32/gpio.h>
-#include <libopencm3/stm32/spi.h>
+#include "stm32f4xx.h"
 #include "common.h"
 
 #define CS_HI() gpio_set(GPIOB, GPIO2)
