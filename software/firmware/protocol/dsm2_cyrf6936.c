@@ -156,7 +156,7 @@ uint8_t channels[23];
 uint8_t chidx;
 uint8_t sop_col;
 uint8_t data_col;
-uint16_t state;
+static uint16_t state;
 uint8_t crcidx;
 uint8_t binding;
 #ifdef USE_FIXED_MFGID

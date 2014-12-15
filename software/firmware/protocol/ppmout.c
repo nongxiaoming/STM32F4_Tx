@@ -59,7 +59,7 @@ enum {
 };
 ctassert(LAST_PROTO_OPT <= NUM_PROTO_OPTS, too_many_protocol_opts);
 
-volatile uint8_t state;
+static volatile uint8_t state;
 static void build_data_pkt()
 {
     int i;
