@@ -43,8 +43,8 @@
 #define READ_Z1 START | ADR_Z1  | MODE | SER | PD
 #define READ_Z2 START | ADR_Z2  | MODE | SER | PD
 // different for control command:
-   #define SET     START | CONTROL | PULLUP | BYPASS | TIMING | NORESET
-   #define RESET   SET | SWRESET
+#define CMD_SET     START | CONTROL | PULLUP | BYPASS | TIMING | NORESET
+#define CMD_RESET   CMD_SET | SWRESET
 
 /*
 PB0 : Chip Select
@@ -68,19 +68,23 @@ unsigned read_channel(unsigned address)
 
 void SPITouch_Init()
 {
+		GPIO_InitTypeDef GPIO_InitStructure;
+  	SPI_InitTypeDef  SPI_InitStructure;
     if(! HAS_TOUCH)
         return;
 #if 0
     /* Enable SPI1 */
-    rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_SPI1EN);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
     /* Enable GPIOA */
-    rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_IOPAEN);
-    /* Enable GPIOB */
-    rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_IOPBEN);
+  	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA ,ENABLE);
 #endif
     /* CS */
-    gpio_set_mode(_TOUCH_PORT, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, _TOUCH_PIN);
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_DOWN;
+  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+	  GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* PenIRQ is pull-up input*/
     gpio_set_mode(_TOUCH_PORT, GPIO_MODE_INPUT,
@@ -88,27 +92,33 @@ void SPITouch_Init()
     gpio_set(_TOUCH_PORT, _TOUCH_IRQ_PIN);
 
     CS_LO();
-    spi_xfer(SPI1, RESET);
+    spi_xfer(SPI1, CMD_RESET);
     CS_HI();
     //SPITouch_Calibrate(197312, 147271, -404, -20); /* Read from my Tx */
 #if 0
-    /* SCK, MOSI */
-    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO5 | GPIO7);
-    /* MISO */
-    gpio_set_mode(GPIOA, GPIO_MODE_INPUT,
-                  GPIO_CNF_INPUT_FLOAT, GPIO6);
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource5, GPIO_AF_SPI1);
+  	GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_SPI1);
+  	GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_SPI1);
+  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+  	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_DOWN;
+  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  	GPIO_Init(GPIOA, &GPIO_InitStructure);
+		
     /* Includes enable */
-    spi_init_master(SPI1, 
-                    SPI_CR1_BAUDRATE_FPCLK_DIV_4,
-                    SPI_CR1_CPOL_CLK_TO_1_WHEN_IDLE,
-                    SPI_CR1_CPHA_CLK_TRANSITION_2, 
-                    SPI_CR1_DFF_8BIT,
-                    SPI_CR1_MSBFIRST);
-    spi_enable_software_slave_management(SPI1);
-    spi_set_nss_high(SPI1);
-
-    spi_enable(SPI1);
+	  SPI_I2S_DeInit(SPI1);
+  	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;           //全双工
+  	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;                            //8位数据模式
+  	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;                                    //空闲模式下SCK为1
+  	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;                                  //数据采样从第2个时间边沿开始
+  	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;                                     //NSS软件管理
+  	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;           //波特率
+  	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;                             //大端模式
+  	SPI_InitStructure.SPI_CRCPolynomial = 7;                                       //CRC多项式
+  	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;                                  //主机模式
+  	SPI_Init(SPI1, &SPI_InitStructure);
+  	SPI_Cmd(SPI1, ENABLE);
 #endif
 }
 
