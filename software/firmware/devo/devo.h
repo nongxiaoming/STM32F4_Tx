@@ -9,14 +9,14 @@
 #endif
 
 void ADC_Init(void);
-void ADC_StartCapture();
+void ADC_StartCapture(void);
 
 enum {
     TIMER_SOUND = LAST_PRIORITY,
     NUM_MSEC_CALLBACKS,
 };
 void CLOCK_ClearMsecCallback(int MsecCallback);
-u32 SOUND_Callback();
+u32 SOUND_Callback(void);
 
 extern void PROTO_Stubs(int);
 // ADC defines
