@@ -24,6 +24,6 @@ extern void PROTO_Stubs(int);
 #define NUM_ADC_CHANNELS (INP_HAS_CALIBRATION + 2) //Inputs + Temprature + Voltage
 extern const uint8_t adc_chan_sel[NUM_ADC_CHANNELS];
 extern volatile uint16_t adc_array_raw[NUM_ADC_CHANNELS];
-void ADC_Filter();
+void ADC_Filter(void);
 
 #endif

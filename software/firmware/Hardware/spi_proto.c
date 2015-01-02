@@ -22,8 +22,8 @@
 #include "stm32f4xx.h"
 #include "common.h"
 #include "devo.h"
-#include "config/tx.h"
-#include "protocol/interface.h"
+#include "tx.h"
+#include "interface.h"
 #include <stdlib.h>
 
 #if HAS_MULTIMOD_SUPPORT
