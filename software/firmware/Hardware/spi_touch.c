@@ -54,8 +54,8 @@ PA6 : SPI1_MISO
 PA7 : SPI1_MOSI
 */
 
-#define CS_HI() gpio_set(_TOUCH_PORT, _TOUCH_PIN)
-#define CS_LO() gpio_clear(_TOUCH_PORT, _TOUCH_PIN)
+#define CS_HI() GPIO_SetBits(_TOUCH_PORT, _TOUCH_PIN)
+#define CS_LO() GPIO_ResetBits(_TOUCH_PORT, _TOUCH_PIN)
 #define pen_is_down() (! gpio_get(_TOUCH_PORT, _TOUCH_IRQ_PIN))
 
 unsigned read_channel(unsigned address)

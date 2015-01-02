@@ -37,8 +37,8 @@
 
 #ifndef _TOUCH_PORT
     #define _TOUCH_PORT                GPIOB
-    #define _TOUCH_PIN                 GPIO0
-    #define _TOUCH_IRQ_PIN             GPIO5
+    #define _TOUCH_PIN                 GPIO_Pin_0
+    #define _TOUCH_IRQ_PIN             GPIO_Pin_5
     #define _TOUCH_RCC_APB2ENR_IOPEN   RCC_APB2ENR_IOPBEN
     #define _TOUCH_COORDS_REVERSE      1
 #endif //_TOUCH_PORT

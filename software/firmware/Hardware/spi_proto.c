@@ -30,18 +30,24 @@
 int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low)
 {
     int i;
+	  GPIO_InitTypeDef GPIO_InitStructure;
+	  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB ,ENABLE);
     //Switch output on clock before switching off SPI
     //Otherwise the pin will float which could cause a false trigger
     //SCK is now on output
-    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
-    spi_disable(SPI2);
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+  	GPIO_Init(GPIOB, &GPIO_InitStructure);
+    SPI_Cmd(SPI2,DISABLE);
     for(i = 0; i < 100; i++)
         asm volatile ("nop");
-    gpio_set(GPIOB, GPIO13);
+    GPIO_SetBits(GPIOB, GPIO_Pin_13);
     for(i = 0; i < 100; i++)
         asm volatile ("nop");
-    gpio_clear(GPIOB, GPIO13);
+    GPIO_ResetBits(GPIOB, GPIO_Pin_13);
     //Switch back to SPI
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
                   GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO13);
