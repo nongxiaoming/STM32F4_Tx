@@ -1,5 +1,6 @@
 #ifndef _TELEMETRY_H_
 #define _TELEMETRY_H_
+#include <stdint.h>
 
 #define NUM_DEVO_TELEM 9
 #define NUM_DSM_TELEM  10
@@ -112,10 +113,10 @@ enum {
     TELEMUNIT_FAREN  = 0x80,
 };
 struct gps {
-    s32 latitude;
-    s32 longitude;
-    s32 altitude;
-    s32 velocity;
+    int32_t latitude;
+    int32_t longitude;
+    int32_t altitude;
+    int32_t velocity;
     uint32_t time;
     uint32_t heading;
     uint32_t satcount;
@@ -123,7 +124,7 @@ struct gps {
 
 struct telem_devo {
     uint16_t volt[3];
-    s16 temp[4];
+    int16_t temp[4];
     uint16_t rpm[2];
 };
 struct telem_dsm_flog {
@@ -133,7 +134,7 @@ struct telem_dsm_flog {
     uint8_t holds;
     uint16_t volt[2];
     uint16_t rpm;
-    s16 temp;
+    int16_t temp;
 };
 
 struct telem_dsm_pbox {
@@ -177,9 +178,9 @@ struct telem_dsm {
 
 struct telem_frsky {
     uint16_t volt[3];
-    s16 temp[2];
+    int16_t temp[2];
     uint16_t rpm;
-    s32 altitude;
+    int32_t altitude;
     //uint16_t current;
     //uint16_t fuel;
 };
@@ -203,13 +204,13 @@ enum {
 };
 
 extern struct Telemetry Telemetry; 
-s32 TELEMETRY_GetValue(int idx);
-s32 _TELEMETRY_GetValue(struct Telemetry *t, int idx);
+int32_t TELEMETRY_GetValue(int idx);
+int32_t _TELEMETRY_GetValue(struct Telemetry *t, int idx);
 const char * TELEMETRY_GetValueStr(char *str, unsigned telem);
-const char * TELEMETRY_GetValueStrByValue(char *str, unsigned telem, s32 value);
+const char * TELEMETRY_GetValueStrByValue(char *str, unsigned telem, int32_t value);
 const char * TELEMETRY_Name(char *str, unsigned telem);
 const char * TELEMETRY_ShortName(char *str, unsigned telem);
-s32 TELEMETRY_GetMaxValue(unsigned telem);
+int32_t TELEMETRY_GetMaxValue(unsigned telem);
 void TELEMETRY_Alarm(void);
 int TELEMETRY_HasAlarm(int src);
 uint32_t TELEMETRY_IsUpdated(int val);

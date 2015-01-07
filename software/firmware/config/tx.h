@@ -1,6 +1,6 @@
 #ifndef _TX_H_
 #define _TX_H_
-
+#include "stm32f4xx.h"
 #include "mixer.h"
 #include "autodimmer.h"
 #include "telemetry.h"
@@ -17,14 +17,14 @@ struct StickCalibration {
 };
 
 struct TouchCalibration {
-    s32 xscale;
-    s32 yscale;
-    s32 xoffset;
-    s32 yoffset;
+    int32_t xscale;
+    int32_t yscale;
+    int32_t xoffset;
+    int32_t yoffset;
 };
 
 struct mcu_pin {
-    uint32_t port;
+    GPIO_TypeDef *port;
     uint16_t pin;
 };
 

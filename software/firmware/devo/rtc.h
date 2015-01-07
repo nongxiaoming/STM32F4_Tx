@@ -1,6 +1,6 @@
 #ifndef _RTC_H_
 #define _RTC_H_
-
+#include "stm32f4xx.h"
 #if HAS_RTC
     #define NUM_RTC 2
 #else
