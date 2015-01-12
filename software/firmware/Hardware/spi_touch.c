@@ -81,15 +81,17 @@ void SPITouch_Init()
     /* CS */
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
   	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_DOWN;
+  	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
   	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
 	  GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* PenIRQ is pull-up input*/
-    gpio_set_mode(_TOUCH_PORT, GPIO_MODE_INPUT,
-                  GPIO_CNF_INPUT_PULL_UPDOWN, _TOUCH_IRQ_PIN);
-    gpio_set(_TOUCH_PORT, _TOUCH_IRQ_PIN);
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+	  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+		GPIO_InitStructure.GPIO_Pin = _TOUCH_IRQ_PIN;
+		GPIO_Init(_TOUCH_PORT, &GPIO_InitStructure);
+    GPIO_SetBits(_TOUCH_PORT, _TOUCH_IRQ_PIN);
 
     CS_LO();
     spi_xfer(SPI1, CMD_RESET);
