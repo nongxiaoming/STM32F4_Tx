@@ -49,8 +49,12 @@ int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low)
         asm volatile ("nop");
     GPIO_ResetBits(GPIOB, GPIO_Pin_13);
     //Switch back to SPI
-    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO13);
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+  	GPIO_Init(GPIOB, &GPIO_InitStructure);
     spi_set_baudrate_prescaler(SPI2, SPI_CR1_BR_FPCLK_DIV_128);
     spi_enable(SPI2);
     //Finally ready to send a command
