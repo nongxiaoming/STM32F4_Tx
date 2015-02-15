@@ -876,11 +876,6 @@
               <FilePath>..\devo\remap_channels.c</FilePath>
             </File>
             <File>
-              <FileName>rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\devo\rtc.c</FilePath>
-            </File>
-            <File>
               <FileName>telemetry.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\devo\telemetry.c</FilePath>

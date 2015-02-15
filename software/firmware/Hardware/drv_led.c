@@ -1,12 +1,12 @@
-#include "led.h"
+#include "drv_led.h"
 
 /******************************************************************************************
-*函数名：LED_GPIO_Conf()
+*函数名：LED_GPIO_Config()
 * 参数：void
 * 返回值：void
 * 功能：LED的管脚配置
 *********************************************************************************************/
-void LED_GPIO_Conf(void)
+void LED_GPIO_Config(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;                                                   //定义GPIO初始化结构体
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOB, ENABLE);           //使能GPIOA和GPIOB的AHP1时钟
