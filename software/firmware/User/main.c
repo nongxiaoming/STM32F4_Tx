@@ -1,7 +1,7 @@
 
 #include "stm32f4xx.h"
 #include "delay.h"
-#include "led.h"
+#include "drv_led.h"
 #include "drv_lcd.h"
 
 /*************************************************************************************
@@ -13,7 +13,7 @@
 int main(void)
 {
   SystemInit();			                                   //初始化系统时钟，设置时钟为168Mhz
-  LED_GPIO_Conf();										   //初始化LED的GPIO配置
+  LED_GPIO_Config();										   //初始化LED的GPIO配置
   LCD_Init();
   while (1)
   {
