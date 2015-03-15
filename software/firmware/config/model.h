@@ -8,7 +8,7 @@
 
 #include "mixer.h"
 #include "timer.h"
-#include "rtc.h"
+#include "drv_rtc.h"
 #include "telemetry.h"
 #include "datalog.h"
 #include "pagecfg.h"

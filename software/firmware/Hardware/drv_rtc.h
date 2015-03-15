@@ -1,5 +1,5 @@
-#ifndef _RTC_H_
-#define _RTC_H_
+#ifndef __DRV_RTC_H
+#define __DRV_RTC_H
 #include "stm32f4xx.h"
 #if HAS_RTC
     #define NUM_RTC 2
@@ -12,14 +12,14 @@
 enum { DAY=0, MONTH, YEAR, SECOND, MINUTE, HOUR };
 
 // initialize RTC clock
-void RTC_Init(void);
+void RTC_HW_Init(void);
 
 // set date value (deviation epoch = seconds since 1.1.2012, 00:00:00)
 void RTC_SetValue(uint32_t value);
 
 // set time/date (don't change date/time)
-void RTC_SetTime(uint16_t hour, uint16_t minute, uint16_t second);
-void RTC_SetDate(uint16_t year, uint16_t month, uint16_t day);
+//void RTC_SetTime(uint16_t hour, uint16_t minute, uint16_t second);
+//void RTC_SetDate(uint16_t year, uint16_t month, uint16_t day);
 
 // get date value (deviation epoch = seconds since 1.1.2012, 00:00:00)
 uint32_t RTC_GetValue(void);

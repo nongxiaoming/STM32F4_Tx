@@ -17,7 +17,7 @@
 #include "target.h"
 #include "gui.h"
 #include "tx.h"
-#include "rtc.h"
+#include "drv_rtc.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +31,7 @@ const char CURRENT_MODEL[] = "current_model";
 const char LANGUAGE[] = "language";
 const char MUSIC_SHUTD[]="music_shutdown";
 const char MODE[]="mode";
-const char RTC[]="has_rtc";
+const char HRTC[]="has_rtc";
 
 const char BRIGHTNESS[] = "brightness";
 const char CONTRAST[] = "contrast";

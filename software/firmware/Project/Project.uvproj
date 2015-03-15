@@ -426,11 +426,6 @@
               <FilePath>..\Hardware\delay.c</FilePath>
             </File>
             <File>
-              <FileName>led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Hardware\led.c</FilePath>
-            </File>
-            <File>
               <FileName>drv_lcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hardware\drv_lcd.c</FilePath>
@@ -449,6 +444,16 @@
               <FileName>spi_touch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hardware\spi_touch.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\drv_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\drv_rtc.c</FilePath>
             </File>
           </Files>
         </Group>
