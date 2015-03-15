@@ -24,11 +24,11 @@
 extern struct FAT FontFAT; //defined in screen/lcd_string.c
 
 //Not static because we need it in mixer.c
-const uint8_t const EATRG[PROTO_MAP_LEN] =
+const uint8_t  EATRG[PROTO_MAP_LEN] =
     { INP_ELEVATOR, INP_AILERON, INP_THROTTLE, INP_RUDDER, INP_GEAR1 };
-static const uint8_t const TAERG[PROTO_MAP_LEN] = 
+static const uint8_t  TAERG[PROTO_MAP_LEN] = 
     { INP_THROTTLE, INP_AILERON, INP_ELEVATOR, INP_RUDDER, INP_GEAR1 };
-static const uint8_t const AETRG[PROTO_MAP_LEN] = 
+static const uint8_t  AETRG[PROTO_MAP_LEN] = 
     { INP_AILERON, INP_ELEVATOR, INP_THROTTLE, INP_RUDDER, INP_GEAR1 };
 
 static uint8_t proto_state;
