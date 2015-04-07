@@ -97,25 +97,33 @@ int SPI_ProtoGetPinConfig(int module, int state) {
 
 void SPI_ProtoInit()
 {
+	   GPIO_InitTypeDef GPIO_InitStructure;
+	
     /* Enable SPI2 */
-    rcc_peripheral_enable_clock(&RCC_APB1ENR, RCC_APB1ENR_SPI2EN);
+	  RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
+	  
     /* Enable GPIOA */
-    rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_IOPAEN);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA ,ENABLE);
     /* Enable GPIOB */
-    rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_IOPBEN);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB ,ENABLE);
 
-    /* SCK, MOSI */
-    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO13 | GPIO15);
-    /* MISO */
-    gpio_set_mode(GPIOB, GPIO_MODE_INPUT,
-                  GPIO_CNF_INPUT_FLOAT, GPIO14);
+    /* SCK, MOSI, MISO */
+
+	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+  	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_DOWN;
+  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+  	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     /*CYRF cfg */
     /* Reset and CS */
-    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO11);
-    gpio_clear(GPIOB, GPIO11);
+   	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+	  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_SetBits(GPIOB, GPIO_Pin_11);
 
 #if 0 //In power.c
     //Disable JTAG and SWD and set both pins high
@@ -132,9 +140,12 @@ void SPI_ProtoInit()
     if(Transmitter.module_enable[MULTIMOD].port) {
         struct mcu_pin *port = &Transmitter.module_enable[MULTIMOD];
         printf("Switch port: %08x pin: %04x\n", port->port, port->pin);
-        gpio_set_mode(port->port, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, port->pin);
-        gpio_set(port->port, port->pin);
+				GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+				GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+				GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+				GPIO_InitStructure.GPIO_Pin = port->pin;
+				GPIO_Init(port->port, &GPIO_InitStructure);
+        GPIO_SetBits(port->port, port->pin);
     }
 #endif //HAS_MULTIMOD_SUPPORT
     for (int i = 0; i < MULTIMOD; i++) {
@@ -143,9 +154,12 @@ void SPI_ProtoInit()
         {
             struct mcu_pin *port = &Transmitter.module_enable[i];
             printf("%s port: %08x pin: %04x\n", MODULE_NAME[i], port->port, port->pin);
-            gpio_set_mode(port->port, GPIO_MODE_OUTPUT_50_MHZ,
-                      GPIO_CNF_OUTPUT_PUSHPULL, port->pin);
-            gpio_set(port->port, port->pin);
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+						GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+						GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+						GPIO_InitStructure.GPIO_Pin = port->pin;
+						GPIO_Init(port->port, &GPIO_InitStructure);
+						GPIO_SetBits(port->port, port->pin);
         }
     }
     /* Includes enable? */
