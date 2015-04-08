@@ -226,7 +226,7 @@ int MCU_SetPin(struct mcu_pin *port, const char *name) {
 #if HAS_MULTIMOD_SUPPORT
         case 'S':
         case 's':
-            port->port = SWITCH_ADDRESS; break;
+            port->port = (GPIO_TypeDef*)SWITCH_ADDRESS; break;
 #endif
         default:
             port->port = 0;
@@ -236,7 +236,7 @@ int MCU_SetPin(struct mcu_pin *port, const char *name) {
             }
             return 0;
     }
-    if (port->port != SWITCH_ADDRESS) {
+    if (port->port != (GPIO_TypeDef*)SWITCH_ADDRESS) {
         int x = atoi(name+1);
         if (x > 15)
             return 0;
