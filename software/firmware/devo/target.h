@@ -32,12 +32,12 @@ enum {
 #define NUM_TX_BUTTONS (BUT_LAST - 1)
 
 enum {
-    CYRF6936,
-    A7105,
-    CC2500,
-    NRF24L01,
-    MULTIMOD,
-    TX_MODULE_LAST,
+    CYRF6936=0x00,
+    A7105=0x01,
+    CC2500=0x02,
+    NRF24L01=0x03,
+    MULTIMOD=0x04,
+    TX_MODULE_LAST=0x05,
 };
 
 

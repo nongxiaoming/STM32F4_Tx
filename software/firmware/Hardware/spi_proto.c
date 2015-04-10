@@ -56,7 +56,7 @@ int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low)
   	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
   	GPIO_Init(GPIOB, &GPIO_InitStructure);
     spi_set_baudrate_prescaler(SPI2, SPI_CR1_BR_FPCLK_DIV_128);
-    spi_enable(SPI2);
+    SPI_Cmd(SPI2,ENABLE);
     //Finally ready to send a command
     
     int byte1 = spi_xfer(SPI2, csn_high); //Set all other pins high
@@ -64,9 +64,9 @@ int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low)
     for(i = 0; i < 100; i++)
         asm volatile ("nop");
     //Reset transfer speed
-    spi_disable(SPI2);
+		SPI_Cmd(SPI2,DISABLE);
     spi_set_baudrate_prescaler(SPI2, SPI_CR1_BR_FPCLK_DIV_16);
-    spi_enable(SPI2);
+    SPI_Cmd(SPI2,ENABLE);
     return byte1 == 0xa5 ? byte2 : 0;
 }
 
