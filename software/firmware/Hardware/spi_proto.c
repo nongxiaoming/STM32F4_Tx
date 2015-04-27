@@ -171,7 +171,7 @@ void SPI_ProtoInit()
                     SPI_CR1_MSBFIRST);
     spi_enable_software_slave_management(SPI2);
     spi_set_nss_high(SPI2);
-    spi_enable(SPI2);
+    SPI_Cmd(SPI2,ENABLE);
 
     PROTO_Stubs(0);
 }
@@ -179,9 +179,9 @@ void SPI_ProtoInit()
 void SPI_AVRProgramInit()
 {
     rcc_set_ppre1(RCC_CFGR_PPRE1_HCLK_DIV16);  //72 / 16 = 4.5MHz
-    spi_disable(SPI2);
+    SPI_Cmd(SPI2,DISABLE);
     spi_set_baudrate_prescaler(SPI2, SPI_CR1_BR_FPCLK_DIV_256);// 4.5 / 256 = 17.5kHz
-    spi_enable(SPI2);
+    SPI_Cmd(SPI2,ENABLE);
 }
 
 void MCU_InitModules()

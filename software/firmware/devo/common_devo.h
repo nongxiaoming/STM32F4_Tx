@@ -2,7 +2,7 @@
 #define _COMMON_DEVO_H_
 
 #ifndef FILE_SIZE
-#include "petit_fat.h"
+#include "ff.h"
 #define FILE_SIZE sizeof(FATFS)
 #endif
 
