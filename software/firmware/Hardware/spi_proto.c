@@ -87,7 +87,7 @@ int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low)
 }
 
 int SPI_ProtoGetPinConfig(int module, int state) {
-    if (module >= TX_MODULE_LAST || Transmitter.module_enable[module].port != SWITCH_ADDRESS)
+    if (module >= TX_MODULE_LAST || Transmitter.module_enable[module].port != (GPIO_TypeDef*)SWITCH_ADDRESS)
         return 0;
     if(state == CSN_PIN)
         return 1 << (Transmitter.module_enable[module].pin & 0x0F);
@@ -167,7 +167,7 @@ void SPI_ProtoInit()
 #endif //HAS_MULTIMOD_SUPPORT
     for (int i = 0; i < MULTIMOD; i++) {
         if(Transmitter.module_enable[i].port
-           && Transmitter.module_enable[i].port != SWITCH_ADDRESS)
+           && Transmitter.module_enable[i].port != (GPIO_TypeDef*)SWITCH_ADDRESS)
         {
             struct mcu_pin *port = &Transmitter.module_enable[i];
             printf("%s port: %08x pin: %04x\n", MODULE_NAME[i], port->port, port->pin);
