@@ -42,7 +42,7 @@ void TIMER_SetString(char *str, s32 time)
     unsigned m = (time - h*3600) / 60;
     unsigned s = time -h*3600 - m*60;
     if( h < 1)
-            sprintf(str, "%s%02d:%02d", neg ? "-" : "", m, s);
+         sprintf(str, "%s%02d:%02d", neg ? "-" : "", m, s);
     else
         sprintf(str, "%s%02d:%02d:%02d", neg ? "-" : "", h, m, s);
 }

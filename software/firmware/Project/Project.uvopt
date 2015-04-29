@@ -297,8 +297,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>59</TopLine>
-      <CurrentLine>73</CurrentLine>
+      <TopLine>92</TopLine>
+      <CurrentLine>132</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Hardware\spi_flash.c</PathWithFileName>
       <FilenameWithoutPath>spi_flash.c</FilenameWithoutPath>
@@ -311,10 +311,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>38</ColumnNumber>
+      <ColumnNumber>30</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>154</TopLine>
-      <CurrentLine>171</CurrentLine>
+      <TopLine>185</TopLine>
+      <CurrentLine>219</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Hardware\spi_proto.c</PathWithFileName>
       <FilenameWithoutPath>spi_proto.c</FilenameWithoutPath>
@@ -329,7 +329,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>63</TopLine>
+      <TopLine>64</TopLine>
       <CurrentLine>72</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Hardware\spi_touch.c</PathWithFileName>
@@ -359,10 +359,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>14</ColumnNumber>
+      <ColumnNumber>34</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>70</TopLine>
-      <CurrentLine>85</CurrentLine>
+      <TopLine>71</TopLine>
+      <CurrentLine>79</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Hardware\drv_rtc.c</PathWithFileName>
       <FilenameWithoutPath>drv_rtc.c</FilenameWithoutPath>
@@ -373,7 +373,7 @@
 
   <Group>
     <GroupName>STM32F4xx_StdPeriph</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -513,7 +513,7 @@
       <Focus>0</Focus>
       <ColumnNumber>29</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>317</TopLine>
+      <TopLine>318</TopLine>
       <CurrentLine>323</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</PathWithFileName>
@@ -1775,9 +1775,9 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>16</ColumnNumber>
+      <ColumnNumber>17</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
+      <TopLine>156</TopLine>
       <CurrentLine>180</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\FatFS\src\diskio.c</PathWithFileName>

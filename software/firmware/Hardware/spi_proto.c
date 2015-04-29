@@ -26,6 +26,22 @@
 #include "interface.h"
 #include <stdlib.h>
 
+static void spi_set_baudrate_prescaler(SPI_TypeDef* SPIx, uint16_t baudrate)
+{
+	assert_param(IS_SPI_BAUDRATE_PRESCALER(baudrate));
+	SPIx->CR1&=0xffc7;
+	SPIx->CR1 |= baudrate;
+}
+uint16_t spi_xfer(SPI_TypeDef* SPIx, uint16_t data)
+{
+ /* Wait until the TXE goes high */
+ while (!(SPIx->SR & SPI_I2S_FLAG_TXE));
+ /* Start the transfer */
+ SPIx->DR = data;
+ /* Wait until there is a byte to read */
+ while (!(SPIx->SR & SPI_I2S_FLAG_RXNE)) ;
+ return SPIx->DR;
+}
 #if HAS_MULTIMOD_SUPPORT
 int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low)
 {
@@ -55,7 +71,7 @@ int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low)
   	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
   	GPIO_Init(GPIOB, &GPIO_InitStructure);
-    spi_set_baudrate_prescaler(SPI2, SPI_CR1_BR_FPCLK_DIV_128);
+    spi_set_baudrate_prescaler(SPI2, SPI_BaudRatePrescaler_128);
     SPI_Cmd(SPI2,ENABLE);
     //Finally ready to send a command
     
@@ -65,7 +81,7 @@ int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low)
         asm volatile ("nop");
     //Reset transfer speed
 		SPI_Cmd(SPI2,DISABLE);
-    spi_set_baudrate_prescaler(SPI2, SPI_CR1_BR_FPCLK_DIV_16);
+    spi_set_baudrate_prescaler(SPI2, SPI_BaudRatePrescaler_16);
     SPI_Cmd(SPI2,ENABLE);
     return byte1 == 0xa5 ? byte2 : 0;
 }
@@ -97,7 +113,8 @@ int SPI_ProtoGetPinConfig(int module, int state) {
 
 void SPI_ProtoInit()
 {
-	   GPIO_InitTypeDef GPIO_InitStructure;
+	  GPIO_InitTypeDef GPIO_InitStructure;
+	  SPI_InitTypeDef  SPI_InitStructure;
 	
     /* Enable SPI2 */
 	  RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
@@ -163,26 +180,31 @@ void SPI_ProtoInit()
         }
     }
     /* Includes enable? */
-    spi_init_master(SPI2, 
-                    SPI_CR1_BAUDRATE_FPCLK_DIV_16,
-                    SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
-                    SPI_CR1_CPHA_CLK_TRANSITION_1, 
-                    SPI_CR1_DFF_8BIT,
-                    SPI_CR1_MSBFIRST);
-    spi_enable_software_slave_management(SPI2);
-    spi_set_nss_high(SPI2);
+
+		SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+    SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+    SPI_InitStructure.SPI_NSS = SPI_NSS_Hard;
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;
+    SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+    SPI_InitStructure.SPI_CRCPolynomial = 7;
+    SPI_Init(SPI2, &SPI_InitStructure);
+		
+    SPI_SSOutputCmd(SPI2,DISABLE);
     SPI_Cmd(SPI2,ENABLE);
 
     PROTO_Stubs(0);
 }
 
-void SPI_AVRProgramInit()
-{
-    rcc_set_ppre1(RCC_CFGR_PPRE1_HCLK_DIV16);  //72 / 16 = 4.5MHz
-    SPI_Cmd(SPI2,DISABLE);
-    spi_set_baudrate_prescaler(SPI2, SPI_CR1_BR_FPCLK_DIV_256);// 4.5 / 256 = 17.5kHz
-    SPI_Cmd(SPI2,ENABLE);
-}
+//void SPI_AVRProgramInit()
+//{
+//    rcc_set_ppre1(RCC_CFGR_PPRE1_HCLK_DIV16);  //72 / 16 = 4.5MHz
+//    SPI_Cmd(SPI2,DISABLE);
+//    spi_set_baudrate_prescaler(SPI2, SPI_CR1_BR_FPCLK_DIV_256);// 4.5 / 256 = 17.5kHz
+//    SPI_Cmd(SPI2,ENABLE);
+//}
 
 void MCU_InitModules()
 {
