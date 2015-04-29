@@ -20,8 +20,8 @@
   Important that the actual functions never execute
 */
 #include "common.h"
-#include "config/tx.h"
-#include "protocol/interface.h"
+#include "tx.h"
+#include "interface.h"
 #include <stdlib.h>
 #include "protospi.h"
 

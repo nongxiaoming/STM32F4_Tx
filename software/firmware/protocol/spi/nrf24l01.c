@@ -19,8 +19,8 @@
 #endif
 
 #include "common.h"
-#include "config/tx.h"
-#include "protocol/interface.h"
+#include "tx.h"
+#include "interface.h"
 #include "protospi.h"
 
 #ifdef PROTO_HAS_NRF24L01

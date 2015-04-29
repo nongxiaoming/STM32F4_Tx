@@ -1090,6 +1090,31 @@
               <FileType>1</FileType>
               <FilePath>..\protocol\yd717_nrf24l01.c</FilePath>
             </File>
+            <File>
+              <FileName>a7105.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\spi\a7105.c</FilePath>
+            </File>
+            <File>
+              <FileName>avr_program.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\spi\avr_program.c</FilePath>
+            </File>
+            <File>
+              <FileName>cc2500.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\spi\cc2500.c</FilePath>
+            </File>
+            <File>
+              <FileName>cyrf6936.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\spi\cyrf6936.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\protocol\spi\nrf24l01.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

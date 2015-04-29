@@ -16,11 +16,11 @@
   #pragma long_calls
 #endif
 #include "common.h"
-#include "config/tx.h"
+#include "tx.h"
 //Some versions of gcc applythis to definitions, others to calls
 //So just use long_calls everywhere
 //#pragma long_calls_off
-#include "protocol/interface.h"
+#include "interface.h"
 #include "protospi.h"
 
 //GPIOB.11
