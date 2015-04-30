@@ -131,7 +131,22 @@ int32_t SPI_SetClockSpeed(SPI_TypeDef *SPIx, uint32_t spi_speed)
 	//return set speed
 	return spiBusClock / spi_prescaler;
 }
-
+void spi_set_baudrate_prescaler(SPI_TypeDef* SPIx, uint16_t baudrate)
+{
+	assert_param(IS_SPI_BAUDRATE_PRESCALER(baudrate));
+	SPIx->CR1&=0xffc7;
+	SPIx->CR1 |= baudrate;
+}
+uint16_t spi_xfer(SPI_TypeDef* SPIx, uint16_t data)
+{
+ /* Wait until the TXE goes high */
+ while (!(SPIx->SR & SPI_I2S_FLAG_TXE));
+ /* Start the transfer */
+ SPIx->DR = data;
+ /* Wait until there is a byte to read */
+ while (!(SPIx->SR & SPI_I2S_FLAG_RXNE)) ;
+ return SPIx->DR;
+}
 int SPI_HW_Init(void)
 {
     RCC_Configuration();

@@ -24,24 +24,10 @@
 #include "devo.h"
 #include "tx.h"
 #include "interface.h"
+#include "drv_spi.h"
 #include <stdlib.h>
 
-static void spi_set_baudrate_prescaler(SPI_TypeDef* SPIx, uint16_t baudrate)
-{
-	assert_param(IS_SPI_BAUDRATE_PRESCALER(baudrate));
-	SPIx->CR1&=0xffc7;
-	SPIx->CR1 |= baudrate;
-}
-uint16_t spi_xfer(SPI_TypeDef* SPIx, uint16_t data)
-{
- /* Wait until the TXE goes high */
- while (!(SPIx->SR & SPI_I2S_FLAG_TXE));
- /* Start the transfer */
- SPIx->DR = data;
- /* Wait until there is a byte to read */
- while (!(SPIx->SR & SPI_I2S_FLAG_RXNE)) ;
- return SPIx->DR;
-}
+
 #if HAS_MULTIMOD_SUPPORT
 int SPI_ConfigSwitch(unsigned csn_high, unsigned csn_low)
 {

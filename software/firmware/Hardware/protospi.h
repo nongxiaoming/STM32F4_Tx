@@ -3,8 +3,8 @@
 #include "stm32f4xx.h"
 #include "tx.h"
 
-inline u8 PROTOSPI_read3wire(){
-    u8 data;
+static inline uint8_t PROTOSPI_read3wire(){
+    uint8_t data;
     while(!(SPI2->SR & SPI_SR_TXE))
         ;
     while(SPI2->SR & SPI_SR_BSY)
@@ -13,7 +13,7 @@ inline u8 PROTOSPI_read3wire(){
     SPI_Cmd(SPI2,DISABLE);
     spi_set_bidirectional_receive_only_mode(SPI2);
     /* Force read from SPI_DR to ensure RXNE is clear (probably not needed) */
-    volatile u8 x = SPI2->DR;
+    volatile uint8_t x = SPI2->DR;
     (void)x;
     SPI_Cmd(SPI2,ENABLE);  //This starts the data read
     //Wait > 1 SPI clock (but less than 8).  clock is 4.5MHz
@@ -28,9 +28,9 @@ inline u8 PROTOSPI_read3wire(){
     return data;
 }
 
-#define PROTOSPI_pin_set(io) gpio_set(io.port,io.pin)
-#define PROTOSPI_pin_clear(io) gpio_clear(io.port,io.pin)
-#define PROTOSPI_xfer(byte) spi_xfer(SPI2, byte)
+#define PROTOSPI_pin_set(io)   GPIO_SetBits(io.port,io.pin)
+#define PROTOSPI_pin_clear(io) GPIO_ResetBits(io.port,io.pin)
+#define PROTOSPI_xfer(byte)   spi_xfer(SPI2, byte)
 #define _NOP()  asm volatile ("nop")
 
 static const struct mcu_pin CYRF_RESET_PIN ={GPIOB, GPIO_Pin_11};
