@@ -16,6 +16,7 @@
 #include "common.h"
 #include "tx.h"
 #include "devo.h"
+#include "drv_spi.h"
 
 #define START   (1 << 7)     // 1 = user command, 0 = reserved for factory purposes
 
