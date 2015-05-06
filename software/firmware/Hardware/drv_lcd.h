@@ -77,6 +77,38 @@
 #define LCD_ReadRAM_Start()     LCD_WriteCmd(READ_MEMORY_START)
 #define LCD_WriteRAM_Start()    LCD_WriteCmd(WRITE_MEMORY_START)
 
+/* LCD primitive functions */
 void LCD_Clear(uint16_t color);
 void LCD_Init(void);
+    /* Strings */
+void LCD_PrintCharXY(uint16_t x, uint16_t y, uint32_t c);
+void LCD_PrintChar(uint32_t c);
+void LCD_PrintStringXY(uint16_t x, uint16_t y, const char *str);
+void LCD_PrintString(const char *str);
+void LCD_SetXY(uint16_t x,uint16_t y);
+void LCD_GetStringDimensions(const uint8_t *str, uint16_t *width, uint16_t *height);
+void LCD_GetCharDimensions(uint32_t c, uint16_t *width, uint16_t *height);
+uint8_t LCD_SetFont(unsigned int idx);
+uint8_t  LCD_GetFont(void);
+void LCD_SetFontColor(uint16_t color);
+    /* Graphics */
+void LCD_DrawCircle(uint16_t x0, uint16_t y0, uint16_t r, uint16_t color);
+void LCD_FillCircle(uint16_t x0, uint16_t y0, uint16_t r, uint16_t color);
+void LCD_DrawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color);
+void LCD_DrawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
+void LCD_DrawFastHLine(uint16_t x, uint16_t y, uint16_t w, uint16_t color);
+void LCD_DrawDashedVLine(int16_t x, int16_t y, int16_t h, int16_t space, uint16_t color);
+void LCD_DrawDashedHLine(int16_t x, int16_t y, int16_t w, int16_t space, uint16_t color);
+void LCD_DrawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+void LCD_FillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+void LCD_DrawRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r, uint16_t color);
+void LCD_FillRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r, uint16_t color);
+void LCD_DrawTriangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
+void LCD_FillTriangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
+void LCD_DrawWindowedImageFromFile(uint16_t x, uint16_t y, const char *file, s16 w, s16 h, uint16_t x_off, uint16_t y_off);
+void LCD_DrawImageFromFile(uint16_t x, uint16_t y, const char *file);
+uint8_t LCD_ImageIsTransparent(const char *file);
+uint8_t LCD_ImageDimensions(const char *file, uint16_t *w, uint16_t *h);
+void LCD_DrawUSBLogo(int lcd_width, int lcd_height);
+
 #endif
