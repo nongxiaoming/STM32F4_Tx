@@ -55,9 +55,15 @@ PA6 : SPI1_MISO
 PA7 : SPI1_MOSI
 */
 
-#define CS_HI() GPIO_SetBits(_TOUCH_PORT, _TOUCH_PIN)
-#define CS_LO() GPIO_ResetBits(_TOUCH_PORT, _TOUCH_PIN)
-#define pen_is_down() (GPIO_ReadInputDataBit(_TOUCH_PORT, _TOUCH_IRQ_PIN)==Bit_RESET)
+#define TOUCH_PORT                GPIOB
+#define TOUCH_CS_PIN              GPIO_Pin_0
+#define TOUCH_IRQ_PIN             GPIO_Pin_5
+#define TOUCH_RCC_APB2ENR_IOPEN   RCC_APB2ENR_IOPBEN
+#define TOUCH_COORDS_REVERSE      1
+
+#define CS_HI() GPIO_SetBits(TOUCH_PORT, TOUCH_CS_PIN)
+#define CS_LO() GPIO_ResetBits(TOUCH_PORT, TOUCH_CS_PIN)
+#define pen_is_down() (GPIO_ReadInputDataBit(TOUCH_PORT, TOUCH_IRQ_PIN)==Bit_RESET)
 
 unsigned read_channel(unsigned address)
 {
@@ -90,9 +96,9 @@ void SPITouch_Init()
     /* PenIRQ is pull-up input*/
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-		GPIO_InitStructure.GPIO_Pin = _TOUCH_IRQ_PIN;
-		GPIO_Init(_TOUCH_PORT, &GPIO_InitStructure);
-    GPIO_SetBits(_TOUCH_PORT, _TOUCH_IRQ_PIN);
+		GPIO_InitStructure.GPIO_Pin = TOUCH_IRQ_PIN;
+		GPIO_Init(TOUCH_PORT, &GPIO_InitStructure);
+    GPIO_SetBits(TOUCH_PORT, TOUCH_IRQ_PIN);
 
     CS_LO();
     spi_xfer(SPI1, CMD_RESET);

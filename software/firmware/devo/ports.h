@@ -35,14 +35,6 @@
     #define _SOUND_TIM                 TIM2
 #endif //_SOUND_PORT
 
-#ifndef _TOUCH_PORT
-    #define _TOUCH_PORT                GPIOD
-    #define _TOUCH_PIN                 GPIO_Pin_12
-    #define _TOUCH_IRQ_PIN             GPIO_Pin_13
-    #define _TOUCH_RCC_APB2ENR_IOPEN   RCC_APB2ENR_IOPBEN
-    #define _TOUCH_COORDS_REVERSE      1
-#endif //_TOUCH_PORT
-
 #ifndef _PWM_PIN
     #define _PWM_PIN GPIO_USART1_TX    //GPIO9
     #define _PWM_EXTI EXTI9
