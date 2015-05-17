@@ -31,7 +31,7 @@ void LCD_DrawFastVLine(int16_t x, int16_t y,
     LCD_DrawStop();
 }
 
-void LCD_DrawFastHLine(u16 x, u16 y, u16 w, u16 color) {
+void LCD_DrawFastHLine(uint16_t x, uint16_t y, uint16_t w, uint16_t color) {
     LCD_DrawStart(x, y, x + w -1, y, DRAW_NWSE);
     while(w--)
         LCD_DrawPixel(color);
@@ -124,7 +124,7 @@ void drawCircleHelper( int x0, int y0,
 /* end of helper functions */
 
 // draw a circle outline
-void LCD_DrawCircle(u16 x0, u16 y0, u16 r, u16 color)
+void LCD_DrawCircle(uint16_t x0, uint16_t y0, uint16_t r, uint16_t color)
 {
   struct circle c = {1 - r, 1, -2 * r, 0, r};
 
@@ -147,7 +147,7 @@ void LCD_DrawCircle(u16 x0, u16 y0, u16 r, u16 color)
   }
 }
 
-void LCD_FillCircle(u16 x0, u16 y0, u16 r, u16 color)
+void LCD_FillCircle(uint16_t x0, uint16_t y0, uint16_t r, uint16_t color)
 {
     LCD_DrawFastVLine(x0, y0-r, 2*r+1, color);
     fillCircleHelper(x0, y0, r, 3, 0, color);
@@ -155,7 +155,7 @@ void LCD_FillCircle(u16 x0, u16 y0, u16 r, u16 color)
 
 
 // bresenham's algorithm - thx wikpedia
-void LCD_DrawLine(u16 x0, u16 y0, u16 x1, u16 y1, u16 color)
+void LCD_DrawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color)
 {
   int steep = abs(y1 - y0) > abs(x1 - x0);
   if (steep) {
@@ -196,7 +196,7 @@ void LCD_DrawLine(u16 x0, u16 y0, u16 x1, u16 y1, u16 color)
 }
 
 // draw a rectangle
-void LCD_DrawRect(u16 x, u16 y, u16 w, u16 h, u16 color)
+void LCD_DrawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
   LCD_DrawFastHLine(x, y, w, color);
   LCD_DrawFastHLine(x, y+h-1, w, color);
@@ -204,9 +204,9 @@ void LCD_DrawRect(u16 x, u16 y, u16 w, u16 h, u16 color)
   LCD_DrawFastVLine(x+w-1, y, h, color);
 }
 
-void LCD_FillRect(u16 x, u16 y, u16 w, u16 h, u16 color)
+void LCD_FillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-    u32 bytes = (u32)w * h;
+    uint32_t bytes = (uint32_t)w * h;
     LCD_DrawStart(x, y, x + w - 1, y + h -1, DRAW_NWSE); // Bug fix: should be y+h-1 instead of y+h
     while(bytes--)
         LCD_DrawPixel(color);
@@ -214,7 +214,7 @@ void LCD_FillRect(u16 x, u16 y, u16 w, u16 h, u16 color)
 }
 
 // draw a rounded rectangle!
-void LCD_DrawRoundRect(u16 x, u16 y, u16 w, u16 h, u16 r, u16 color)
+void LCD_DrawRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r, uint16_t color)
 {
   // smarter version
   LCD_DrawFastHLine(x+r  , y    , w-2*r, color); // Top
@@ -229,7 +229,7 @@ void LCD_DrawRoundRect(u16 x, u16 y, u16 w, u16 h, u16 r, u16 color)
 }
 
 // fill a rounded rectangle!
-void LCD_FillRoundRect(u16 x, u16 y, u16 w, u16 h, u16 r, u16 color)
+void LCD_FillRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r, uint16_t color)
 {
   // smarter version
   LCD_FillRect(x+r, y, w-2*r, h, color);
@@ -240,7 +240,7 @@ void LCD_FillRoundRect(u16 x, u16 y, u16 w, u16 h, u16 r, u16 color)
 }
 
 // draw a triangle!
-void LCD_DrawTriangle(u16 x0, u16 y0, u16 x1, u16 y1, u16 x2, u16 y2, u16 color)
+void LCD_DrawTriangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color)
 {
   LCD_DrawLine(x0, y0, x1, y1, color);
   LCD_DrawLine(x1, y1, x2, y2, color);
@@ -248,7 +248,7 @@ void LCD_DrawTriangle(u16 x0, u16 y0, u16 x1, u16 y1, u16 x2, u16 y2, u16 color)
 }
 
 // fill a triangle!
-void LCD_FillTriangle(u16 x0, u16 y0, u16 x1, u16 y1, u16 x2, u16 y2, u16 color)
+void LCD_FillTriangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color)
 {
   int16_t a, b, y, last;
 
@@ -323,15 +323,15 @@ void LCD_FillTriangle(u16 x0, u16 y0, u16 x1, u16 y1, u16 x2, u16 y2, u16 color)
   }
 }
 
-u8 LCD_ImageIsTransparent(const char *file)
+uint8_t LCD_ImageIsTransparent(const char *file)
 {
     FILE *fh;
-    u8 buf[0x46];
+    uint8_t buf[0x46];
     fh = fopen(file, "r");
     if(! fh) {
         return 0;
     }
-    u32 compression;
+    uint32_t compression;
 
     if(fread(buf, 0x46, 1, fh) != 1 || buf[0] != 'B' || buf[1] != 'M')
     {
@@ -340,13 +340,13 @@ u8 LCD_ImageIsTransparent(const char *file)
         return 0;
     }
     fclose(fh);
-    compression = *((u32 *)(buf + 0x1e));
+    compression = *((uint32_t *)(buf + 0x1e));
     if(compression == 3)
     {
-        if(*((u16 *)(buf + 0x36)) == 0x7c00 
-           && *((u16 *)(buf + 0x3a)) == 0x03e0
-           && *((u16 *)(buf + 0x3e)) == 0x001f
-           && *((u16 *)(buf + 0x42)) == 0x8000)
+        if(*((uint16_t *)(buf + 0x36)) == 0x7c00 
+           && *((uint16_t *)(buf + 0x3a)) == 0x03e0
+           && *((uint16_t *)(buf + 0x3e)) == 0x001f
+           && *((uint16_t *)(buf + 0x42)) == 0x8000)
         {
             return 1;
         }
@@ -354,10 +354,10 @@ u8 LCD_ImageIsTransparent(const char *file)
     return 0;
 }
 
-u8 LCD_ImageDimensions(const char *file, u16 *w, u16 *h)
+uint8_t LCD_ImageDimensions(const char *file, uint16_t *w, uint16_t *h)
 {
     FILE *fh;
-    u8 buf[0x1a];
+    uint8_t buf[0x1a];
     fh = fopen(file, "r");
     if(! fh) {
         printf("DEBUG: LCD_ImageDimensions: File %s not found\n", file);
@@ -371,12 +371,12 @@ u8 LCD_ImageDimensions(const char *file, u16 *w, u16 *h)
         return 0;
     }
     fclose(fh);
-    *w = *((u32 *)(buf + 0x12));
-    *h = *((u32 *)(buf + 0x16));
+    *w = *((uint32_t *)(buf + 0x12));
+    *h = *((uint32_t *)(buf + 0x16));
     return 1;
 }
 
-void LCD_DrawWindowedImageFromFile(u16 x, u16 y, const char *file, s16 w, s16 h, u16 x_off, u16 y_off)
+void LCD_DrawWindowedImageFromFile(uint16_t x, uint16_t y, const char *file, s16 w, s16 h, uint16_t x_off, uint16_t y_off)
 {
     int i, j;
     FILE *fh;
@@ -384,7 +384,7 @@ void LCD_DrawWindowedImageFromFile(u16 x, u16 y, const char *file, s16 w, s16 h,
     unsigned row_has_transparency = 0;
     (void)row_has_transparency;
 
-    u8 buf[480 * 2];
+    uint8_t buf[480 * 2];
 
     if (w == 0 || h == 0)
         return;
@@ -397,7 +397,7 @@ void LCD_DrawWindowedImageFromFile(u16 x, u16 y, const char *file, s16 w, s16 h,
         return;
     }
     setbuf(fh, 0);
-    u32 img_w, img_h, offset, compression;
+    uint32_t img_w, img_h, offset, compression;
 
     if(fread(buf, 0x46, 1, fh) != 1 || buf[0] != 'B' || buf[1] != 'M')
     {
@@ -405,9 +405,9 @@ void LCD_DrawWindowedImageFromFile(u16 x, u16 y, const char *file, s16 w, s16 h,
         printf("DEBUG: LCD_DrawWindowedImageFromFile: Buffer read issue?\n");
         return;
     }
-    compression = *((u32 *)(buf + 0x1e));
-    if(*((u16 *)(buf + 0x1a)) != 1      /* 1 plane */
-       || *((u16 *)(buf + 0x1c)) != 16  /* 16bpp */
+    compression = *((uint32_t *)(buf + 0x1e));
+    if(*((uint16_t *)(buf + 0x1a)) != 1      /* 1 plane */
+       || *((uint16_t *)(buf + 0x1c)) != 16  /* 16bpp */
        || (compression != 0 && compression != 3)  /* BI_RGB or BI_BITFIELDS */
       )
     {
@@ -417,32 +417,32 @@ void LCD_DrawWindowedImageFromFile(u16 x, u16 y, const char *file, s16 w, s16 h,
     }
     if(compression == 3)
     {
-        if(*((u16 *)(buf + 0x36)) == 0x7c00 
-           && *((u16 *)(buf + 0x3a)) == 0x03e0
-           && *((u16 *)(buf + 0x3e)) == 0x001f
-           && *((u16 *)(buf + 0x42)) == 0x8000)
+        if(*((uint16_t *)(buf + 0x36)) == 0x7c00 
+           && *((uint16_t *)(buf + 0x3a)) == 0x03e0
+           && *((uint16_t *)(buf + 0x3e)) == 0x001f
+           && *((uint16_t *)(buf + 0x42)) == 0x8000)
         {
             transparent = 1;
-        } else if(*((u16 *)(buf + 0x36)) != 0xf800 
-           || *((u16 *)(buf + 0x3a)) != 0x07e0
-           || *((u16 *)(buf + 0x3e)) != 0x001f)
+        } else if(*((uint16_t *)(buf + 0x36)) != 0xf800 
+           || *((uint16_t *)(buf + 0x3a)) != 0x07e0
+           || *((uint16_t *)(buf + 0x3e)) != 0x001f)
         {
             fclose(fh);
             printf("DEBUG: LCD_DrawWindowedImageFromFile: BMP Format not correct second check\n");
             return;
         }
     }
-    offset = *((u32 *)(buf + 0x0a));
-    img_w = *((u32 *)(buf + 0x12));
-    img_h = *((u32 *)(buf + 0x16));
+    offset = *((uint32_t *)(buf + 0x0a));
+    img_w = *((uint32_t *)(buf + 0x12));
+    img_h = *((uint32_t *)(buf + 0x16));
     if(w < 0)
         w = img_w;
     if(h < 0)
         h = img_h;
-    if((u16)w + x_off > img_w || (u16)h + y_off > img_h)
+    if((uint16_t)w + x_off > img_w || (uint16_t)h + y_off > img_h)
     {
         printf("DEBUG: LCD_DrawWindowedImageFromFile (%s): Dimensions asked for are out of bounds\n", file);
-        printf("size: (%d x %d) bounds(%d x %d)\n", (u16)img_w, (u16)img_h, (u16)(w + x_off), (u16)(h + y_off));
+        printf("size: (%d x %d) bounds(%d x %d)\n", (uint16_t)img_w, (uint16_t)img_h, (uint16_t)(w + x_off), (uint16_t)(h + y_off));
         fclose(fh);
         return;
     }
@@ -454,12 +454,12 @@ void LCD_DrawWindowedImageFromFile(u16 x, u16 y, const char *file, s16 w, s16 h,
     for (j = 0; j < h; j++) {
         if (fread(buf, 2 * w, 1, fh) != 1)
             break;
-        u16 *color = (u16 *)buf;
+        uint16_t *color = (uint16_t *)buf;
         if(transparent) {
 #ifdef TRANSPARENT_COLOR
             //Display supports a transparent color
             for (i = 0; i < w; i++ ) {
-                u32 c;
+                uint32_t c;
                 if((*color & 0x8000)) {
                     //convert 1555 -> 565
                     c = ((*color & 0x7fe0) << 1) | (*color & 0x1f);
@@ -498,7 +498,7 @@ void LCD_DrawWindowedImageFromFile(u16 x, u16 y, const char *file, s16 w, s16 h,
                 LCD_DrawPixel(*color++);
             }
         }
-        if((u16)w < img_w) {
+        if((uint16_t)w < img_w) {
             fseek(fh, 2 * (img_w - w), SEEK_CUR);
         }
         // for images with odd width: skip 2 bytes to reach a 4-byte-position (skip padding bytes, see http://en.wikipedia.org/wiki/File:BMPfileFormat.png
@@ -508,15 +508,15 @@ void LCD_DrawWindowedImageFromFile(u16 x, u16 y, const char *file, s16 w, s16 h,
     fclose(fh);
 }
 
-void LCD_DrawImageFromFile(u16 x, u16 y, const char *file)
+void LCD_DrawImageFromFile(uint16_t x, uint16_t y, const char *file)
 {
     LCD_DrawWindowedImageFromFile(x, y, file, -1, -1, 0, 0);
 }
 
-void LCD_DrawRLE(const u8 *data, int len, u32 color)
+void LCD_DrawRLE(const uint8_t *data, int len, uint32_t color)
 {
     while(len) {
-        u32 c = (*data & 0x80) ? color : 0;
+        uint32_t c = (*data & 0x80) ? color : 0;
         for(int i = 0; i < (*data & 0x7f); i++) {
             LCD_DrawPixel(c);
         }
@@ -525,7 +525,7 @@ void LCD_DrawRLE(const u8 *data, int len, u32 color)
     }
 }
 
-extern u8 usb_logo[];
+extern uint8_t usb_logo[];
 void LCD_DrawUSBLogo(int lcd_width, int lcd_height)
 {
     int width = (usb_logo[0] << 8) |  usb_logo[1];
