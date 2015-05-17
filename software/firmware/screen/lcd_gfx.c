@@ -17,7 +17,7 @@ All text above must be included in any redistribution
 #include "common.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "gui/gui.h"
+#include "gui.h"
 
 /* helper functions */
 

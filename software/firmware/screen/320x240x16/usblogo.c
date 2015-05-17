@@ -2,7 +2,7 @@
 //width:  300
 //height: 134
 //size:   622
-const u8 usb_logo[] = {
+const uint8_t usb_logo[] = {
     0x01, 0x2c,
     0x00, 0x86,
     0x02, 0x6e,

@@ -13,7 +13,7 @@
     along with Deviation.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "common.h"
-#include "gui/gui.h"
+#include "gui.h"
 
 struct FAT FontFAT = {{0}};
 /*
@@ -54,21 +54,21 @@ char FontNames[NUM_FONTS][FONT_NAME_LEN];
 
 struct font_def 
 {
-        u8 idx;
+        uint8_t idx;
         FILE *fh;
-        u8 font[80];
-    u8 height;          /* Character height for storage        */
-        u16 range[2 * (RANGE_TABLE_SIZE + 1)];  /* Array containing the ranges of supported characters */
+        uint8_t font[80];
+    uint8_t height;          /* Character height for storage        */
+        uint16_t range[2 * (RANGE_TABLE_SIZE + 1)];  /* Array containing the ranges of supported characters */
 };
 static struct {
     struct font_def font;
     unsigned int x_start;
     unsigned int x;
     unsigned int y;
-    u16          color;
+    uint16_t          color;
 } cur_str;
 
-u8 FONT_GetFromString(const char *value)
+uint8_t FONT_GetFromString(const char *value)
 {
     int i;
     for (i = 0; i < NUM_FONTS; i++) {
@@ -84,11 +84,11 @@ u8 FONT_GetFromString(const char *value)
     return 0;
 }
 
-u8 get_char_range(u32 c, u32 *begin, u32 *end)
+uint8_t get_char_range(uint32_t c, uint32_t *begin, uint32_t *end)
 {
-    u32 offset = 0;
-    u32 pos = 5;
-    u16 *range = cur_str.font.range;
+    uint32_t offset = 0;
+    uint32_t pos = 5;
+    uint16_t *range = cur_str.font.range;
     while(1) {
         if (range[0] == 0 && range[1] == 0)
             break;
@@ -101,20 +101,20 @@ u8 get_char_range(u32 c, u32 *begin, u32 *end)
         pos += 4;
     }
     fseek(cur_str.font.fh, pos, SEEK_SET);
-    u8 *font = cur_str.font.font;
+    uint8_t *font = cur_str.font.font;
     fread(font, 6, 1, cur_str.font.fh);
     *begin = font[0] | (font[1] << 8) | (font[2] << 16);
     *end   = font[3] | (font[4] << 8) | (font[5] << 16);
     return 1;
 }
 
-const u8 *char_offset(u32 c, u8 *width)
+const uint8_t *char_offset(uint32_t c, uint8_t *width)
 {
-    u32 begin;
-    u32 end;
-    u8 *font = cur_str.font.font;
+    uint32_t begin;
+    uint32_t end;
+    uint8_t *font = cur_str.font.font;
 
-    u8 row_bytes = ((cur_str.font.height - 1) / 8) + 1;
+    uint8_t row_bytes = ((cur_str.font.height - 1) / 8) + 1;
     get_char_range(c, &begin, &end);
     *width = (end - begin) / row_bytes;
     fseek(cur_str.font.fh, begin, SEEK_SET);
@@ -127,20 +127,20 @@ const u8 *char_offset(u32 c, u8 *width)
     return font;
 }
 
-u8 get_width(u32 c)
+uint8_t get_width(uint32_t c)
 {
-    u32 begin;
-    u32 end;
+    uint32_t begin;
+    uint32_t end;
 
-    u8 row_bytes = ((cur_str.font.height - 1) / 8) + 1;
+    uint8_t row_bytes = ((cur_str.font.height - 1) / 8) + 1;
     get_char_range(c, &begin, &end);
     return (end - begin) / row_bytes;
 } 
 
-void LCD_PrintCharXY(unsigned int x, unsigned int y, u32 c)
+void LCD_PrintCharXY(unsigned int x, unsigned int y, uint32_t c)
 {
-    u8 row, col, width;
-    const u8 *offset = char_offset(c, &width);
+    uint8_t row, col, width;
+    const uint8_t *offset = char_offset(c, &width);
     if (! offset || ! width) {
         printf("Could not locate character U-%04x\n", (int)c);
         return;
@@ -149,8 +149,8 @@ void LCD_PrintCharXY(unsigned int x, unsigned int y, u32 c)
     LCD_DrawStart(x, y, x + width - 1,  y + HEIGHT(cur_str.font) - 1, DRAW_NWSE);
     for (col = 0; col < width; col++)
     {
-        const u8 *data = offset++;
-        u8 bit = 0;
+        const uint8_t *data = offset++;
+        uint8_t bit = 0;
         // Data is right aligned,adrawn top to bottom
         for (row = 0; row < HEIGHT(cur_str.font); ++row)
         {
@@ -175,7 +175,7 @@ void close_font()
     }
 }
 
-u8 open_font(unsigned int idx)
+uint8_t open_font(unsigned int idx)
 {
     char font[20];
     close_font();
@@ -199,7 +199,7 @@ u8 open_font(unsigned int idx)
     }
     cur_str.font.idx = idx;
     idx = 0;
-    u8 *f = (u8 *)font;
+    uint8_t *f = (uint8_t *)font;
     while(1) {
         if (fread(f, 4, 1, cur_str.font.fh) != 1) {
             printf("Failed to parse font range table\n");
@@ -207,8 +207,8 @@ u8 open_font(unsigned int idx)
             cur_str.font.fh = NULL;
             return 0;
         }
-        u16 start_c = f[0] | (f[1] << 8);
-        u16 end_c = f[2] | (f[3] << 8);
+        uint16_t start_c = f[0] | (f[1] << 8);
+        uint16_t end_c = f[2] | (f[3] << 8);
         cur_str.font.range[idx++] = start_c;
         cur_str.font.range[idx++] = end_c;
         if (start_c == 0 && end_c == 0)
@@ -217,9 +217,9 @@ u8 open_font(unsigned int idx)
     return 1;
 }
 
-u8 LCD_SetFont(unsigned int idx)
+uint8_t LCD_SetFont(unsigned int idx)
 {
-    u8 old = LCD_GetFont();
+    uint8_t old = LCD_GetFont();
     if (old == idx)
         return old;
     if (! open_font(idx))
@@ -227,7 +227,7 @@ u8 LCD_SetFont(unsigned int idx)
     return old;
 }
 
-u8 LCD_GetFont()
+uint8_t LCD_GetFont()
 {
     return cur_str.font.idx;
 }
@@ -248,13 +248,13 @@ void LCD_PrintStringXY(unsigned int x, unsigned int y, const char *str)
 void LCD_PrintString(const char *str)
 {
     while(*str != 0) {
-        u32 ch;
-        str = utf8_to_u32(str, &ch);
+        uint32_t ch;
+        str = utf8_to_uint32_t(str, &ch);
         LCD_PrintChar(ch);
     }
 }
 
-void LCD_PrintChar(u32 c)
+void LCD_PrintChar(uint32_t c)
 {
     if(c == '\n') {
         cur_str.x = cur_str.x_start;
@@ -265,19 +265,19 @@ void LCD_PrintChar(u32 c)
     }
 }
 
-void LCD_GetCharDimensions(u32 c, u16 *width, u16 *height) {
+void LCD_GetCharDimensions(uint32_t c, uint16_t *width, uint16_t *height) {
     *height = HEIGHT(cur_str.font);
     *width = get_width(c);
 }
 
-void LCD_GetStringDimensions(const u8 *str, u16 *width, u16 *height) {
+void LCD_GetStringDimensions(const uint8_t *str, uint16_t *width, uint16_t *height) {
     int line_width = 0;
     *height = HEIGHT(cur_str.font);
     *width = 0;
     //printf("String: %s\n", str);
     while(*str) {
-        u32 ch;
-        str = (const u8 *)utf8_to_u32((const char *)str, &ch);
+        uint32_t ch;
+        str = (const uint8_t *)utf8_to_uint32_t((const char *)str, &ch);
         if(ch == '\n') {
             *height += HEIGHT(cur_str.font) + LINE_SPACING;
             if(line_width > *width)
@@ -292,6 +292,6 @@ void LCD_GetStringDimensions(const u8 *str, u16 *width, u16 *height) {
     //printf("W: %d   H: %d\n",(int)*width,(int)*height);
 }
 
-void LCD_SetFontColor(u16 color) {
+void LCD_SetFontColor(uint16_t color) {
     cur_str.color = color;
 }
