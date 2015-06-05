@@ -189,18 +189,18 @@ void LCD_Sleep(void)
 {
 
 }
-void LCD_Clear(uint16_t color)
-{
-    uint32_t index;
+//void LCD_Clear(uint16_t color)
+//{
+//    uint32_t index;
 
-    LCD_SetCursor(0, 0);
-    LCD_WriteRAM_Start();
+//    LCD_SetCursor(0, 0);
+//    LCD_WriteRAM_Start();
 
-    for (index = 0; index < 345600; index++)
-    {
-        LCD_WriteData(color);
-    }
-}
+//    for (index = 0; index < 345600; index++)
+//    {
+//        LCD_WriteData(color);
+//    }
+//}
 void LCD_Init(void)
 {
     GPIO_Configuration();

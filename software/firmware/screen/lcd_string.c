@@ -227,7 +227,7 @@ uint8_t LCD_SetFont(unsigned int idx)
     return old;
 }
 
-uint8_t LCD_GetFont()
+uint8_t LCD_GetFont(void)
 {
     return cur_str.font.idx;
 }

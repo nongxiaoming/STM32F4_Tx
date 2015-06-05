@@ -144,7 +144,7 @@
             <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>7</TargetSelection>
+          <TargetSelection>6</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -861,11 +861,6 @@
               <FilePath>..\devo\inputs.c</FilePath>
             </File>
             <File>
-              <FileName>misc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\devo\misc.c</FilePath>
-            </File>
-            <File>
               <FileName>mixer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\devo\mixer.c</FilePath>
@@ -1074,11 +1069,6 @@
               <FileName>testrf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\protocol\testrf.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbhid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\protocol\usbhid.c</FilePath>
             </File>
             <File>
               <FileName>v202_nrf24l01.c</FileName>
