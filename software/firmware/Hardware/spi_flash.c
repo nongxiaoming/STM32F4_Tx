@@ -79,10 +79,10 @@ void SPIFLASH_Init(void)
   	SPI_I2S_DeInit(SPI1);
   	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;           //全双工
   	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;                            //8位数据模式
-  	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;                                    //空闲模式下SCK为1
-  	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;                                  //数据采样从第2个时间边沿开始
+  	SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;                                    //空闲模式下SCK为1
+  	SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;                                  //数据采样从第2个时间边沿开始
   	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;                                     //NSS软件管理
-  	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;           //波特率
+  	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;            //波特率
   	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;                             //大端模式
   	SPI_InitStructure.SPI_CRCPolynomial = 7;                                       //CRC多项式
   	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;                                  //主机模式
